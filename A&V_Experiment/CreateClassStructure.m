@@ -38,7 +38,9 @@ ExpInfo.time_wait = [0.5, 0.24]; % Default waiting times (seconds) for each fram
 ExpInfo.fixpoint_size_pix = angle2pixels(ExpInfo.t_angle); %Fixation Dot Stimulus Size pixels 
 ExpInfo.targpoint_size_pix = ExpInfo.fixpoint_size_pix; %Target Dot Size, same as fixation point for now 
 ExpInfo.rew_radius_volts = angle2volts(ExpInfo.rew_angle); %Reward window radius value in volts 
-ExpInfo.target_rew_radius_volts = angle2volts(10);
+%ExpInfo.target_rew_radius_volts = angle2volts(10);
+ExpInfo.target_rew_radius_volts = angle2volts(9);
+
 ExpInfo.ppd = 30;%pi * xCenter / atan(monWidth/viewDist/2) / 360;
 
 %% RDK Parameters
