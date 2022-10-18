@@ -17,8 +17,8 @@ function [random_dir_list] = randomizer(ExpInfo,audInfo)
         if length(audInfo.dirSet) > 1 %If we have more than 1 direction to choose from
 
             numberOfElements = sum(audInfo.cohSet == c); %Sums all of the same coherences from the random list cohSet
-          %  per_R = 50; % the percentage of Right Targets, 50% will make an even number of L and R trials
-            per_R = 70; % the percentage of Right Targets, 50% will make an even number of L and R trials
+            per_R = 50; % the percentage of Right Targets, 50% will make an even number of L and R trials
+           % per_R = 70; % the percentage of Right Targets, 50% will make an even number of L and R trials
 
             numberOfOnes = round(numberOfElements * per_R / 100);
             % Make initial signal with proper number of 0's and 1's.
