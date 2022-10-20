@@ -13,3 +13,6 @@ Fixation_Reward_1_Dot/
 Junda_s\ scripts/
 Previous_Experiment_Versions/
 Visual\ and\ Auditory\ delay\ tracking/
+
+# Windows default autosave extension
+*.asv
