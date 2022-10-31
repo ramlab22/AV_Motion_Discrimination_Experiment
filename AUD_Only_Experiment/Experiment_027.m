@@ -116,6 +116,8 @@ viewDist = 53; %Viewing Distance from monitor in cm
 
 time_wait_frames = round(ExpInfo.time_wait./ifi); %Contains 2 wait times , fixation and target fixation wait times 
 fix_time_frames = round((ExpInfo.fixation_time/1000)/ifi)+time_wait_frames(1); 
+fix_only_time_frames = round((ExpInfo.fixation_time/1000)/ifi); 
+
 stim_time_frames = round((ExpInfo.stim_time/1000)/ ifi);
 aud_time_frames = round(((audInfo.t_end - audInfo.t_start)/1000)/ ifi);
 iti_time_frames = round((ExpInfo.iti/1000)/ifi); 
@@ -172,7 +174,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
      coh_counter = 1;
     disp(['Trial #: ',num2str(trialcounter),'/',num2str(total_trials)])
     output_counter = output_counter + 1;
-    dataout(output_counter,1:8) = {'Trial #' 'Position #' 'Fixation Correct' 'Auditory Reward' 'Catch Trial' 'Target Correct' 'Total Trial Time (sec)' 'Coherence Level'}; %Initialize Columns for data output cell
+    dataout(output_counter,1:8) = {'Trial #' 'Position #' 'Fixation Correct' 'Auditory Reward' 'Catch Trial' 'Target Correct' 'Total Trial Time (sec)' 'Coherence Level' 'Direction of Motion'}; %Initialize Columns for data output cell
     start_block_time = hat; 
     
     while (trialcounter <= total_trials) && (BreakState ~= 1) % each trial
@@ -535,7 +537,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         end_trial_time = hat;
         trial_time = end_trial_time-start_trial_time;
         
-        dataout(output_counter,1:8) = {trialcounter pos fix_reward aud_reward catchtrial target_reward trial_time audInfo.coh}; 
+        dataout(output_counter,1:9) = {trialcounter pos fix_reward aud_reward catchtrial target_reward trial_time audInfo.coh audInfo.dir}; 
         trialcounter = trialcounter + 1;
         
         if trialcounter <= total_trials
@@ -561,7 +563,7 @@ num_catch_trials = audInfo.catchtrials;
     prob_Left = directional_probability(Left_dataout, audInfo); 
     
     [x, y] = psychometric_plotter(prob_Right,prob_Left, prob_zero);
-    %Eye_Tracker_Plotter(eye_data_matrix);
+    Eye_Tracker_Plotter(eye_data_matrix);
     
      times = cell2mat(dataout(2:end,7)); %Extract the trial times 
      Total_Block_Time = sum(times);
