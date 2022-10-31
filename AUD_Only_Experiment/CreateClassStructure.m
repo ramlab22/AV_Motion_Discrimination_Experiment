@@ -38,13 +38,15 @@ dstruct.dis = 55;             % viewing distance in cm
 %ExpInfo.time_wait = [0.5,0.6]; % Default waiting times (seconds) for each frame [fixation, targets] 042522-AS: changed from 4 vals to 2 bc dont have cue and delay time
 %ExpInfo.time_wait = [0.5, 1]; % Default waiting times (seconds) for each frame [fixation, targets] 042522-AS: changed from 4 vals to 2 bc dont have cue and delay time
 ExpInfo.time_wait = [0.5, 1.5]; % Default waiting times (seconds) for each frame [fixation, targets] 042522-AS: changed from 4 vals to 2 bc dont have cue and delay time
+%ExpInfo.time_wait = [1, 1.5]; % Default waiting times (seconds) for each frame [fixation, targets] 042522-AS: changed from 4 vals to 2 bc dont have cue and delay time
 
 %ExpInfo.time_wait = [0.7, 3]; % Default waiting times (seconds) for each frame [fixation, targets] 042522-AS: changed from 4 vals to 2 bc dont have cue and delay time
 ExpInfo.fixpoint_size_pix = angle2pixels(ExpInfo.t_angle); %Fixation Dot Stimulus Size pixels 
 ExpInfo.targpoint_size_pix = ExpInfo.fixpoint_size_pix; %Target Dot Size, same as fixation point for now 
 ExpInfo.rew_radius_volts = angle2volts(ExpInfo.rew_angle); %Reward window radius value in volts 
-ExpInfo.target_rew_radius_volts = angle2volts(10);
+%ExpInfo.target_rew_radius_volts = angle2volts(10);
 %ExpInfo.target_rew_radius_volts = angle2volts(9.5);
+ExpInfo.target_rew_radius_volts = angle2volts(9);
 
 ExpInfo.ppd = 30;%pi * xCenter / atan(monWidth/viewDist/2) / 360;
 
@@ -84,7 +86,7 @@ audInfo.random_incorrect_opacity_list = catch_trial_randomizer(ExpInfo,audInfo,d
 %audInfo.coherences = [0.0, 0.05, 0.10, 0.15, 0.2, 0.25, 0.35, 0.40, 0.45, 0.50, 0.55, 1.00];
 %audInfo.coherences = [0, 0.1, 0.125892541179417, 0.158489319246111, 0.199526231496888, 0.251188643150958, 0.316227766016838, 0.398107170553497, 0.501187233627272, 0.630957344480193, 0.794328234724282, 1];%Possible coherencecs to choose from 
 %audInfo.coherences = [0,0.03,0.05,0.07, 0.1,0.139,0.193, 0.268,0.373,0.518,0.72,1];
-audInfo.coherences = [0,0.031,0.044,0.063, 0.89,0.125,0.177, 0.25,0.354,0.5,0.707,1];
+audInfo.coherences = [0,0.031,0.044,0.063, 0.089,0.125,0.177, 0.25,0.354,0.5,0.707,1];
 audInfo.cohFreq = data(35:46,1)'; %[0.0, 0.2, 0.4, 0.6, 0.8, 1.0] Each Corresponds to the number of trials in that coherence (0.0-1.0)
 audInfo.cohSet = cohSet_maker(audInfo); 
 audInfo.random_dir_list = randomizer(ExpInfo,audInfo); 

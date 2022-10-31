@@ -107,6 +107,8 @@ viewDist = 53; %Viewing Distance from monitor in cm
 
 time_wait_frames = round(ExpInfo.time_wait./ifi); %Contains 2 wait times , fixation and target fixation wait times 
 fix_time_frames = round((ExpInfo.fixation_time/1000)/ifi)+time_wait_frames(1); 
+fix_only_time_frames = round((ExpInfo.fixation_time/1000)/ifi); 
+
 stim_time_frames = round((ExpInfo.stim_time/1000)/ ifi);
 iti_time_frames = round((ExpInfo.iti/1000)/ifi); 
 TO_time_frames = round((ExpInfo.fail_timeout/1000)/ifi); 
@@ -144,7 +146,7 @@ block_counter = 1;
 gate_off_time = .1;
 total_blocks = 1; 
 total_trials = ExpInfo.num_trials; 
-dataout = cell(total_trials+1,7);
+dataout = cell(total_trials+1,8);
  
 %% RDK Initilization Stuff
 
@@ -353,8 +355,8 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                     
                 end
                 if frame > time_wait_frames(2)
-                    %  Screen('DrawDots', window, [(h + target_distance_from_fixpoint_pix) (target_y_coord_pix)], ExpInfo.targpoint_size_pix, right_target_color, [], 2);%Right target
-                    % Screen('DrawDots', window, [(h - target_distance_from_fixpoint_pix) (target_y_coord_pix)], ExpInfo.targpoint_size_pix, left_target_color, [], 2);%Left Target
+                   %   Screen('DrawDots', window, [(h + target_distance_from_fixpoint_pix) (target_y_coord_pix)], ExpInfo.targpoint_size_pix, right_target_color, [], 2);%Right target
+                     %Screen('DrawDots', window, [(h - target_distance_from_fixpoint_pix) (target_y_coord_pix)], ExpInfo.targpoint_size_pix, left_target_color, [], 2);%Left Target
                     %  vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
                     %commented out 10/10/22-AMS
                     if correct_counter2 > target_only_time_frames
@@ -445,7 +447,7 @@ num_catch_trials = dotInfo.catchtrials;
     prob_Left = directional_probability(Left_dataout, dotInfo); 
     
     [x, y] = psychometric_plotter(prob_Right,prob_Left, prob_zero); 
-    %Eye_Tracker_Plotter(eye_data_matrix);
+    Eye_Tracker_Plotter(eye_data_matrix);
     
     times = cell2mat(dataout(2:end,7)); %Extract the trial times 
     Total_Block_Time = sum(times);

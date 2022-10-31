@@ -34,14 +34,15 @@ dstruct.dis = 55;             % viewing distance in cm
 %% Other Parameters
 %ExpInfo.time_wait = [0.5, 0.2]; % Default waiting times (seconds) for each frame [fixation, targets] 042522-AS: changed from 4 vals to 2 bc dont have cue and delay time
 %ExpInfo.time_wait = [0.5, 0.24];
-ExpInfo.time_wait = [0.5, 1]; % Default waiting times (seconds) for each frame [fixation, targets] 042522-AS: changed from 4 vals to 2 bc dont have cue and delay time
+%ExpInfo.time_wait = [0.5, 1]; % Default waiting times (seconds) for each frame [fixation, targets] 042522-AS: changed from 4 vals to 2 bc dont have cue and delay time
+ExpInfo.time_wait = [0.5, 1.5]; % Default waiting times (seconds) for each frame [fixation, targets] 042522-AS: changed from 4 vals to 2 bc dont have cue and delay time
 
 %ExpInfo.time_wait = [0.7, 3]; % Default waiting times (seconds) for each frame [fixation, targets] 042522-AS: changed from 4 vals to 2 bc dont have cue and delay time
 ExpInfo.fixpoint_size_pix = angle2pixels(ExpInfo.t_angle); %Fixation Dot Stimulus Size pixels 
 ExpInfo.targpoint_size_pix = ExpInfo.fixpoint_size_pix; %Target Dot Size, same as fixation point for now 
 ExpInfo.rew_radius_volts = angle2volts(ExpInfo.rew_angle); %Reward window radius value in volts 
 %ExpInfo.target_rew_radius_volts = angle2volts(10);
-ExpInfo.target_rew_radius_volts = angle2volts(9);
+ExpInfo.target_rew_radius_volts = angle2volts(9.5);
 
 ExpInfo.ppd = 30;%pi * xCenter / atan(monWidth/viewDist/2) / 360;
 
@@ -57,13 +58,17 @@ dotInfo.rdk_size_pix = angle2pixels(ExpInfo.rdk_angle); %RDK window size in pixe
 %dotInfo.coherences = [0.0, 0.05, 0.10, 0.15, 0.2, 0.25, 0.35, 0.40, 0.70, 0.80, 0.90, 1.00]; %Possible coherencecs to choose from 
 %dotInfo.coherences = [0,0.03,0.05,0.07, 0.1,0.139,0.193, 0.268,0.373,0.518,0.720,1];
 dotInfo.coherences =[0,0.031,0.044,0.063, 0.89,0.125,0.177, 0.25,0.354,0.5,0.707,1];
+%dotInfo.coherences =[0,0.03,0.04,0.06, 0.89,0.13,0.18, 0.25,0.35,0.5,0.71,1.0];
+
 dotInfo.cohFreq = data(35:46,1)'; % Each Corresponds to the number of trials in that coherence 
 dotInfo.cohSet = cohSet_maker(dotInfo); %Randomly scattered cohSet to choose from for regular trials
 dotInfo.random_dir_list = randomizer(ExpInfo,dotInfo);
 
 dotInfo.apXYD = [0 90 (ExpInfo.rdk_angle*10)]; % Location x,y pixels (0,0 is center of screen) and diameter of the aperature, currently in visual degrees - MULTPLIED by 10 because of Shadlen dots code, needed to be an integer
 dotInfo.speed = data(20,1); %Degrees per second?
-dotInfo.dotSize = 3; %RDK Field Dots
+%dotInfo.dotSize = 3; %RDK Field Dots
+dotInfo.dotSize = 4; %RDK Field Dots
+
 %dotInfo.dotSize = 5; %RDK Field Dots
 %dotInfo.dotSize = 6; %RDK Field Dots
 
