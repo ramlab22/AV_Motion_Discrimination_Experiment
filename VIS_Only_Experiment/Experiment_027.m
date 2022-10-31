@@ -200,16 +200,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
 
         %This Includes the reward for fixating for required fixation time
         for frame = 1:fix_time_frames - waitframes
-            
-%             if baron_fixation_training==1 
-%                 if mod(frame,2) ~= 0
-%                     x = TDT.read('x');
-%                     y = TDT.read('y');
-%                 end
-%             else
-%                 x = TDT.read('x');
-%                 y = TDT.read('y');
-%             end
+
             x = TDT.read('x');
             y = TDT.read('y');
             [eye_data_matrix] = Send_Eye_Position_Data(TDT, start_block_time, eye_data_matrix, 1, trialcounter); %Collect eye position data with timestamp
@@ -222,7 +213,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
               
                 if (d <= ExpInfo.rew_radius_volts)
                     correct_counter = correct_counter + 1;
-                    if frame>10
+                    if frame>10 %give monkey a buffer in case they were already looking where the fixpoint was 
                         end_fixation_waitframes = 1;
                     end
                 end
@@ -236,10 +227,16 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                     end
                     break
                 end
+                if correct_counter > fix_only_time_frames
+                    break
+                end
             end
             if frame > time_wait_frames(1)
                 Screen('DrawDots', window,[h k], ExpInfo.fixpoint_size_pix, fix_point_color, [], 2);
                 vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
+                if correct_counter > fix_only_time_frames %break out of loop if already fixated for required amount of time
+                    break %added 10/31/22-AMS
+                end
                 if d <= ExpInfo.rew_radius_volts
                     correct_counter = correct_counter + 1;
                 else

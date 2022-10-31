@@ -261,7 +261,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
               
                 if (d <= ExpInfo.rew_radius_volts)
                     correct_counter = correct_counter + 1;
-                    if frame>10
+                    if frame>10 %give monkey a buffer in case they were already looking where the fixpoint was 
                         end_fixation_waitframes = 1;
                     end
                 end
@@ -275,10 +275,16 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                     end
                     break
                 end
+                if correct_counter > fix_only_time_frames
+                    break
+                end
             end
             if frame > time_wait_frames(1)
                 Screen('DrawDots', window,[h i_trial], ExpInfo.fixpoint_size_pix, fix_point_color, [], 2);
                 vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
+                if correct_counter > fix_only_time_frames %break out of loop if already fixated for required amount of time
+                    break %added 10/31/22-AMS
+                end
                 if d <= ExpInfo.rew_radius_volts
                     correct_counter = correct_counter + 1;
                 else
