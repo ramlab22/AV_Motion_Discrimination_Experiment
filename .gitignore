@@ -16,3 +16,6 @@ Visual\ and\ Auditory\ delay\ tracking/
 
 # Windows default autosave extension
 *.asv
+
+# all text files, they change everytime we run experiments
+*.txt
