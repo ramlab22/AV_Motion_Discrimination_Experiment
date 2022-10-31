@@ -183,23 +183,21 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         end_fixation_waitframes = 0; %variable to end fixation acquisition wait time once fixation is acquired
         end_target_waitframes = 0; %variable to end target acquisition wait time once fixation is acquired
 
-        %Inititlize the coherence and direction for each trial
-%         dotInfo.coh = dotInfo.cohSet(trialcounter)*1000;
-%         dotInfo.dir = dotInfo.random_dir_list(trialcounter); %See CreateClassStructure.m for randomization code
-%         
-        %Initilize the auditory coherence and direction for each trial
-        if audInfo.random_incorrect_opacity_list(trialcounter) == 0
-            catchtrial = 'Yes';
-            fix_point_color = [0 255 0]; %Green 
-        elseif audInfo.random_incorrect_opacity_list(trialcounter) == 1
-            catchtrial = 'No';
-            fix_point_color = white; 
-        end
 
-        audInfo.dir = audInfo.random_dir_list(trialcounter); %See CreateClassStructure.m for randomization code
-        audInfo.mux = audInfo.random_mux_list(trialcounter);
-        audInfo.coh = audInfo.cohSet(trialcounter);% (Value 0.0 - 1.0)
-        
+         
+        %Initilize the auditory coherence and direction for each trial
+
+        catchtrial = 'No'; %All trials will not be catch, new staircase procedure
+        fix_point_color = white;
+
+        if trialcounter == 1
+            staircase_index = 1; %Initialize index for first trial 
+            audInfo.dir = randi([0,1]); %for first trial, randomly choose 0 or 1 for dir
+            audInfo.mux = 0; %Set to zero for now, we only need L and R trials 
+            audInfo.coh = (audInfo.cohSet(staircase_index))./100;% (Value 0.0 - 1.0)
+        elseif trialcounter > 1
+            [audInfo] = staircase_procedure(trial_status, audInfo, staircase_index);
+        end
 
         
         if audInfo.dir == 1 && audInfo.mux == 0
@@ -539,6 +537,11 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
 
 
         %% End of trial Stuff , timing and output
+        if target_reward == 'Yes'
+            trial_status = 'Correct'
+        else
+            trial_status = 'Incorrect'
+        end
   
         end_trial_time = hat;
         trial_time = end_trial_time-start_trial_time;
