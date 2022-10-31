@@ -102,11 +102,14 @@ viewDist = 53; %Viewing Distance from monitor in cm
 
 time_wait_frames = round(ExpInfo.time_wait./ifi); %Contains 2 wait times , fixation and target fixation wait times 
 fix_time_frames = round((ExpInfo.fixation_time/1000)/ifi)+time_wait_frames(1); 
+fix_only_time_frames = round((ExpInfo.fixation_time/1000)/ifi); 
+
 stim_time_frames = round((ExpInfo.stim_time/1000)/ ifi);
 aud_time_frames = round(((audInfo.t_end-audInfo.t_start))/ ifi);
 iti_time_frames = round((ExpInfo.iti/1000)/ifi); 
 TO_time_frames = round((ExpInfo.fail_timeout/1000)/ifi); 
 target_time_frames = round((ExpInfo.target_fixation_time/1000)/ ifi+time_wait_frames(2));
+target_only_time_frames = round((ExpInfo.target_fixation_time/1000)/ ifi);
 
 
 %% Fixation Position structure
@@ -136,6 +139,7 @@ output_counter = 0;
 correct_counter = 0;
 aud_correct_counter = 0;
 correct_counter2 = 0;
+incorrect_counter2=0;
 block_counter = 1;
 gate_off_time = .1;
 total_blocks = 1; 
@@ -226,16 +230,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
 
         %This Includes the reward for fixating for required fixation time
         for frame = 1:fix_time_frames - waitframes
-%             
-%             if baron_fixation_training==1 
-%                 if mod(frame,2) ~= 0
-%                     x = TDT.read('x');
-%                     y = TDT.read('y');
-%                 end
-%             else
-%                 x = TDT.read('x');
-%                 y = TDT.read('y');
-%             end
+
             x = TDT.read('x');
             y = TDT.read('y');
             d = sqrt(((x-h_voltage).^2)+((y-k_voltage).^2));
@@ -260,10 +255,16 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                     end
                     break
                 end
+                if correct_counter > fix_only_time_frames
+                    break
+                end
             end
             if frame > time_wait_frames(1)
                 Screen('DrawDots', window,[h k], ExpInfo.fixpoint_size_pix, white, [], 2);
                 vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
+                if correct_counter > fix_only_time_frames %break out of loop if already fixated for required amount of time
+                    break %added 10/31/22-AMS
+                end
                 if d <= ExpInfo.rew_radius_volts
                     correct_counter = correct_counter + 1;
                 else
@@ -355,7 +356,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                         correct_counter2 = correct_counter2 + 1;
                         end_target_waitframes = 1;
                     end
-                    if ~isAnyTargetFixation && end_target_waitframes==1 && (frame>3)
+                    if ~isAnyTargetFixation && end_target_waitframes==1 
                         correct_counter2 = 0;
                         %Timeout for Failure to fixate on fixation
                         for frame_2 = 1:TO_time_frames
@@ -365,17 +366,31 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                         end
                         break
                     end
-                    
+                    if correct_counter2 > target_only_time_frames
+                        break
+                    end
+                    if (isLeftTargetFixation && strcmp('right',correct_target)) || (isRightTargetFixation && strcmp('left',correct_target)) && end_target_waitframes == 0
+                        incorrect_counter2 = incorrect_counter2 + 1;
+                    end
+                    if incorrect_counter2 > target_only_time_frames
+                        incorrect_counter2=0;
+                        
+                        break
+                    end
                     
                 end
                 if frame > time_wait_frames(2)
-                    Screen('DrawDots', window, [(h + target_distance_from_fixpoint_pix) (target_y_coord_pix)], ExpInfo.targpoint_size_pix, right_target_color, [], 2);%Right target
-                    Screen('DrawDots', window, [(h - target_distance_from_fixpoint_pix) (target_y_coord_pix)], ExpInfo.targpoint_size_pix, left_target_color, [], 2);%Left Target
-                    vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
+%                     Screen('DrawDots', window, [(h + target_distance_from_fixpoint_pix) (target_y_coord_pix)], ExpInfo.targpoint_size_pix, right_target_color, [], 2);%Right target
+%                     Screen('DrawDots', window, [(h - target_distance_from_fixpoint_pix) (target_y_coord_pix)], ExpInfo.targpoint_size_pix, left_target_color, [], 2);%Left Target
+%                     vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
+                    if correct_counter2 > target_only_time_frames
+                        break %added 10/31/22-AMS
+                    end
                     if (isRightTargetFixation && strcmp('right',correct_target)) || (isLeftTargetFixation && strcmp('left',correct_target) || (isAnyTargetFixation && strcmp('both',correct_target)))
                         correct_counter2 = correct_counter2 + 1;
                     else
                         correct_counter2 = 0;
+                        incorrect_counter2 =0 ;
                         %Timeout for Failure to fixate on target
                         for frame_2 = 1:TO_time_frames
                             Screen('FillRect', window, black);
