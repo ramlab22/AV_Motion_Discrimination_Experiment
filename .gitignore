@@ -19,4 +19,6 @@ Visual\ and\ Auditory\ delay\ tracking/
 
 # all text files, they change everytime we run experiments
 *.txt
-
+#all figures
+*.png
+*.jpg
