@@ -18,7 +18,5 @@ Visual\ and\ Auditory\ delay\ tracking/
 *.asv
 
 # all text files, they change everytime we run experiments
-AUD_Only_Experiment/*.txt
-VIS_Only_Experiment/*.txt
-A&V_Experiment/*.txt
+*.txt
 

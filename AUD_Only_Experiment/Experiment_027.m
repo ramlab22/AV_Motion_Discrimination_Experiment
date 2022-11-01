@@ -174,7 +174,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
      coh_counter = 1;
     disp(['Trial #: ',num2str(trialcounter),'/',num2str(total_trials)])
     output_counter = output_counter + 1;
-    dataout(output_counter,1:8) = {'Trial #' 'Position #' 'Fixation Correct' 'Auditory Reward' 'Catch Trial' 'Target Correct' 'Total Trial Time (sec)' 'Coherence Level' 'Direction of Motion'}; %Initialize Columns for data output cell
+    dataout(output_counter,1:9) = {'Trial #' 'Position #' 'Fixation Correct' 'Auditory Reward' 'Catch Trial' 'Target Correct' 'Total Trial Time (sec)' 'Coherence Level' 'Direction of Motion'}; %Initialize Columns for data output cell
     start_block_time = hat; 
     
     while (trialcounter <= total_trials) && (BreakState ~= 1) % each trial
@@ -194,9 +194,9 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
             staircase_index = 1; %Initialize index for first trial 
             audInfo.dir = randi([0,1]); %for first trial, randomly choose 0 or 1 for dir
             audInfo.mux = 0; %Set to zero for now, we only need L and R trials 
-            audInfo.coh = (audInfo.cohSet(staircase_index))./100;% (Value 0.0 - 1.0)
+            audInfo.coh = audInfo.cohSet(staircase_index);% (Value 0.0 - 1.0)
         elseif trialcounter > 1
-            [audInfo] = staircase_procedure(trial_status, audInfo, staircase_index);
+            [audInfo, staircase_index] = staircase_procedure(trial_status, audInfo, staircase_index);
         end
 
         
@@ -537,10 +537,10 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
 
 
         %% End of trial Stuff , timing and output
-        if target_reward == 'Yes'
-            trial_status = 'Correct'
+        if strcmp(target_reward,'Yes')
+            trial_status = 'Correct';
         else
-            trial_status = 'Incorrect'
+            trial_status = 'Incorrect';
         end
   
         end_trial_time = hat;
@@ -554,6 +554,9 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         end
     end
 %% End of Block 
+[ii, jj, kk] = unique(cell2mat(dataout(2:end,8)));
+freq = accumarray(kk,1); 
+audInfo.cohFreq =flip(freq');
 
 total_trials = ExpInfo.num_trials;  
 num_regular_trials = total_trials - audInfo.catchtrials;  
@@ -567,7 +570,7 @@ num_catch_trials = audInfo.catchtrials;
     prob = coherence_probability(dataout,audInfo)
     prob_zero = prob(1,:); 
     
-    [Right_dataout, Left_dataout] = direction_splitter(dataout, audInfo);
+    [Right_dataout, Left_dataout] = direction_splitter(dataout);
     prob_Right = directional_probability(Right_dataout, audInfo); 
     prob_Left = directional_probability(Left_dataout, audInfo); 
     

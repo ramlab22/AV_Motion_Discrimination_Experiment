@@ -1,4 +1,4 @@
-function [] = staircase_procedure(trial_status, audInfo, staircase_index)
+function [audInfo, staircase_index] = staircase_procedure(trial_status, audInfo, staircase_index)
 
     %We need info from the last trial on weahter he got the trial correct
     if strcmp(trial_status, 'Correct')
@@ -6,7 +6,7 @@ function [] = staircase_procedure(trial_status, audInfo, staircase_index)
         if x_rand <= audInfo.probs(1) %Prob of Coherence lowering 
             if staircase_index < length(audInfo.cohSet) %Check to make sure we don't go lower than the lowest value possible
                 staircase_index = staircase_index + 1; %Decrease the coherence
-                audInfo.coh = (audInfo.cohSet(staircase_index))./100; 
+                audInfo.coh = (audInfo.cohSet(staircase_index)); 
             end
         end
 
@@ -23,7 +23,7 @@ function [] = staircase_procedure(trial_status, audInfo, staircase_index)
         if y_rand <= audInfo.probs(3) %Prob of Coherence Increasing 
             if staircase_index > 1 %Check to make sure we don't go higher than highest value possible
                 staircase_index = staircase_index - 1; %Increase the coherence
-                audInfo.coh = (audInfo.cohSet(staircase_index))./100; 
+                audInfo.coh = (audInfo.cohSet(staircase_index)); 
             end
         end
 
