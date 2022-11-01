@@ -80,7 +80,7 @@ dotInfo.maxDotsPerFrame = 400; %Maximum number of dots per frame of the RDK aper
 %% Auditory Parameters 
 audInfo.dirSet = dirBin(data); %[LR DU UD RL] 1 - Include, 0 - Exclude
 audInfo.catchtrials = 0;
-audInfo.random_incorrect_opacity_list = catch_trial_randomizer(ExpInfo,audInfo,data); 
+audInfo.random_incorrect_opacity_list = catch_trial_randomizer(ExpInfo,audInfo); 
 %audInfo.coherences = [0.0, 0.05, 0.10, 0.15, 0.2, 0.25, 0.35, 0.40, 0.50, 0.60, 0.80, 1.00];
 %audInfo.coherences = [0.0, 0.05, 0.10, 0.15, 0.2, 0.25, 0.35, 0.40, 0.50, 0.80, 0.90, 1.00];
 %audInfo.coherences = [0.0, 0.05, 0.10, 0.15, 0.2, 0.25, 0.35, 0.40, 0.45, 0.50, 0.55, 1.00];

@@ -1,10 +1,10 @@
-function [random_incorrect_opacity_list] = catch_trial_randomizer(ExpInfo,audInfo,data)
+function [random_incorrect_opacity_list] = catch_trial_randomizer(ExpInfo,audInfo)
 %CATCH_TRIAL_RANDOMIZER Summary of this function goes here
 %   Detailed explanation goes here
     %Catch Trial Randomizer
     random_incorrect_opacity_list = zeros(1,(ExpInfo.num_trials));
-    if data(34,1) >= 1
-        num_catch = data(34,1); % number of 0 opacity (Catch Trials)  
+    if audInfo.catchtrials >= 1
+        num_catch = audInfo.catchtrials; % number of 0 opacity (Catch Trials)  
         audInfo.catchtrials = num_catch;
         
         signal_2 = [ones(1, num_catch), zeros(1, ExpInfo.num_trials - num_catch)];

@@ -557,6 +557,9 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
 [ii, jj, kk] = unique(cell2mat(dataout(2:end,8)));
 freq = accumarray(kk,1); 
 audInfo.cohFreq =flip(freq');
+while length(audInfo.cohFreq) ~= length(audInfo.cohSet)
+   audInfo.cohFreq(end+1) = 0; 
+end
 
 total_trials = ExpInfo.num_trials;  
 num_regular_trials = total_trials - audInfo.catchtrials;  
