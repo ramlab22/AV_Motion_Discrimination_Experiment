@@ -26,7 +26,8 @@ coherence_rew_numbers = [audInfo.coherences;
 
     % All of the Coherence Success Rates in Percentage, regular
     prob = [audInfo.coherences;
-        coherence_success_rate(2,:)*100];
+        coherence_success_rate(2,:)*100;
+        audInfo.cohFreq];
 
     prob = prob';
 end
