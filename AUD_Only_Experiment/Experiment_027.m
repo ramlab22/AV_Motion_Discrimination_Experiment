@@ -174,7 +174,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
      coh_counter = 1;
     disp(['Trial #: ',num2str(trialcounter),'/',num2str(total_trials)])
     output_counter = output_counter + 1;
-    dataout(output_counter,1:8) = {'Trial #' 'Position #' 'Fixation Correct' 'Auditory Reward' 'Catch Trial' 'Target Correct' 'Total Trial Time (sec)' 'Coherence Level' 'Direction of Motion'}; %Initialize Columns for data output cell
+    dataout(output_counter,1:9) = {'Trial #' 'Position #' 'Fixation Correct' 'Auditory Reward' 'Catch Trial' 'Target Correct' 'Total Trial Time (sec)' 'Coherence Level' 'Direction of Motion'}; %Initialize Columns for data output cell
     start_block_time = hat; 
     
     while (trialcounter <= total_trials) && (BreakState ~= 1) % each trial
@@ -183,23 +183,21 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         end_fixation_waitframes = 0; %variable to end fixation acquisition wait time once fixation is acquired
         end_target_waitframes = 0; %variable to end target acquisition wait time once fixation is acquired
 
-        %Inititlize the coherence and direction for each trial
-%         dotInfo.coh = dotInfo.cohSet(trialcounter)*1000;
-%         dotInfo.dir = dotInfo.random_dir_list(trialcounter); %See CreateClassStructure.m for randomization code
-%         
-        %Initilize the auditory coherence and direction for each trial
-        if audInfo.random_incorrect_opacity_list(trialcounter) == 0
-            catchtrial = 'Yes';
-            fix_point_color = [0 255 0]; %Green 
-        elseif audInfo.random_incorrect_opacity_list(trialcounter) == 1
-            catchtrial = 'No';
-            fix_point_color = white; 
-        end
 
-        audInfo.dir = audInfo.random_dir_list(trialcounter); %See CreateClassStructure.m for randomization code
-        audInfo.mux = audInfo.random_mux_list(trialcounter);
-        audInfo.coh = audInfo.cohSet(trialcounter);% (Value 0.0 - 1.0)
-        
+         
+        %Initilize the auditory coherence and direction for each trial
+
+        catchtrial = 'No'; %All trials will not be catch, new staircase procedure
+        fix_point_color = white;
+
+        if trialcounter == 1
+            staircase_index = 1; %Initialize index for first trial 
+            audInfo.dir = randi([0,1]); %for first trial, randomly choose 0 or 1 for dir
+            audInfo.mux = 0; %Set to zero for now, we only need L and R trials 
+            audInfo.coh = audInfo.cohSet(staircase_index);% (Value 0.0 - 1.0)
+        elseif trialcounter > 1
+            [audInfo, staircase_index] = staircase_procedure(trial_status, audInfo, staircase_index);
+        end
 
         
         if audInfo.dir == 1 && audInfo.mux == 0
@@ -539,6 +537,11 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
 
 
         %% End of trial Stuff , timing and output
+        if strcmp(target_reward,'Yes')
+            trial_status = 'Correct';
+        else
+            trial_status = 'Incorrect';
+        end
   
         end_trial_time = hat;
         trial_time = end_trial_time-start_trial_time;
@@ -551,6 +554,9 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         end
     end
 %% End of Block 
+[ii, jj, kk] = unique(cell2mat(dataout(2:end,8)));
+freq = accumarray(kk,1); 
+audInfo.cohFreq =flip(freq');
 
 total_trials = ExpInfo.num_trials;  
 num_regular_trials = total_trials - audInfo.catchtrials;  
@@ -564,7 +570,7 @@ num_catch_trials = audInfo.catchtrials;
     prob = coherence_probability(dataout,audInfo)
     prob_zero = prob(1,:); 
     
-    [Right_dataout, Left_dataout] = direction_splitter(dataout, audInfo);
+    [Right_dataout, Left_dataout] = direction_splitter(dataout);
     prob_Right = directional_probability(Right_dataout, audInfo); 
     prob_Left = directional_probability(Left_dataout, audInfo); 
     

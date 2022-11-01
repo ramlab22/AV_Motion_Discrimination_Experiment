@@ -79,18 +79,22 @@ dotInfo.maxDotsPerFrame = 400; %Maximum number of dots per frame of the RDK aper
 
 %% Auditory Parameters 
 audInfo.dirSet = dirBin(data); %[LR DU UD RL] 1 - Include, 0 - Exclude
-audInfo.catchtrials = data(34,1);
+audInfo.catchtrials = 0;
 audInfo.random_incorrect_opacity_list = catch_trial_randomizer(ExpInfo,audInfo,data); 
 %audInfo.coherences = [0.0, 0.05, 0.10, 0.15, 0.2, 0.25, 0.35, 0.40, 0.50, 0.60, 0.80, 1.00];
 %audInfo.coherences = [0.0, 0.05, 0.10, 0.15, 0.2, 0.25, 0.35, 0.40, 0.50, 0.80, 0.90, 1.00];
-
 %audInfo.coherences = [0.0, 0.05, 0.10, 0.15, 0.2, 0.25, 0.35, 0.40, 0.45, 0.50, 0.55, 1.00];
 %audInfo.coherences = [0, 0.1, 0.125892541179417, 0.158489319246111, 0.199526231496888, 0.251188643150958, 0.316227766016838, 0.398107170553497, 0.501187233627272, 0.630957344480193, 0.794328234724282, 1];%Possible coherencecs to choose from 
 %audInfo.coherences = [0,0.03,0.05,0.07, 0.1,0.139,0.193, 0.268,0.373,0.518,0.72,1];
-audInfo.coherences = [0,0.031,0.044,0.063, 0.089,0.125,0.177, 0.25,0.354,0.5,0.707,1];
-audInfo.cohFreq = data(35:46,1)'; %[0.0, 0.2, 0.4, 0.6, 0.8, 1.0] Each Corresponds to the number of trials in that coherence (0.0-1.0)
-audInfo.cohSet = cohSet_maker(audInfo); 
-audInfo.random_dir_list = randomizer(ExpInfo,audInfo); 
+%audInfo.coherences = [0,0.031,0.044,0.063, 0.089,0.125,0.177, 0.25,0.354,0.5,0.707,1];
+%audInfo.cohFreq = data(35:46,1)'; %[0.0, 0.2, 0.4, 0.6, 0.8, 1.0] Each Corresponds to the number of trials in that coherence (0.0-1.0)
+%audInfo.cohSet = cohSet_maker(audInfo); 
+
+audInfo.cohSet = (nonzeros(data(34:42,1)))'./100; %This is the descending list of Coherences 
+audInfo.coherences = audInfo.cohSet; %This is for use in other functions for success calcs
+audInfo.probs = data(43:46,1)'; %This is the input probablities for the staircase procedure protocol
+
+%audInfo.random_dir_list = randomizer(ExpInfo,audInfo); 
 audInfo.set_dur = 2.523;%Seconds, This is going to be set as long as the speakers dont move, the actual duration of the stimulus will be set by the t_start and t_end variables
 audInfo.t_start = data(27,1); % In ms, , this will also determine "Location" of perceptive field 
 audInfo.t_end = data(28,1);  % In ms, 
