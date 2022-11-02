@@ -177,7 +177,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         fix_point_color = white;
         if trialcounter == 1
             staircase_index = 1; %Initialize index for first trial 
-            dir_matrix = [0,180]
+            dir_matrix = [0,180];
             dotInfo.dir = dir_matrix(randi([1,2])); %for first trial, randomly choose 0(Right) or 180(left) for dir
             dotInfo.coh = dotInfo.cohSet(staircase_index);% (Value 0.0 - 1.0)
         elseif trialcounter > 1
@@ -435,7 +435,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         end_trial_time = hat; %High Accuracy Timer (hat)
         trial_time = end_trial_time-start_trial_time;
         
-        dataout(output_counter,1:9) = {trialcounter pos fix_reward rdk_reward catchtrial target_reward trial_time (dotInfo.coh/1000) dotInfo.dir}; 
+        dataout(output_counter,1:9) = {trialcounter pos fix_reward rdk_reward catchtrial target_reward trial_time dotInfo.coh dotInfo.dir}; 
         trialcounter = trialcounter + 1;
         
         if trialcounter <= total_trials
@@ -446,8 +446,8 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
 [ii, jj, kk] = unique(cell2mat(dataout(2:end,8)));
 freq = accumarray(kk,1); 
 dotInfo.cohFreq =flip(freq');
-while length(audInfo.cohFreq) ~= length(audInfo.cohSet)
-   audInfo.cohFreq(end+1) = 0; 
+while length(dotInfo.cohFreq) ~= length(dotInfo.cohSet)
+   dotInfo.cohFreq(end+1) = 0; 
 end
 
 total_trials = ExpInfo.num_trials; 
