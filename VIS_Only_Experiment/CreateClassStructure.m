@@ -49,21 +49,23 @@ ExpInfo.ppd = 30;%pi * xCenter / atan(monWidth/viewDist/2) / 360;
 
 %% RDK Parameters
 dotInfo = struct;
-dotInfo.catchtrials = data(34,1); % # catch trials
+dotInfo.catchtrials = 0; % # catch trials
 dotInfo.dirSet = dirBin(data); %See function dirBin.m
-dotInfo.random_incorrect_opacity_list = catch_trial_randomizer(ExpInfo,dotInfo,data);%Gives list of 1 = regular trial, 0 = catch trial, see function 
+dotInfo.random_incorrect_opacity_list = catch_trial_randomizer(ExpInfo,dotInfo);%Gives list of 1 = regular trial, 0 = catch trial, see function 
 dotInfo.rdk_size_pix = angle2pixels(ExpInfo.rdk_angle); %RDK window size in pixels
 %dotInfo.coherences = [0.0, 0.05, 0.10, 0.15, 0.2, 0.25, 0.35, 0.40, 0.50, 0.60, 0.80, 1.00]; %Possible coherencecs to choose from 
 %dotInfo.coherences = [0.0, 0.05, 0.10, 0.15, 0.2, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50, 0.55]; %Possible coherencecs to choose from 
 %dotInfo.coherences = [0, 0.1, 0.125892541179417, 0.158489319246111, 0.199526231496888, 0.251188643150958, 0.316227766016838, 0.398107170553497, 0.501187233627272, 0.630957344480193, 0.794328234724282, 1];%Possible coherencecs to choose from 
 %dotInfo.coherences = [0.0, 0.05, 0.10, 0.15, 0.2, 0.25, 0.35, 0.40, 0.70, 0.80, 0.90, 1.00]; %Possible coherencecs to choose from 
 %dotInfo.coherences = [0,0.03,0.05,0.07, 0.1,0.139,0.193, 0.268,0.373,0.518,0.720,1];
-dotInfo.coherences =[0,0.031,0.044,0.063, 0.89,0.125,0.177, 0.25,0.354,0.5,0.707,1];
+%dotInfo.coherences =[0,0.031,0.044,0.063, 0.89,0.125,0.177, 0.25,0.354,0.5,0.707,1];
 %dotInfo.coherences =[0,0.03,0.04,0.06, 0.89,0.13,0.18, 0.25,0.35,0.5,0.71,1.0];
 
-dotInfo.cohFreq = data(35:46,1)'; % Each Corresponds to the number of trials in that coherence 
-dotInfo.cohSet = cohSet_maker(dotInfo); %Randomly scattered cohSet to choose from for regular trials
-dotInfo.random_dir_list = randomizer(ExpInfo,dotInfo);
+%dotInfo.cohFreq = data(35:46,1)'; % Each Corresponds to the number of trials in that coherence 
+dotInfo.cohSet = (nonzeros(data(34:42,1)))'./100; %This is the descending list of Coherences 
+%dotInfo.random_dir_list = randomizer(ExpInfo,dotInfo);
+dotInfo.coherences = dotInfo.cohSet; 
+dotInfo.probs = data(43:46,1)'; %This is the input probablities for the staircase procedure protocol
 
 dotInfo.apXYD = [0 90 (ExpInfo.rdk_angle*10)]; % Location x,y pixels (0,0 is center of screen) and diameter of the aperature, currently in visual degrees - MULTPLIED by 10 because of Shadlen dots code, needed to be an integer
 dotInfo.speed = data(20,1); %Degrees per second?

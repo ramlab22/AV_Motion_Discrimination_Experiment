@@ -12,7 +12,7 @@ yR = prob_Right(2:end,2)';
 y = cat(2,yL,yR);  
 
 plot_data = [x; y]'; 
-plot_data(end+1,:) = prob_zero; 
+plot_data(end+1,:) = prob_zero(:,1:2); 
 plot_data = plot_data(~isnan(plot_data(:,2)),:); 
 
 [fitresult, gof] = createFit_Weibull(plot_data(:,1)+10, plot_data(:,2)/100); 
