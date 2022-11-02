@@ -172,17 +172,26 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         end_target_waitframes = 0; %variable to end target acquisition wait time once fixation is acquired
 
         %Inititlize the coherence and direction for each trial
-        if dotInfo.random_incorrect_opacity_list(trialcounter) == 0
-            catchtrial = 'Yes';
-            fix_point_color = [0 255 0]; %Green 
-        elseif dotInfo.random_incorrect_opacity_list(trialcounter) == 1
-            catchtrial = 'No';
-            fix_point_color = white;
+
+        catchtrial = 'No';
+        fix_point_color = white;
+        if trialcounter == 1
+            staircase_index = 1; %Initialize index for first trial 
+            dir_matrix = [0,180]
+            dotInfo.dir = dir_matrix(randi([1,2])); %for first trial, randomly choose 0(Right) or 180(left) for dir
+            dotInfo.coh = dotInfo.cohSet(staircase_index);% (Value 0.0 - 1.0)
+        elseif trialcounter > 1
+            [dotInfo, staircase_index] = staircase_procedure(trial_status, dotInfo, staircase_index);
         end
         
-        dotInfo.coh = dotInfo.cohSet(trialcounter)*1000; %See CreateClassStructure.m 
-        disp(dotInfo.coh/1000)
-        dotInfo.dir = dotInfo.random_dir_list(trialcounter); %See CreateClassStructure.m for randomization code
+        if dotInfo.dir == 0 
+            disp('Left to Right')
+            disp(dotInfo.coh)
+        elseif dotInfo.dir == 180
+            disp('Right to Left')
+            disp(dotInfo.coh)
+        end
+
         
         
         pos = ExpInfo.random_list(trialcounter);  %Gets random pos # from the list evaluated at specific trial #
@@ -258,7 +267,9 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
             fix_timeout = 0; 
             correct_counter = 0;
             fix_reward = 'Yes';
+
         else
+            fix_timeout = 1;
             fix_reward = 'No';
         end
         
@@ -415,6 +426,11 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
 
         
         %% End of trial Stuff , timing and output
+        if strcmp(target_reward,'Yes')
+            trial_status = 'Correct';
+        else
+            trial_status = 'Incorrect';
+        end
         
         end_trial_time = hat; %High Accuracy Timer (hat)
         trial_time = end_trial_time-start_trial_time;
@@ -427,6 +443,13 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         end
     end
 %% End of Block 
+[ii, jj, kk] = unique(cell2mat(dataout(2:end,8)));
+freq = accumarray(kk,1); 
+dotInfo.cohFreq =flip(freq');
+while length(audInfo.cohFreq) ~= length(audInfo.cohSet)
+   audInfo.cohFreq(end+1) = 0; 
+end
+
 total_trials = ExpInfo.num_trials; 
 num_regular_trials = total_trials - dotInfo.catchtrials; 
 num_catch_trials = dotInfo.catchtrials;
@@ -439,7 +462,7 @@ num_catch_trials = dotInfo.catchtrials;
     prob = coherence_probability(dataout,dotInfo)
     prob_zero = prob(1,:); 
     
-    [Right_dataout, Left_dataout] = direction_splitter(dataout, dotInfo);
+    [Right_dataout, Left_dataout] = direction_splitter(dataout);
     prob_Right = directional_probability(Right_dataout, dotInfo); 
     prob_Left = directional_probability(Left_dataout, dotInfo); 
     

@@ -7,7 +7,7 @@ function [prob] = directional_probability(directional_dataout, dotInfo)
     coherences = dotInfo.coherences;
 
     for i_coherence = 1:length(coherences)
-        for v = 1:length(directional_dataout)
+        for v = 1:length(directional_dataout(:,1))
             if directional_dataout{v,9} == 0 %Right Trial
                 if (strcmp(directional_dataout{v,6},'Yes')) && (directional_dataout{v,8} == coherences(i_coherence))  && (strcmp(directional_dataout{v,5},'No')) %Target Reward & Not a Catch Trial
                     coherence_rew_numbers(2,i_coherence) = coherence_rew_numbers(2,i_coherence)+1;

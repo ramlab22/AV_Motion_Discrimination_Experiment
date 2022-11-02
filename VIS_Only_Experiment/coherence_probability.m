@@ -26,7 +26,8 @@ function [prob] = coherence_probability(dataout, dotInfo)
 
     % All of the Coherence Success Rates in Percentage, regular
     prob = [dotInfo.coherences;
-        coherence_success_rate(2,:)*100];
+        coherence_success_rate(2,:)*100;
+        dotInfo.cohFreq];
 
     prob = prob';
 

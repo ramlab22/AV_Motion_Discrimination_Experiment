@@ -1,12 +1,12 @@
-function [Right_dataout, Left_dataout] = direction_splitter(dataout, dotInfo)
+function [Right_dataout, Left_dataout] = direction_splitter(dataout)
 % %DIRECTION_SPLITTER 
 
 % Split the data out cell array into Left Only and Right Only trials
 % Will be used for psychometric function calculations 
 
-dir_list = num2cell(dotInfo.random_dir_list);
-dir_list = dir_list';
-dataout(2:end,9) = dir_list;
+% dir_list = num2cell(dotInfo.random_dir_list);
+% dir_list = dir_list';
+% dataout(2:end,9) = dir_list;
 
 direction_list = dataout(2:end,9); 
 mat = cell2mat(direction_list); 
