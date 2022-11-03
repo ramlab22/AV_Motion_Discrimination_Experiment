@@ -571,17 +571,25 @@ num_catch_trials = audInfo.catchtrials;
     %Count how many rew and N/A per coherence 
      
     prob = coherence_probability(dataout,audInfo)
-    prob_zero = prob(1,:); 
+%    prob_zero = prob(1,:); 
     
     [Right_dataout, Left_dataout] = direction_splitter(dataout);
     prob_Right = directional_probability(Right_dataout, audInfo); 
     prob_Left = directional_probability(Left_dataout, audInfo); 
     
-    [x, y] = psychometric_plotter(prob_Right,prob_Left, prob_zero);
+    [x, y] = psychometric_plotter(prob_Right,prob_Left);
     Eye_Tracker_Plotter(eye_data_matrix);
     
-     times = cell2mat(dataout(2:end,7)); %Extract the trial times 
-     Total_Block_Time = sum(times);
+    %%Make Rightward only graph
+    prob_right_only = coherence_probability_1_direction(Right_dataout, audInfo);
+    psychometric_plotter_1_direction (prob_right_only, 'RIGHT ONLY');
+    
+    %%Make Leftward only graph
+    prob_left_only = coherence_probability_1_direction(Left_dataout, audInfo);
+    psychometric_plotter_1_direction (prob_left_only, 'LEFT ONLY');
+    
+    times = cell2mat(dataout(2:end,7)); %Extract the trial times 
+    Total_Block_Time = sum(times);
    
     block_counter = block_counter + 1;
     
