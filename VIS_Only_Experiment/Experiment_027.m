@@ -453,6 +453,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         end
     end
 %% End of Block 
+
 [ii, jj, kk] = unique(cell2mat(dataout(2:end,8)));
 freq = accumarray(kk,1); 
 dotInfo.cohFreq =flip(freq');
@@ -480,11 +481,11 @@ num_catch_trials = dotInfo.catchtrials;
     Eye_Tracker_Plotter(eye_data_matrix);
     
     %%Make Rightward only graph
-    prob_right_only = coherence_probability_1_direction(Right_dataout, audInfo);
+    prob_right_only = coherence_probability_1_direction(Right_dataout, dotInfo);
     [R_coh, R_pc, R_fitresult, R_gof, R_fig] = psychometric_plotter_1_direction(prob_right_only, 'RIGHT ONLY');
     
     %%Make Leftward only graph
-    prob_left_only = coherence_probability_1_direction(Left_dataout, audInfo);
+    prob_left_only = coherence_probability_1_direction(Left_dataout, dotInfo);
     [L_coh, L_pc, L_fitresult, L_gof, L_fig] = psychometric_plotter_1_direction(prob_left_only, 'LEFT ONLY');
     
     %Save all figures to Figure Directory
