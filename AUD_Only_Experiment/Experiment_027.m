@@ -600,8 +600,8 @@ num_catch_trials = audInfo.catchtrials;
     
     %Save all figures to Figure Directory
     saveas(fig_both, [figure_file_directory save_name '_Psyc_Func_LR.png'])
-    saveas(fig_both, [figure_file_directory save_name '_Psyc_Func_R.png'])
-    saveas(fig_both, [figure_file_directory save_name '_Psyc_Func_L.png'])
+    saveas(R_fig, [figure_file_directory save_name '_Psyc_Func_R.png'])
+    saveas(L_fig, [figure_file_directory save_name '_Psyc_Func_L.png'])
     
     
     times = cell2mat(dataout(2:end,7)); %Extract the trial times 
