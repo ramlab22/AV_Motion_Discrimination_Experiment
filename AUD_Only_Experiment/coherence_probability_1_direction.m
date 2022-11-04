@@ -1,4 +1,4 @@
-function [prob] = coherence_probability(dataout, audInfo) 
+function [prob] = coherence_probability_1_direction(dataout, audInfo) 
 
 coherence_rew_numbers = [audInfo.coherences;
         zeros(1,length(audInfo.coherences));
@@ -20,14 +20,22 @@ coherence_rew_numbers = [audInfo.coherences;
 
     coherence_success_rate = [audInfo.coherences;
         zeros(1,length(audInfo.coherences))]; %Initilize the top row, and percentages
+    
+    [ii, jj, kk] = unique(cell2mat(dataout(:,8)));
+    freq = accumarray(kk,1); 
+    cohFreq =flip(freq');
+    while length(cohFreq) ~= length(audInfo.cohSet)
+        cohFreq(end+1) = 0; 
+    end
+
     for c = 1:length(audInfo.coherences)
-        coherence_success_rate(2,c) = coherence_rew_numbers(2,c)/(audInfo.cohFreq(c)-coherence_rew_numbers(3,c));  %Subtract the trials where there was no chance for reward(N/A Target Correct)
+        coherence_success_rate(2,c) = coherence_rew_numbers(2,c)/(cohFreq(c) -coherence_rew_numbers(3,c));  %Subtract the trials where there was no chance for reward(N/A Target Correct)
     end
 
     % All of the Coherence Success Rates in Percentage, regular
     prob = [audInfo.coherences;
         coherence_success_rate(2,:)*100;
-        audInfo.cohFreq];
+        cohFreq];
 
     prob = prob';
 end

@@ -43,7 +43,7 @@ ExpInfo.fixpoint_size_pix = angle2pixels(ExpInfo.t_angle); %Fixation Dot Stimulu
 ExpInfo.targpoint_size_pix = ExpInfo.fixpoint_size_pix; %Target Dot Size, same as fixation point for now 
 ExpInfo.rew_radius_volts = angle2volts(ExpInfo.rew_angle); %Reward window radius value in volts 
 %ExpInfo.target_rew_radius_volts = angle2volts(10);
-ExpInfo.target_rew_radius_volts = angle2volts(9.5);
+ExpInfo.target_rew_radius_volts = angle2volts(9);
 
 ExpInfo.ppd = 30;%pi * xCenter / atan(monWidth/viewDist/2) / 360;
 
@@ -58,8 +58,8 @@ dotInfo.rdk_size_pix = angle2pixels(ExpInfo.rdk_angle); %RDK window size in pixe
 %dotInfo.coherences = [0, 0.1, 0.125892541179417, 0.158489319246111, 0.199526231496888, 0.251188643150958, 0.316227766016838, 0.398107170553497, 0.501187233627272, 0.630957344480193, 0.794328234724282, 1];%Possible coherencecs to choose from 
 %dotInfo.coherences = [0.0, 0.05, 0.10, 0.15, 0.2, 0.25, 0.35, 0.40, 0.70, 0.80, 0.90, 1.00]; %Possible coherencecs to choose from 
 %dotInfo.coherences = [0,0.03,0.05,0.07, 0.1,0.139,0.193, 0.268,0.373,0.518,0.720,1];
-%dotInfo.coherences =[0,0.031,0.044,0.063, 0.89,0.125,0.177, 0.25,0.354,0.5,0.707,1];
-%dotInfo.coherences =[0,0.03,0.04,0.06, 0.89,0.13,0.18, 0.25,0.35,0.5,0.71,1.0];
+%dotInfo.coherences =[0,0.031,0.044,0.063, 0.089,0.125,0.177, 0.25,0.354,0.5,0.707,1];
+%dotInfo.coherences =[0,0.03,0.04,0.06, 0.089,0.13,0.18, 0.25,0.35,0.5,0.71,1.0];
 
 %dotInfo.cohFreq = data(35:46,1)'; % Each Corresponds to the number of trials in that coherence 
 dotInfo.cohSet = (nonzeros(data(34:42,1)))'./100; %This is the descending list of Coherences 

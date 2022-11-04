@@ -1,7 +1,7 @@
-function [fitresult, gof, fig] = createFit_Weibull(coh_list, pc)
+function [fitresult, gof, fig] = createFit_Weibull_1_direction(coh_list, pc, direction)
 %CREATEFIT(COH_LIST,PC_AUD)
 %  Create a fit.
-%
+% direction = string 'RIGHT' or "LEFT' 
 %  Data for 'untitled fit 1' fit:
 %      X Input : coh_list
 %      Y Output: pc
@@ -29,13 +29,13 @@ opts.StartPoint = [0.884990233378475 0.276025076998578];
 [fitresult, gof] = fit( xData, yData, ft, opts );
 
 % Plot fit with data.
-fig = figure( 'Name', 'Psychometric Function' );
+fig = figure( 'Name', sprintf('Psychometric Function %s',direction) );
 h = plot( fitresult, xData, yData );
-legend( h, '% Rightward Resp. vs. Coherence', 'Weibull', 'Location', 'NorthEast', 'Interpreter', 'none' );
+legend( h, '% Correct Resp. vs. Coherence', 'Weibull', 'Location', 'NorthEast', 'Interpreter', 'none' );
 % Label axes
-xlabel( 'Coherence (9 = -1 Coh (Leftward) / 11 = +1 Coh (Rightward))', 'Interpreter', 'none' );
-ylabel( '% Rightward Response', 'Interpreter', 'none' );
-xlim([9 11])
+xlabel( 'Coherence %', 'Interpreter', 'none' );
+ylabel( '% Correct Response', 'Interpreter', 'none' );
+xlim([0 1])
 ylim([0 1])
 grid on
 
