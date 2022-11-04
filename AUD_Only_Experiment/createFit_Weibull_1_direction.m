@@ -34,7 +34,7 @@ h = plot( fitresult, xData, yData );
 legend( h, '% Correct Resp. vs. Coherence', 'Weibull', 'Location', 'NorthEast', 'Interpreter', 'none' );
 % Label axes
 xlabel( 'Coherence %', 'Interpreter', 'none' );
-ylabel( '% Correct Response', 'Interpreter', 'none' );
+ylabel( '% Rightward Response', 'Interpreter', 'none' );
 xlim([0 1])
 ylim([0 1])
 grid on

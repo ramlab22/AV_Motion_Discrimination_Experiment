@@ -8,11 +8,20 @@ coherence_rew_numbers = [audInfo.coherences;
 
     for i_coherence = 1:length(coherences)
         for v = 1:length(dataout(:,1))
-            if (strcmp(dataout{v,6},'Yes')) && (dataout{v,8} == coherences(i_coherence))  && (strcmp(dataout{v,5},'No')) %Target Reward & Not a Catch Trial
-                coherence_rew_numbers(2,i_coherence) = coherence_rew_numbers(2,i_coherence)+1;
-            end
-            if  (strcmp(dataout{v,6},'N/A')) && (dataout{v,8} == coherences(i_coherence)) && (strcmp(dataout{v,5},'No')) %No chance for target reward & Not a catch trial
-                coherence_rew_numbers(3,i_coherence) = coherence_rew_numbers(3,i_coherence)+1;
+            if dataout{v,9} == 1 %Right Trial
+                if (strcmp(dataout{v,6},'Yes')) && (dataout{v,8} == coherences(i_coherence))  && (strcmp(dataout{v,5},'No')) %Target Reward & Not a Catch Trial
+                    coherence_rew_numbers(2,i_coherence) = coherence_rew_numbers(2,i_coherence)+1;
+                end
+                if  (strcmp(dataout{v,6},'N/A')) && (dataout{v,8} == coherences(i_coherence)) && (strcmp(dataout{v,5},'No')) %No chance for target reward & Not a catch trial
+                    coherence_rew_numbers(3,i_coherence) = coherence_rew_numbers(3,i_coherence)+1;
+                end
+            elseif dataout{v,9} == 0 %Left Trial
+                if (strcmp(dataout{v,6},'No')) && (dataout{v,8} == coherences(i_coherence))  && (strcmp(dataout{v,5},'No')) %Target Reward & Not a Catch Trial
+                    coherence_rew_numbers(2,i_coherence) = coherence_rew_numbers(2,i_coherence)+1;
+                end
+                if  (strcmp(dataout{v,6},'N/A')) && (dataout{v,8} == coherences(i_coherence)) && (strcmp(dataout{v,5},'No')) %No chance for target reward & Not a catch trial
+                    coherence_rew_numbers(3,i_coherence) = coherence_rew_numbers(3,i_coherence)+1;
+                end
             end
         end
     end
