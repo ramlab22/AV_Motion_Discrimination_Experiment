@@ -159,7 +159,7 @@ block_counter = 1;
 gate_off_time = .1;
 total_blocks = 1; 
 total_trials = ExpInfo.num_trials; 
-dataout = cell(total_trials+1,8);
+dataout = cell(total_trials+1,10);
  
 %% RDK Initilization Stuff
 
@@ -175,7 +175,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
      coh_counter = 1;
     disp(['Trial #: ',num2str(trialcounter),'/',num2str(total_trials)])
     output_counter = output_counter + 1;
-    dataout(output_counter,1:9) = {'Trial #' 'Position #' 'Fixation Correct' 'Auditory Reward' 'Catch Trial' 'Target Correct' 'Total Trial Time (sec)' 'Coherence Level' 'Direction of Motion'}; %Initialize Columns for data output cell
+    dataout(output_counter,1:10) = {'Trial #' 'Position #' 'Fixation Correct' 'Auditory Reward' 'Catch Trial' 'Target Correct' 'Total Trial Time (sec)' 'Coherence Level' 'Direction of Motion' 'Incorrect Target Fixation'}; %Initialize Columns for data output cell
     start_block_time = hat; 
     
     while (trialcounter <= total_trials) && (BreakState ~= 1) % each trial
@@ -464,7 +464,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                         incorrect_counter2 = incorrect_counter2 + 1;
                     end
                     if incorrect_counter2 > target_only_time_frames
-                        incorrect_counter2=0;
+                       
 %                         for frame_2 = 1:TO_time_frames %added 10/13/22-AMS
 %                             Screen('FillRect', window, black);
 %                             vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
@@ -475,12 +475,13 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                     
                 end
                 if frame > time_wait_frames(2)
-                  if correct_counter2 > target_only_time_frames 
+                    if correct_counter2 > target_only_time_frames || incorrect_counter2 > target_only_time_frames
                         break %added 10/8/22-AMS
                     end
                     if (isRightTargetFixation && strcmp('right',correct_target)) || (isLeftTargetFixation && strcmp('left',correct_target))
                         correct_counter2 = correct_counter2 + 1;
-                        
+                    elseif (isLeftTargetFixation && strcmp('right',correct_target)) || (isRightTargetFixation && strcmp('left',correct_target)) && end_target_waitframes == 0
+                        incorrect_counter2 = incorrect_counter2 + 1;    
                     else
                         correct_counter2 = 0;
                         incorrect_counter2 =0 ;
@@ -492,7 +493,8 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                         end
                         break
                     end
-           
+                    
+                
                 end
             end
             if correct_counter2 > target_time_frames - waitframes - time_wait_frames(2)
@@ -505,7 +507,14 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                 target_reward = 'Yes';
             else
                 target_reward = 'No';
+             
+            end
+            
+            if incorrect_counter2 > target_time_frames - waitframes - time_wait_frames(2)
+                incorrect_target_fixation = 'Yes';
                 incorrect_counter2 =0 ;
+            else
+                incorrect_target_fixation = 'No';
             end
         end
         
@@ -547,7 +556,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         end_trial_time = hat;
         trial_time = end_trial_time-start_trial_time;
         
-        dataout(output_counter,1:9) = {trialcounter pos fix_reward aud_reward catchtrial target_reward trial_time audInfo.coh audInfo.dir}; 
+        dataout(output_counter,1:10) = {trialcounter pos fix_reward aud_reward catchtrial target_reward trial_time audInfo.coh audInfo.dir incorrect_target_fixation}; 
         trialcounter = trialcounter + 1;
         
         if trialcounter <= total_trials
@@ -587,12 +596,12 @@ num_catch_trials = audInfo.catchtrials;
     
     %%Make Leftward only graph
     prob_left_only = coherence_probability_1_direction(Left_dataout, audInfo);
-    [L_coh, L_pc, L_fitresult, L_gof, L_fig] = psychometric_plotter_1_direction (prob_left_only, 'LEFT ONLY');
+    [L_coh, L_pc, L_fitresult, L_gof, L_fig] = psychometric_plotter_1_direction(prob_left_only, 'LEFT ONLY');
     
     %Save all figures to Figure Directory
     saveas(fig_both, [figure_file_directory save_name '_Psyc_Func_LR.png'])
-    saveas(fig_both, [figure_file_directory save_name '_Psyc_Func_R.png'])
-    saveas(fig_both, [figure_file_directory save_name '_Psyc_Func_L.png'])
+    saveas(R_fig, [figure_file_directory save_name '_Psyc_Func_R.png'])
+    saveas(L_fig, [figure_file_directory save_name '_Psyc_Func_L.png'])
     
     
     times = cell2mat(dataout(2:end,7)); %Extract the trial times 

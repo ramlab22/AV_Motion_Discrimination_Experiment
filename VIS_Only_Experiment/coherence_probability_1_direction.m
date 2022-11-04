@@ -1,21 +1,21 @@
-function [prob] = coherence_probability_1_direction(dataout, audInfo) 
+function [prob] = coherence_probability_1_direction(dataout, dotInfo) 
 
-coherence_rew_numbers = [audInfo.coherences;
-        zeros(1,length(audInfo.coherences));
-        zeros(1,length(audInfo.coherences))]; %Initilize top row(coherence lvls) and 2nd row(rew numbers) to zero, 3rd row(N/A trials)
+coherence_rew_numbers = [dotInfo.coherences;
+        zeros(1,length(dotInfo.coherences));
+        zeros(1,length(dotInfo.coherences))]; %Initilize top row(coherence lvls) and 2nd row(rew numbers) to zero, 3rd row(N/A trials)
 
-    coherences = audInfo.coherences;
+    coherences = dotInfo.coherences;
 
     for i_coherence = 1:length(coherences)
         for v = 1:length(dataout(:,1))
-            if dataout{v,9} == 1 %Right Trial
+            if dataout{v,9} == 0 %Right Trial
                 if (strcmp(dataout{v,6},'Yes')) && (dataout{v,8} == coherences(i_coherence))  && (strcmp(dataout{v,5},'No')) %Target Reward & Not a Catch Trial
                     coherence_rew_numbers(2,i_coherence) = coherence_rew_numbers(2,i_coherence)+1;
                 end
                 if  (strcmp(dataout{v,6},'N/A')) && (dataout{v,8} == coherences(i_coherence)) && (strcmp(dataout{v,5},'No')) %No chance for target reward & Not a catch trial
                     coherence_rew_numbers(3,i_coherence) = coherence_rew_numbers(3,i_coherence)+1;
                 end
-            elseif dataout{v,9} == 0 %Left Trial
+            elseif dataout{v,9} == 180 %Left Trial
                 if (strcmp(dataout{v,6},'No')) && (dataout{v,8} == coherences(i_coherence))  && (strcmp(dataout{v,5},'No')) %Target Reward & Not a Catch Trial
                     coherence_rew_numbers(2,i_coherence) = coherence_rew_numbers(2,i_coherence)+1;
                 end
@@ -27,22 +27,22 @@ coherence_rew_numbers = [audInfo.coherences;
     end
 
 
-    coherence_success_rate = [audInfo.coherences;
-        zeros(1,length(audInfo.coherences))]; %Initilize the top row, and percentages
+    coherence_success_rate = [dotInfo.coherences;
+        zeros(1,length(dotInfo.coherences))]; %Initilize the top row, and percentages
     
     [ii, jj, kk] = unique(cell2mat(dataout(:,8)));
     freq = accumarray(kk,1); 
     cohFreq =flip(freq');
-    while length(cohFreq) ~= length(audInfo.cohSet)
+    while length(cohFreq) ~= length(dotInfo.cohSet)
         cohFreq(end+1) = 0; 
     end
 
-    for c = 1:length(audInfo.coherences)
+    for c = 1:length(dotInfo.coherences)
         coherence_success_rate(2,c) = coherence_rew_numbers(2,c)/(cohFreq(c) -coherence_rew_numbers(3,c));  %Subtract the trials where there was no chance for reward(N/A Target Correct)
     end
 
     % All of the Coherence Success Rates in Percentage, regular
-    prob = [audInfo.coherences;
+    prob = [dotInfo.coherences;
         coherence_success_rate(2,:)*100;
         cohFreq];
 

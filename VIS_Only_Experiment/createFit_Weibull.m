@@ -1,4 +1,4 @@
-function [fitresult, gof] = createFit_Weibull(coh_list, pc)
+function [fitresult, gof, fig] = createFit_Weibull(coh_list, pc)
 %CREATEFIT(COH_LIST,PC_AUD)
 %  Create a fit.
 %
@@ -29,7 +29,7 @@ opts.StartPoint = [0.884990233378475 0.276025076998578];
 [fitresult, gof] = fit( xData, yData, ft, opts );
 
 % Plot fit with data.
-figure( 'Name', 'Psychometric Function' );
+fig = figure( 'Name', 'Psychometric Function' );
 h = plot( fitresult, xData, yData );
 legend( h, '% Rightward Resp. vs. Coherence', 'Weibull', 'Location', 'NorthEast', 'Interpreter', 'none' );
 % Label axes
