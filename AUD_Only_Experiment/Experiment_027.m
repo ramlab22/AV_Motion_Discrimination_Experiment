@@ -8,7 +8,8 @@ sca;
 %  Version info
 Version = 'Experiment_027_v.2.0' ; % after code changes, change version
 file_directory='C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\AUD_Only_Experiment';
-data_file_directory = 'C:\Jackson\Adriana Stuff\AV_Behavioral_Data\'; 
+data_file_directory = 'C:\Jackson\Adriana Stuff\AV_Behavioral_Data\';
+figure_file_directory = 'C:\Jackson\Adriana Stuff\AV_Figures\'; 
 
 %when running baron on fixation training set to 1
 baron_fixation_training=0;
@@ -577,16 +578,22 @@ num_catch_trials = audInfo.catchtrials;
     prob_Right = directional_probability(Right_dataout, audInfo); 
     prob_Left = directional_probability(Left_dataout, audInfo); 
     
-    [x, y] = psychometric_plotter(prob_Right,prob_Left);
+    [x, y, fitresult, gof, fig_both] = psychometric_plotter(prob_Right,prob_Left);
     Eye_Tracker_Plotter(eye_data_matrix);
     
     %%Make Rightward only graph
     prob_right_only = coherence_probability_1_direction(Right_dataout, audInfo);
-    psychometric_plotter_1_direction (prob_right_only, 'RIGHT ONLY');
+    [R_coh, R_pc, R_fitresult, R_gof, R_fig] = psychometric_plotter_1_direction(prob_right_only, 'RIGHT ONLY');
     
     %%Make Leftward only graph
     prob_left_only = coherence_probability_1_direction(Left_dataout, audInfo);
-    psychometric_plotter_1_direction (prob_left_only, 'LEFT ONLY');
+    [L_coh, L_pc, L_fitresult, L_gof, L_fig] = psychometric_plotter_1_direction (prob_left_only, 'LEFT ONLY');
+    
+    %Save all figures to Figure Directory
+    saveas(fig_both, [figure_file_directory save_name '_Psyc_Func_LR.png'])
+    saveas(fig_both, [figure_file_directory save_name '_Psyc_Func_R.png'])
+    saveas(fig_both, [figure_file_directory save_name '_Psyc_Func_L.png'])
+    
     
     times = cell2mat(dataout(2:end,7)); %Extract the trial times 
     Total_Block_Time = sum(times);
