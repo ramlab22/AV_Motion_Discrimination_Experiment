@@ -412,16 +412,18 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
             fix_timeout = 0; %Reset Timeout toggle for each new trial
             rdk_reward = 'N/A';%If timeout true no chance given for rdk reward so put N/A
             target_reward = 'N/A';%If timeout true no chance given for target reward so put N/A
-            
+            incorrect_target_fixation='N/A';
         end
         if rdk_timeout == 1
             rdk_timeout = 0;
             rdk_reward = 'No';
             target_reward = 'N/A';%If timeout true no chance given for target reward so put N/A
+            incorrect_target_fixation='N/A';
         end
         if targ_timeout == 1
             targ_timeout = 0;
             target_reward = 'No'; %If targ timeout is true that means monkey did not fixate on one of the targets, targ_reward is a timeout (TO)
+            incorrect_target_fixation='N/A';
         end
         
        
@@ -461,7 +463,9 @@ while length(dotInfo.cohFreq) ~= length(dotInfo.cohSet)
    dotInfo.cohFreq(end+1) = 0; 
 end
 
-total_trials = ExpInfo.num_trials; 
+%total_trials = ExpInfo.num_trials; 
+total_trials =trialcounter; 
+
 num_regular_trials = total_trials - dotInfo.catchtrials; 
 num_catch_trials = dotInfo.catchtrials;
 
