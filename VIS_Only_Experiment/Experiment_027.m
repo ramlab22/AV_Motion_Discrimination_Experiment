@@ -176,6 +176,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
 
         catchtrial = 'No';
         fix_point_color = white;
+        
         if trialcounter == 1
             staircase_index = 1; %Initialize index for first trial 
             dir_matrix = [0,180];
