@@ -35,6 +35,7 @@ function [audInfo, staircase_index] = staircase_procedure(trial_status, audInfo,
                 audInfo.dir = 1;
             end
         end
+    elseif strcmp(trial_status, 'Repea')     
     end
     
     

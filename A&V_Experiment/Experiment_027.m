@@ -302,9 +302,6 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
              [av_timeout] = AV_Stimulus_Presentation(ExpInfo, dotInfo, window, xCenter, yCenter, h_voltage, k_voltage, TDT);
              if av_timeout ~= 1
                 av_reward = 'Yes';
-%                 if baron_fixation_training==1
-%                      TDT.trg(1); %add in if fixation only
-%                 end
              else
                 av_reward = 'No';
                 %Timeout for Failure to fixate on fixation
@@ -388,6 +385,8 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                     end
                     if (isRightTargetFixation && strcmp('right',correct_target)) || (isLeftTargetFixation && strcmp('left',correct_target) || (isAnyTargetFixation && strcmp('both',correct_target)))
                         correct_counter2 = correct_counter2 + 1;
+                    elseif (isLeftTargetFixation && strcmp('right',correct_target)) || (isRightTargetFixation && strcmp('left',correct_target)) && end_target_waitframes == 0
+                        incorrect_counter2 = incorrect_counter2 + 1;    
                     else
                         correct_counter2 = 0;
                         incorrect_counter2 =0 ;
@@ -412,22 +411,31 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
             else
                 target_reward = 'No';
             end
+            
+            if incorrect_counter2 > target_time_frames - waitframes - time_wait_frames(2)
+                incorrect_target_fixation = 'Yes';
+                incorrect_counter2 =0 ;
+            else
+                incorrect_target_fixation = 'No';
+            end
         end
         
         if fix_timeout == 1
             fix_timeout = 0; %Reset Timeout toggle for each new trial
             av_reward = 'N/A';%If timeout true no chance given for rdk reward so put N/A
             target_reward = 'N/A';%If timeout true no chance given for target reward so put N/A
-            
+            incorrect_target_fixation='N/A';
         end
         if av_timeout == 1
             av_timeout = 0;
             av_reward = 'No';
             target_reward = 'N/A';%If timeout true no chance given for target reward so put N/A
+            incorrect_target_fixation='N/A';
         end
         if targ_timeout == 1
             targ_timeout = 0;
             target_reward = 'No'; %If targ timeout is true that means monkey did not fixate on one of the targets, targ_reward is a NO
+            incorrect_target_fixation='N/A';
         end
         
        
@@ -446,6 +454,20 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         end_trial_time = GetSecs;
         trial_time = end_trial_time-start_trial_time;
         
+        
+            %set trial status for staircase procedure to decide
+            %probabilities on subsequent trial
+        if strcmp(target_reward,'Yes')
+            trial_status = 'Correct';        
+        elseif strcmp(target_reward,'No') 
+            trial_status = 'Incorrect';
+        else %if subject abandons trial early
+            if trialcounter==1
+                trial_status='Incorrect';
+            else %use whatever the trial_status from the previous trial was to repeat those probabilities
+                trial_status = trial_status;
+            end
+        end
         dataout(output_counter,1:8) = {trialcounter pos fix_reward av_reward catchtrial target_reward trial_time audInfo.coh}; 
         trialcounter = trialcounter + 1;
         
@@ -462,7 +484,7 @@ num_catch_trials = audInfo.catchtrials;
     
     %Break down of each success rate based on coherence level 
     %Count how many rew and N/A per coherence 
-     
+     %% FIX THIS--following line doesnt work
     prob = coherence_probability(dataout,audInfo)
     prob_zero = prob(1,:); 
     

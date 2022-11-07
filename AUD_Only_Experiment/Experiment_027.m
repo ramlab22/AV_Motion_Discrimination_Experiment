@@ -183,8 +183,6 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         start_trial_time = hat; %Trial Start Time
         end_fixation_waitframes = 0; %variable to end fixation acquisition wait time once fixation is acquired
         end_target_waitframes = 0; %variable to end target acquisition wait time once fixation is acquired
-
-
          
         %Initilize the auditory coherence and direction for each trial
 
@@ -238,16 +236,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
 
         %This Includes the reward for fixating for required fixation time
         for frame = 1:fix_time_frames - waitframes
-%             
-%             if baron_fixation_training==1 
-%                 if mod(frame,2) ~= 0
-%                     x = TDT.read('x');
-%                     y = TDT.read('y');
-%                 end
-%             else
-%                 x = TDT.read('x');
-%                 y = TDT.read('y');
-%             end
+
             x = TDT.read('x');
             y = TDT.read('y');
             [eye_data_matrix] = Send_Eye_Position_Data(TDT, start_block_time, eye_data_matrix, 1, trialcounter); %Collect eye position data with timestamp
@@ -313,26 +302,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         
         
          %% Now we play the aud stim and the fixation point
-%         
-%         rdk_timeout = 0;
-% 
-%         if fix_timeout ~= 1
-%             % Draw the RDK
-%             [rdk_timeout] = RDK_Draw(ExpInfo, dotInfo, window, xCenter, yCenter, h_voltage, k_voltage, TDT);
-%             if rdk_timeout ~= 1
-%                rdk_reward = 'Yes'; 
-%                if baron_fixation_training==1
-%                     TDT.trg(1); %add in if fixation only
-%                end
-%             else
-%                rdk_reward = 'No';
-%                %Timeout for Failure to fixate on fixation
-%                for frame_3 = 1:TO_time_frames
-%                    Screen('FillRect', window, black);
-%                    vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
-%                end
-%             end
-%         end
+
 
         %% Present the Auditory Stimulus while keeping the fixation point up
         aud_timeout = 0;
@@ -522,16 +492,18 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
             fix_timeout = 0; %Reset Timeout toggle for each new trial
             aud_reward = 'N/A';%If timeout true no chance given for rdk reward so put N/A
             target_reward = 'N/A';%If timeout true no chance given for target reward so put N/A
-            
+            incorrect_target_fixation='N/A';
         end
         if aud_timeout == 1
             aud_timeout = 0;
             aud_reward = 'No';
             target_reward = 'N/A';%If timeout true no chance given for target reward so put N/A
+            incorrect_target_fixation='N/A';
         end
         if targ_timeout == 1
             targ_timeout = 0;
             target_reward = 'No'; %If targ timeout is true that means monkey did not fixate on one of the targets, targ_reward is a NO
+            incorrect_target_fixation='N/A';
         end
         
        
@@ -547,10 +519,18 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
 
 
         %% End of trial Stuff , timing and output
+            %set trial status for staircase procedure to decide
+            %probabilities on subsequent trial
         if strcmp(target_reward,'Yes')
-            trial_status = 'Correct';
-        else
+            trial_status = 'Correct';        
+        elseif strcmp(target_reward,'No') 
             trial_status = 'Incorrect';
+        else %if subject abandons trial early
+            if trialcounter==1
+                trial_status='Incorrect';
+            else %use whatever the trial_status from the previous trial was to repeat those probabilities
+                trial_status = trial_status;
+            end
         end
   
         end_trial_time = hat;
@@ -570,7 +550,7 @@ audInfo.cohFreq =flip(freq');
 while length(audInfo.cohFreq) ~= length(audInfo.cohSet)
    audInfo.cohFreq(end+1) = 0; 
 end
-
+%total_trials=trialcounter
 total_trials = ExpInfo.num_trials;  
 num_regular_trials = total_trials - audInfo.catchtrials;  
 num_catch_trials = audInfo.catchtrials; 
