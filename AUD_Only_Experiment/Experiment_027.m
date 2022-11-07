@@ -521,10 +521,10 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         %% End of trial Stuff , timing and output
         if strcmp(target_reward,'Yes')
             trial_status = 'Correct';        
-        elseif strcmp(target_reward,'Incorrect') 
+        elseif strcmp(target_reward,'No') 
             trial_status = 'Incorrect';
         else 
-            if trialcount==1
+            if trialcounter==1
                 trial_status='Incorrect';
             else
                 trial_status = trial_status;
@@ -548,7 +548,7 @@ audInfo.cohFreq =flip(freq');
 while length(audInfo.cohFreq) ~= length(audInfo.cohSet)
    audInfo.cohFreq(end+1) = 0; 
 end
-
+%total_trials=trialcounter
 total_trials = ExpInfo.num_trials;  
 num_regular_trials = total_trials - audInfo.catchtrials;  
 num_catch_trials = audInfo.catchtrials; 
