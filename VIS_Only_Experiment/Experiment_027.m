@@ -439,10 +439,18 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
 
         
         %% End of trial Stuff , timing and output
+            %set trial status for staircase procedure to decide
+            %probabilities on subsequent trial
         if strcmp(target_reward,'Yes')
-            trial_status = 'Correct';
-        else
+            trial_status = 'Correct';        
+        elseif strcmp(target_reward,'No') 
             trial_status = 'Incorrect';
+        else %if subject abandons trial early
+            if trialcounter==1 
+                trial_status='Incorrect';
+            else %use whatever the trial_status from the previous trial was to repeat those probabilities
+                trial_status = trial_status; 
+            end
         end
         
         end_trial_time = hat; %High Accuracy Timer (hat)
