@@ -577,6 +577,9 @@ num_catch_trials = audInfo.catchtrials;
     %%Make Leftward only graph
     prob_left_only = coherence_probability_1_direction(Left_dataout, audInfo);
     [L_coh, L_pc, L_fitresult, L_gof, L_fig] = psychometric_plotter_1_direction(prob_left_only, 'LEFT ONLY');
+
+    %%Make Coh vs Trial graph to track progress 
+    coh_vs_trial = plot_coh_vs_trial(dataout);
     
     %Save all figures to Figure Directory
     saveas(fig_both, [figure_file_directory save_name '_Psyc_Func_LR.png'])
