@@ -62,7 +62,7 @@ dotInfo.rdk_size_pix = angle2pixels(ExpInfo.rdk_angle); %RDK window size in pixe
 %dotInfo.coherences =[0,0.03,0.04,0.06, 0.089,0.13,0.18, 0.25,0.35,0.5,0.71,1.0];
 
 %dotInfo.cohFreq = data(35:46,1)'; % Each Corresponds to the number of trials in that coherence 
-dotInfo.cohSet = (nonzeros(data(34:42,1)))'./100; %This is the descending list of Coherences 
+dotInfo.cohSet = (nonzeros(data(50:60,1)))'./100; %This is the descending list of Coherences 
 %dotInfo.random_dir_list = randomizer(ExpInfo,dotInfo);
 dotInfo.coherences = dotInfo.cohSet; 
 dotInfo.probs = data(43:46,1)'; %This is the input probablities for the staircase procedure protocol
