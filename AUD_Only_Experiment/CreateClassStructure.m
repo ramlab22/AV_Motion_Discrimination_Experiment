@@ -90,7 +90,7 @@ audInfo.random_incorrect_opacity_list = catch_trial_randomizer(ExpInfo,audInfo);
 %audInfo.cohFreq = data(35:46,1)'; %[0.0, 0.2, 0.4, 0.6, 0.8, 1.0] Each Corresponds to the number of trials in that coherence (0.0-1.0)
 %audInfo.cohSet = cohSet_maker(audInfo); 
 
-audInfo.cohSet = (nonzeros(data(34:42,1)))'./100; %This is the descending list of Coherences 
+audInfo.cohSet = (nonzeros(data(50:60,1)))'./100; %This is the descending list of Coherences 
 audInfo.coherences = audInfo.cohSet; %This is for use in other functions for success calcs
 audInfo.probs = data(43:46,1)'; %This is the input probablities for the staircase procedure protocol
 
