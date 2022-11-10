@@ -1,4 +1,4 @@
-function  [ExpInfo, dstruct, audInfo]= CreateClassStructure(data, monWidth, viewDist, xCenter, yCenter) %Puts all data input into structure for neatness
+function  [ExpInfo, dstruct, dotInfo, audInfo]= CreateClassStructure(data, monWidth, viewDist, xCenter, yCenter) %Puts all data input into structure for neatness
 %% Jack Mayfield 4/22/22
 
 
@@ -15,6 +15,7 @@ ExpInfo.possible_pos = find(ExpInfo.positions == 1); %Corresponding Number Posit
 ExpInfo.fail_timeout = data(16,1); %Failure of trial timeout in (ms)
 ExpInfo.rdk_angle = data(17,1); %RDK stimulus visual angle
 ExpInfo.target_fixation_time = data(18,1);% Time to fixate inside the target point window in order to get Reward
+ExpInfo.probs = data(43:46,1)'; %This is the input probablities for the staircase procedure protocol
 
 %% This is the random position number generator
 
@@ -41,16 +42,35 @@ ExpInfo.rew_radius_volts = angle2volts(ExpInfo.rew_angle); %Reward window radius
 ExpInfo.target_rew_radius_volts = angle2volts(9);
 ExpInfo.ppd = 30;%pi * xCenter / atan(monWidth/viewDist/2) / 360;
 
+%% RDK Parameters
+
+dotInfo = struct;
+dotInfo.catchtrials = 0; % # catch trials
+dotInfo.dirSet = dirBin(data); %See function dirBin.m
+dotInfo.random_incorrect_opacity_list = catch_trial_randomizer(ExpInfo,dotInfo);%Gives list of 1 = regular trial, 0 = catch trial, see function 
+dotInfo.rdk_size_pix = angle2pixels(ExpInfo.rdk_angle); %RDK window size in pixels
+dotInfo.cohSet = (nonzeros(data(34:42,1)))'./100; %This is the descending list of Coherences 
+dotInfo.coherences = dotInfo.cohSet; 
+
+dotInfo.apXYD = [0 90 (ExpInfo.rdk_angle*10)]; % Location x,y pixels (0,0 is center of screen) and diameter of the aperature, currently in visual degrees - MULTPLIED by 10 because of Shadlen dots code, needed to be an integer
+dotInfo.speed = data(20,1); %Degrees per second?
+dotInfo.dotSize = 4; %RDK Field Dots
+dotInfo.numDotField = 1; %Do not change 
+dotInfo.dotColor = [255 255 255]; %Dot field Color
+dotInfo.maxDotTime = ExpInfo.stim_time/1000; %Puts this in seconds from ms 
+dotInfo.Incorrect_Opacity = 1; %OPacity for the incorrect target if there is only 1 direction of motion, this for training purposes - eventually will be the same opacity as correct 
+dotInfo.maxDotsPerFrame = 400; %Maximum number of dots per frame of the RDK aperture drawing, DO NOT CHANGE - Graphics Card Specific
 
 
 %% Auditory Parameters 
 
+audInfo = struct; 
 audInfo.dirSet = dirBin(data); %[LR DU UD RL] 1 - Include, 0 - Exclude
 audInfo.catchtrials = 0;
 audInfo.random_incorrect_opacity_list = catch_trial_randomizer(ExpInfo,audInfo); 
 audInfo.cohSet = (nonzeros(data(34:42,1)))'./100; %This is the descending list of Coherences 
 audInfo.coherences = audInfo.cohSet; %This is for use in other functions for success calcs
-audInfo.probs = data(43:46,1)'; %This is the input probablities for the staircase procedure protocol
+
 audInfo.set_dur = 2.523;%Seconds, This is going to be set as long as the speakers dont move, the actual duration of the stimulus will be set by the t_start and t_end variables
 audInfo.t_start = data(27,1); % In ms, , this will also determine "Location" of perceptive field 
 audInfo.t_end = data(28,1);  % In ms, 
@@ -65,8 +85,6 @@ audInfo.Incorrect_Opacity = 1;
 % 0       1  = D to U
 % 1       1  = U to D
 % 0       0  = R to L 
-
-
 
 
 end
