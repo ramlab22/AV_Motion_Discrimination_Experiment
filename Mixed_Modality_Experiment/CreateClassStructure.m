@@ -15,7 +15,7 @@ ExpInfo.possible_pos = find(ExpInfo.positions == 1); %Corresponding Number Posit
 ExpInfo.fail_timeout = data(16,1); %Failure of trial timeout in (ms)
 ExpInfo.rdk_angle = data(17,1); %RDK stimulus visual angle
 ExpInfo.target_fixation_time = data(18,1);% Time to fixate inside the target point window in order to get Reward
-ExpInfo.probs = data(43:46,1)'; %This is the input probablities for the staircase procedure protocol
+ExpInfo.probs = data(43:48,1)'; %This is the input probablities for the staircase procedure protocol
 
 %% This is the random position number generator
 
@@ -49,7 +49,7 @@ dotInfo.catchtrials = 0; % # catch trials
 dotInfo.dirSet = dirBin(data); %See function dirBin.m
 dotInfo.random_incorrect_opacity_list = catch_trial_randomizer(ExpInfo,dotInfo);%Gives list of 1 = regular trial, 0 = catch trial, see function 
 dotInfo.rdk_size_pix = angle2pixels(ExpInfo.rdk_angle); %RDK window size in pixels
-dotInfo.cohSet = (nonzeros(data(34:42,1)))'./100; %This is the descending list of Coherences 
+dotInfo.cohSet = (nonzeros(data(50:60,1)))'./100; %This is the descending list of Coherences 
 dotInfo.coherences = dotInfo.cohSet; 
 
 dotInfo.apXYD = [0 90 (ExpInfo.rdk_angle*10)]; % Location x,y pixels (0,0 is center of screen) and diameter of the aperature, currently in visual degrees - MULTPLIED by 10 because of Shadlen dots code, needed to be an integer
@@ -68,7 +68,7 @@ audInfo = struct;
 audInfo.dirSet = dirBin(data); %[LR DU UD RL] 1 - Include, 0 - Exclude
 audInfo.catchtrials = 0;
 audInfo.random_incorrect_opacity_list = catch_trial_randomizer(ExpInfo,audInfo); 
-audInfo.cohSet = (nonzeros(data(34:42,1)))'./100; %This is the descending list of Coherences 
+audInfo.cohSet = (nonzeros(data(50:60,1)))'./100; %This is the descending list of Coherences 
 audInfo.coherences = audInfo.cohSet; %This is for use in other functions for success calcs
 
 audInfo.set_dur = 2.523;%Seconds, This is going to be set as long as the speakers dont move, the actual duration of the stimulus will be set by the t_start and t_end variables
@@ -78,6 +78,9 @@ audInfo.velocity = data(29,1); %deg/sec
 audInfo.muxSet = [0]; %Set to zero for now which only includes LR and RL directions
 audInfo.random_mux_list = zeros(1,(ExpInfo.num_trials)); %Set to zeros for now which only includes LR and RL directions
 audInfo.Incorrect_Opacity = 1;   
+
+%% trial info
+trialInfo.cohset = (nonzeros(data(50:60,1)))'./100; %This is the descending list of Coherences 
  
 % This explains the inputs for each direction of auditory motion
 % dir | mux
