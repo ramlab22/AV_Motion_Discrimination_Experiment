@@ -1,4 +1,4 @@
-function  [ExpInfo, dstruct, dotInfo, audInfo]= CreateClassStructure(data, monWidth, viewDist, xCenter, yCenter) %Puts all data input into structure for neatness
+function  [ExpInfo, dstruct, dotInfo, audInfo, trialInfo]= CreateClassStructure(data, monWidth, viewDist, xCenter, yCenter) %Puts all data input into structure for neatness
 %% Jack Mayfield 4/22/22
 
 
@@ -80,8 +80,11 @@ audInfo.random_mux_list = zeros(1,(ExpInfo.num_trials)); %Set to zeros for now w
 audInfo.Incorrect_Opacity = 1;   
 
 %% trial info
-trialInfo.cohset = (nonzeros(data(50:60,1)))'./100; %This is the descending list of Coherences 
- 
+trialInfo.cohSet = (nonzeros(data(50:60,1)))'./100; %This is the descending list of Coherences
+trialInfo.coherences = trialInfo.cohSet; 
+trialInfo.catchtrials = 0;
+trialInfo.random_incorrect_opacity_list = catch_trial_randomizer(ExpInfo,trialInfo);  
+
 % This explains the inputs for each direction of auditory motion
 % dir | mux
 % 1       0  = L to R 

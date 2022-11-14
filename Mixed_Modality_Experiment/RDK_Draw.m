@@ -1,4 +1,4 @@
-function [rdk_timeout] = RDK_Draw(ExpInfo, dotInfo, trialInfo, curWindow, xCenter, yCenter, h_voltage, k_voltage, TDT)
+function [rdk_timeout, eye_data_matrix] = RDK_Draw(ExpInfo, dotInfo, trialInfo, curWindow, xCenter, yCenter, h_voltage, k_voltage, TDT, start_block_time, eye_data_matrix, trial, fix_point_color)
 % dotInfo will be a struct with all of the information concerning the RDK stimulus
 %look at CreateClassStructure.m function 
 
@@ -12,7 +12,7 @@ refresh_rate = 1/ifi;
     rng(rseed,'v5uniform');
         
 
-    coh = trialInfo.coh/1000;
+    coh = trialInfo.coh;
     apD = dotInfo.apXYD(:,3); % diameter of aperture
     center = repmat([xCenter yCenter],size(dotInfo.apXYD(:,1)));
 
@@ -66,13 +66,14 @@ r = round(ExpInfo.fixpoint_size_pix/2);
 % are replotted according to the speed/direction and coherence. Similarly, the 
 % same is done for the 2nd group, etc.
   %Turn on fixation point Initially
-        Screen('FillOval',curWindow,dotInfo.dotColor,[(xCenter-r) (yCenter-r) (xCenter+r) (yCenter+r)]);
+        Screen('FillOval',curWindow,fix_point_color,[(xCenter-r) (yCenter-r) (xCenter+r) (yCenter+r)]);
 
         Screen('DrawingFinished',curWindow,dontclear);
 
 while continue_show
             x = TDT.read('x');
             y = TDT.read('y');
+            [eye_data_matrix] = Send_Eye_Position_Data(TDT, start_block_time, eye_data_matrix, 2, trial); %Collect eye position data with timestamp
             d = sqrt(((x-h_voltage).^2)+((y-k_voltage).^2));
             if d > ExpInfo.rew_radius_volts
                 %Timeout for Failure to fixate on fixation
@@ -155,7 +156,7 @@ while continue_show
         Screen('DrawDots',curWindow,dots2Display,dotSize,dotInfo.dotColor,center(df,1:2));
     end
     
-        Screen('FillOval',curWindow,dotInfo.dotColor,[(xCenter-r) (yCenter-r) (xCenter+r) (yCenter+r)]);
+        Screen('FillOval',curWindow,fix_point_color,[(xCenter-r) (yCenter-r) (xCenter+r) (yCenter+r)]);
         Screen('DrawingFinished',curWindow,dontclear);
  
 

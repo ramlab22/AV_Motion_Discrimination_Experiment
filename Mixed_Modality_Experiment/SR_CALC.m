@@ -1,4 +1,4 @@
-function [Fixation_Success_Rate, RDK_Success_Rate, Target_Success_Rate_Regular, Target_Success_Rate_Catch] = SR_CALC(dataout,total_trials,num_regular_trials,num_catch_trials)
+function [Fixation_Success_Rate, Stim_Success_Rate, Target_Success_Rate_Regular, Target_Success_Rate_Catch] = SR_CALC(dataout,total_trials,num_regular_trials,num_catch_trials)
     %Count all of the fixation rewards given and divde by total trials to get a Fixation Success Rate 
     fix_rew = zeros(1,total_trials); 
     for j = 2:total_trials+1
@@ -8,14 +8,14 @@ function [Fixation_Success_Rate, RDK_Success_Rate, Target_Success_Rate_Regular, 
     end
     Fixation_Success_Rate = sum(fix_rew)/total_trials; 
 
-    %Count all of the RDK rewards given and divde by total trials to get a RDK Success Rate    
-    rdk_rew = zeros(1,total_trials); 
+    %Count all of the Stim rewards given and divde by total trials to get a Stim Success Rate    
+    stim_rew = zeros(1,total_trials); 
     for h = 2:total_trials+1
         if strcmp(dataout{h,4},'Yes')
-            rdk_rew(h-1) = 1;
+            stim_rew(h-1) = 1;
         end
     end
-    RDK_Success_Rate = sum(rdk_rew)/total_trials;
+    Stim_Success_Rate = sum(stim_rew)/total_trials;
 
     %Count all of the target rewards given and divde by total trials to get a Target Success Rate 
     targ_rew_regular = zeros(1,num_regular_trials); 

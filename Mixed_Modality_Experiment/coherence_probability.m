@@ -1,10 +1,10 @@
-function [prob] = coherence_probability(dataout, audInfo) 
+function [prob] = coherence_probability(dataout, trialInfo) 
 
-coherence_rew_numbers = [audInfo.coherences;
-        zeros(1,length(audInfo.coherences));
-        zeros(1,length(audInfo.coherences))]; %Initilize top row(coherence lvls) and 2nd row(rew numbers) to zero, 3rd row(N/A trials)
+coherence_rew_numbers = [trialInfo.coherences;
+        zeros(1,length(trialInfo.coherences));
+        zeros(1,length(trialInfo.coherences))]; %Initilize top row(coherence lvls) and 2nd row(rew numbers) to zero, 3rd row(N/A trials)
 
-    coherences = audInfo.coherences;
+    coherences = trialInfo.coherences;
 
     for i_coherence = 1:length(coherences)
         for v = 1:length(dataout(:,1))
@@ -18,16 +18,16 @@ coherence_rew_numbers = [audInfo.coherences;
     end
 
 
-    coherence_success_rate = [audInfo.coherences;
-        zeros(1,length(audInfo.coherences))]; %Initilize the top row, and percentages
-    for c = 1:length(audInfo.coherences)
-        coherence_success_rate(2,c) = coherence_rew_numbers(2,c)/(audInfo.cohFreq(c)-coherence_rew_numbers(3,c));  %Subtract the trials where there was no chance for reward(N/A Target Correct)
+    coherence_success_rate = [trialInfo.coherences;
+        zeros(1,length(trialInfo.coherences))]; %Initilize the top row, and percentages
+    for c = 1:length(trialInfo.coherences)
+        coherence_success_rate(2,c) = coherence_rew_numbers(2,c)/(trialInfo.cohFreq(c)-coherence_rew_numbers(3,c));  %Subtract the trials where there was no chance for reward(N/A Target Correct)
     end
 
     % All of the Coherence Success Rates in Percentage, regular
-    prob = [audInfo.coherences;
+    prob = [trialInfo.coherences;
         coherence_success_rate(2,:)*100;
-        audInfo.cohFreq];
+        trialInfo.cohFreq];
 
     prob = prob';
 end

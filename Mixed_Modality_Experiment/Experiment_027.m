@@ -110,7 +110,7 @@ viewDist = 53; %Viewing Distance from monitor in cm
 
 %%%%%%%%%%%%%%%%%%%%%%% Main Structures for variable names %%%%%%%%%%%%%%
  
-[ExpInfo, vstruct, dotInfo, audInfo] = CreateClassStructure(data, monWidth, viewDist, xCenter, yCenter);
+[ExpInfo, vstruct, dotInfo, audInfo, trialInfo] = CreateClassStructure(data, monWidth, viewDist, xCenter, yCenter);
     disp(ExpInfo)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%3
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -159,7 +159,7 @@ block_counter = 1;
 gate_off_time = .1;
 total_blocks = 1; 
 total_trials = ExpInfo.num_trials; 
-dataout = cell(total_trials+1,10);
+dataout = cell(total_trials+1,11);
  
 %% RDK Initilization Stuff
 
@@ -175,7 +175,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     coh_counter = 1;
     disp(['Trial #: ',num2str(trialcounter),'/',num2str(total_trials)])
     output_counter = output_counter + 1;
-    dataout(output_counter,1:10) = {'Trial #' 'Position #' 'Fixation Correct' 'Stimulus Reward' 'Catch Trial' 'Target Correct' 'Total Trial Time (sec)' 'Coherence Level' 'Direction of Motion' 'Incorrect Target Fixation'}; %Initialize Columns for data output cell
+    dataout(output_counter,1:11) = {'Trial #' 'Position #' 'Fixation Correct' 'Stimulus Reward' 'Catch Trial' 'Target Correct' 'Total Trial Time (sec)' 'Coherence Level' 'Direction of Motion' 'Incorrect Target Fixation' 'Stimulus Modality'}; %Initialize Columns for data output cell
     start_block_time = hat; 
 
     trialInfo.modality_list = ["VIS", "AUD"];
@@ -195,11 +195,15 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         if trialcounter == 1
             staircase_index = 1; %Initialize index for first trial 
             trialInfo.modality = trialInfo.modality_list(randi(numel(trialInfo.modality_list)));
-            trialInfo.dir = randi([0,1]); %for first trial, randomly choose 0 or 1 for dir
+            if strcmp(trialInfo.modality, 'AUD')
+                trialInfo.dir = randi([0,1]); %for first trial, randomly choose 0 (Left) or 1 (Right) for dir
+            elseif strcmp(trialInfo.modality, 'VIS')
+               trialInfo.dir = randsample([0, 180],1);%for first trial, randomly choose 0 (Right) or 180 (Left) for dir
+            end
             trialInfo.coh = trialInfo.cohSet(staircase_index);% (Value 0.0 - 1.0)
             
         elseif trialcounter > 1
-            [trialInfo, staircase_index] = staircase_procedure(trial_status, trialInfo, staircase_index);
+            [trialInfo, staircase_index] = staircase_procedure(ExpInfo,trial_status, trialInfo, staircase_index);
         end
 
         
@@ -308,9 +312,10 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         %% Now we play the stim and the fixation point
         %% Present either the Visual or the Auditory Stimulus while keeping the fixation point up
         if strcmp(trialInfo.modality,'VIS')
-
+            aud_reward = 'No';
             rdk_timeout = 0;
-
+            aud_timeout = 0;
+            
             if fix_timeout ~= 1
                 % Draw the RDK
                 [rdk_timeout, eye_data_matrix] = RDK_Draw(ExpInfo, dotInfo, trialInfo, window, xCenter, yCenter, h_voltage, k_voltage, TDT, start_block_time, eye_data_matrix, trialcounter, fix_point_color);
@@ -331,7 +336,10 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     
 
         elseif strcmp(trialInfo.modality,'AUD')
+            rdk_reward = 'No';
             aud_timeout = 0;
+            rdk_timeout = 0;
+            
             TDT.write('aud_off',0); %aud_off - TRUE = 1 , FALSE = 0, Begin with aud_off = 0
 
             if fix_timeout ~= 1
@@ -402,22 +410,21 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                 end
                 
             end
-            
-            if strcmp(rdk_reward, 'Yes') || strcmp(aud_reward, 'Yes')
-                stim_reward = 'Yes';
-            end
-
         end
         
+        
+        if strcmp(rdk_reward, 'Yes') || strcmp(aud_reward, 'Yes')
+            stim_reward = 'Yes';
+        end
         
 
         %% Now Draw the descision targets
         % This Includes a end trial reward for saccade and fixation towards either one of the target
         % points, IN PROGRESS
         targ_timeout = 0;
-        if fix_timeout ~= 1 && (aud_timeout ~= 1 || rdk_timeout ~= 1) && baron_fixation_training ~= 1
+        if fix_timeout ~= 1 && (aud_timeout ~= 1 && rdk_timeout ~= 1) && baron_fixation_training ~= 1
             %This picks the luminace of the targets based on correct direction response, also outputs correct target string variable, eg 'right'
-            [right_target_color,left_target_color,correct_target] = percentage_target_color_selection(audInfo,trialcounter);
+            [right_target_color,left_target_color,correct_target] = percentage_target_color_selection(trialInfo,trialcounter);
             
             for frame = 1:target_time_frames - waitframes
                 
@@ -571,7 +578,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         end_trial_time = hat;
         trial_time = end_trial_time-start_trial_time;
         
-        dataout(output_counter,1:10) = {trialcounter pos fix_reward stim_reward catchtrial target_reward trial_time trialInfo.coh trialInfo.dir incorrect_target_fixation}; 
+        dataout(output_counter,1:11) = {trialcounter pos fix_reward stim_reward catchtrial target_reward trial_time trialInfo.coh trialInfo.dir incorrect_target_fixation trialInfo.modality}; 
         trialcounter = trialcounter + 1;
         
         if trialcounter <= total_trials
@@ -582,36 +589,36 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
 %% End of Block 
 [ii, jj, kk] = unique(cell2mat(dataout(2:end,8)));
 freq = accumarray(kk,1); 
-audInfo.cohFreq =flip(freq');
-while length(audInfo.cohFreq) ~= length(audInfo.cohSet)
-   audInfo.cohFreq(end+1) = 0; 
+trialInfo.cohFreq =flip(freq');
+while length(trialInfo.cohFreq) ~= length(trialInfo.cohSet)
+   trialInfo.cohFreq(end+1) = 0; 
 end
 %total_trials=trialcounter
 total_trials = ExpInfo.num_trials;  
-num_regular_trials = total_trials - audInfo.catchtrials;  
-num_catch_trials = audInfo.catchtrials; 
+num_regular_trials = total_trials - trialInfo.catchtrials;  
+num_catch_trials = trialInfo.catchtrials; 
 
-[Fixation_Success_Rate, AUD_Success_Rate, Target_Success_Rate_Regular, Target_Success_Rate_Catch] = SR_CALC(dataout,total_trials,num_regular_trials,num_catch_trials)
+[Fixation_Success_Rate, Stim_Success_Rate, Target_Success_Rate_Regular, Target_Success_Rate_Catch] = SR_CALC(dataout,total_trials,num_regular_trials,num_catch_trials)
     
     %Break down of each success rate based on coherence level 
     %Count how many rew and N/A per coherence 
      
-    prob = coherence_probability(dataout,audInfo)
+    prob = coherence_probability(dataout,trialInfo)
 %    prob_zero = prob(1,:); 
     
     [Right_dataout, Left_dataout] = direction_splitter(dataout);
-    prob_Right = directional_probability(Right_dataout, audInfo); 
-    prob_Left = directional_probability(Left_dataout, audInfo); 
+    prob_Right = directional_probability(Right_dataout, trialInfo); 
+    prob_Left = directional_probability(Left_dataout, trialInfo); 
     
     [x, y, fitresult, gof, fig_both] = psychometric_plotter(prob_Right,prob_Left);
     Eye_Tracker_Plotter(eye_data_matrix);
     
     %%Make Rightward only graph
-    prob_right_only = coherence_probability_1_direction(Right_dataout, audInfo);
+    prob_right_only = coherence_probability_1_direction(Right_dataout, trialInfo);
     [R_coh, R_pc, R_fitresult, R_gof, R_fig] = psychometric_plotter_1_direction(prob_right_only, 'RIGHT ONLY');
     
     %%Make Leftward only graph
-    prob_left_only = coherence_probability_1_direction(Left_dataout, audInfo);
+    prob_left_only = coherence_probability_1_direction(Left_dataout, trialInfo);
     [L_coh, L_pc, L_fitresult, L_gof, L_fig] = psychometric_plotter_1_direction(prob_left_only, 'LEFT ONLY');
 
     %%Make Coh vs Trial graph to track progress 

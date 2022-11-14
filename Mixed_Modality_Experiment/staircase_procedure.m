@@ -1,6 +1,6 @@
 function [trialInfo, staircase_index] = staircase_procedure(ExpInfo, trial_status, trialInfo, staircase_index)
 
-    %We need info from the last trial on weahter he got the trial correct
+    %We need info from the last trial on weather he got the trial correct
         if strcmp(trial_status, 'Correct')
             x_rand = rand(1); %random num between 0-1 
             if x_rand <= ExpInfo.probs(1) %Prob of Coherence lowering 
@@ -13,26 +13,38 @@ function [trialInfo, staircase_index] = staircase_procedure(ExpInfo, trial_statu
             if x_rand <= ExpInfo.probs(2) %Prob of direction change, after Correct 
                 if strcmp(trialInfo.modality, 'AUD')
                     %Change Direction of the AUD stimulus
-                    if trialInfo.dir == 1 
+                    if trialInfo.dir == 1 %Right
                         trialInfo.dir = 0; 
-                    elseif trialInfo.dir == 0 
+                    elseif trialInfo.dir == 0 %Left
                         trialInfo.dir = 1;
                     end
                 elseif strcmp(trialInfo.modality, 'VIS')
                     %Change Direction of the VIS stimulus
-                    if trialInfo.dir == 0 
+                    if trialInfo.dir == 0 %Right
                         trialInfo.dir = 180; 
-                    elseif trialInfo.dir == 180 
+                    elseif trialInfo.dir == 180 %Left
                         trialInfo.dir = 0;
                     end
                 end
             end
 
-            if x_rand <= ExpInfo.prob(5) %Prob of modality switch
+            if x_rand <= ExpInfo.probs(5) %Prob of modality switch
                 if strcmp(trialInfo.modality, 'VIS')
-                    triaInfo.modality = 'AUD';
+                    trialInfo.modality = 'AUD';
+                    %Make sure that direction is for AUD
+                    if trialInfo.dir == 0 %VIS Right 
+                        trialInfo.dir = 1; %AUD Right
+                    elseif trialInfo.dir == 180 %VIS Left
+                        trialInfo.dir = 0; %AUD Left
+                    end
                 elseif strcmp(trialInfo.modality, 'AUD')
-                    triaInfo.modality = 'VIS'
+                    trialInfo.modality = 'VIS';
+                    %Make sure that direction is for VIS
+                    if trialInfo.dir == 1 %AUD Right 
+                        trialInfo.dir = 0; %VIS Right
+                    elseif trialInfo.dir == 0 %AUD Left
+                        trialInfo.dir = 180; %VIS Left
+                    end
                 end
             end
 
@@ -63,11 +75,23 @@ function [trialInfo, staircase_index] = staircase_procedure(ExpInfo, trial_statu
                 end
             end
 
-            if x_rand <= ExpInfo.prob(6) %Prob of modality switch
+            if y_rand <= ExpInfo.probs(6) %Prob of modality switch
                 if strcmp(trialInfo.modality, 'VIS')
-                    triaInfo.modality = 'AUD';
+                    trialInfo.modality = 'AUD';
+                    %Make sure that direction is for AUD
+                    if trialInfo.dir == 0 %VIS Right 
+                        trialInfo.dir = 1; %AUD Right
+                    elseif trialInfo.dir == 180 %VIS Left
+                        trialInfo.dir = 0; %AUD Left
+                    end
                 elseif strcmp(trialInfo.modality, 'AUD')
-                    triaInfo.modality = 'VIS'
+                    trialInfo.modality = 'VIS';
+                    %Make sure that direction is for VIS
+                    if trialInfo.dir == 1 %AUD Right 
+                        trialInfo.dir = 0; %VIS Right
+                    elseif trialInfo.dir == 0 %AUD Left
+                        trialInfo.dir = 180; %VIS Left
+                    end
                 end
             end
         end
