@@ -550,8 +550,8 @@ audInfo.cohFreq =flip(freq');
 while length(audInfo.cohFreq) ~= length(audInfo.cohSet)
    audInfo.cohFreq(end+1) = 0; 
 end
-%total_trials=trialcounter
-total_trials = ExpInfo.num_trials;  
+total_trials=trialcounter
+%total_trials = ExpInfo.num_trials;  
 num_regular_trials = total_trials - audInfo.catchtrials;  
 num_catch_trials = audInfo.catchtrials; 
 
