@@ -49,7 +49,7 @@ dotInfo.catchtrials = 0; % # catch trials
 dotInfo.dirSet = dirBin(data); %See function dirBin.m
 dotInfo.random_incorrect_opacity_list = catch_trial_randomizer(ExpInfo,dotInfo);%Gives list of 1 = regular trial, 0 = catch trial, see function 
 dotInfo.rdk_size_pix = angle2pixels(ExpInfo.rdk_angle); %RDK window size in pixels
-dotInfo.cohSet = (nonzeros(data(50:60,1)))'./100; %This is the descending list of Coherences 
+dotInfo.cohSet = (nonzeros(data(61:71,1)))'./100; %This is the descending list of Coherences 
 dotInfo.coherences = dotInfo.cohSet; 
 
 dotInfo.apXYD = [0 90 (ExpInfo.rdk_angle*10)]; % Location x,y pixels (0,0 is center of screen) and diameter of the aperature, currently in visual degrees - MULTPLIED by 10 because of Shadlen dots code, needed to be an integer
@@ -80,8 +80,6 @@ audInfo.random_mux_list = zeros(1,(ExpInfo.num_trials)); %Set to zeros for now w
 audInfo.Incorrect_Opacity = 1;   
 
 %% trial info
-trialInfo.cohSet = (nonzeros(data(50:60,1)))'./100; %This is the descending list of Coherences
-trialInfo.coherences = trialInfo.cohSet; 
 trialInfo.catchtrials = 0;
 trialInfo.random_incorrect_opacity_list = catch_trial_randomizer(ExpInfo,trialInfo);  
 

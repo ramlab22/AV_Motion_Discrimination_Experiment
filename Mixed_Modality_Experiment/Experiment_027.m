@@ -193,26 +193,28 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         fix_point_color = white;
 
         if trialcounter == 1
-            staircase_index = 1; %Initialize index for first trial 
-            trialInfo.modality = trialInfo.modality_list(randi(numel(trialInfo.modality_list)));
+            staircase_index_aud = 1; %Initialize index for first trial 
+            staircase_index_dot = 1;
+            trialInfo.modality = trialInfo.modality_list(randi(numel(trialInfo.modality_list)));     
             if strcmp(trialInfo.modality, 'AUD')
                 trialInfo.dir = randi([0,1]); %for first trial, randomly choose 0 (Left) or 1 (Right) for dir
+                trialInfo.coh = audInfo.cohSet(staircase_index);% (Value 0.0 - 1.0)
             elseif strcmp(trialInfo.modality, 'VIS')
                trialInfo.dir = randsample([0, 180],1);%for first trial, randomly choose 0 (Right) or 180 (Left) for dir
+               trialInfo.coh = dotInfo.cohSet(staircase_index);% (Value 0.0 - 1.0)
             end
-            trialInfo.coh = trialInfo.cohSet(staircase_index);% (Value 0.0 - 1.0)
-            
         elseif trialcounter > 1
-            [trialInfo, staircase_index] = staircase_procedure(ExpInfo,trial_status, trialInfo, staircase_index);
+            [trialInfo, staircase_index_dot, staircase_index_aud] = staircase_procedure(ExpInfo, trial_status, trialInfo, staircase_index_aud, staircase_index_dot, audInfo, dotInfo);        end
         end
-
         
         if trialInfo.dir == 0 && strcmp(trialInfo.modality, 'VIS') || trialInfo.dir == 1 && strcmp(trialInfo.modality, 'AUD')
             disp('Left to Right')
             disp(trialInfo.coh)
+            disp(trialInfo.modality)
         elseif trialInfo.dir == 180 && strcmp(trialInfo.modality, 'VIS') || trialInfo.dir == 0 && strcmp(trialInfo.modality, 'AUD')
             disp('Right to Left')
             disp(trialInfo.coh)
+            disp(trialInfo.modality)
         end
 
         if strcmp(trialInfo.modality,'AUD')
@@ -606,7 +608,10 @@ num_catch_trials = trialInfo.catchtrials;
     prob = coherence_probability(dataout,trialInfo)
 %    prob_zero = prob(1,:); 
     
-    [Right_dataout, Left_dataout] = direction_splitter(dataout);
+    [AUD_dataout, VIS_dataout] = modality_splitter(dataout);
+    [AUD_Right_dataout, AUD_Left_dataout] = direction_splitter(AUD_dataout);
+    [VIS_Right_dataout, VIS_Left_dataout] = direction_splitter(VIS_dataout);
+    
     prob_Right = directional_probability(Right_dataout, trialInfo); 
     prob_Left = directional_probability(Left_dataout, trialInfo); 
     
