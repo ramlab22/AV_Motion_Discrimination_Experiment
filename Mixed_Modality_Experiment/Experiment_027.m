@@ -160,8 +160,7 @@ gate_off_time = .1;
 total_blocks = 1; 
 total_trials = ExpInfo.num_trials; 
 dataout = cell(total_trials+1,11);
- 
-%% RDK Initilization Stuff
+rng('default');
 
 
 
@@ -594,6 +593,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     %% End of Block
     [AUD_dataout, VIS_dataout] = modality_splitter(dataout);
     
+    % Get the Frequencies for each coherence in each modality
     [ii, jj, kk] = unique(cell2mat(AUD_dataout(2:end,8)));
     freq = accumarray(kk,1);
     audInfo.cohFreq =flip(freq');
@@ -608,8 +608,12 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         dotInfo.cohFreq(end+1) = 0;
     end
     
-    %total_trials=trialcounter
-    total_trials = ExpInfo.num_trials;
+    if trial_counter < ExpInfo.num_trials
+        total_trials = trial_counter; 
+    else
+        total_trials = ExpInfo.num_trials;
+    end
+
     num_regular_trials = total_trials - trialInfo.catchtrials;
     num_catch_trials = trialInfo.catchtrials;
     
@@ -618,35 +622,41 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     %Break down of each success rate based on coherence level
     %Count how many rew and N/A per coherence
     
-    prob = coherence_probability(dataout,trialInfo)
-    %    prob_zero = prob(1,:);
-    
+    prob_AUD = coherence_probability(AUD_dataout,trialInfo)
+    prob_VIS = coherence_probability(VIS_dataout, trialInfo)
     
     [AUD_Right_dataout, AUD_Left_dataout] = direction_splitter(AUD_dataout);
     [VIS_Right_dataout, VIS_Left_dataout] = direction_splitter(VIS_dataout);
     
-    prob_Right = directional_probability(Right_dataout, trialInfo);
-    prob_Left = directional_probability(Left_dataout, trialInfo);
-    
-    [x, y, fitresult, gof, fig_both] = psychometric_plotter(prob_Right,prob_Left);
+    AUD_prob_Right = directional_probability(AUD_Right_dataout, trialInfo);
+    AUD_prob_Left = directional_probability(AUD_Left_dataout, trialInfo);
+    VIS_prob_Right = directional_probability(VIS_Right_dataout, trialInfo);
+    VIS_prob_Left = directional_probability(VIS_Left_dataout, trialInfo);
+
+    [x, y, fitresult, gof, fig_both_AUD_VIS] = psychometric_plotter_modalities(AUD_prob_Right, AUD_prob_Left, VIS_prob_Right, VIS_prob_Left);
+
     Eye_Tracker_Plotter(eye_data_matrix);
     
-    %%Make Rightward only graph
-    prob_right_only = coherence_probability_1_direction(Right_dataout, trialInfo);
-    [R_coh, R_pc, R_fitresult, R_gof, R_fig] = psychometric_plotter_1_direction(prob_right_only, 'RIGHT ONLY');
     
-    %%Make Leftward only graph
-    prob_left_only = coherence_probability_1_direction(Left_dataout, trialInfo);
-    [L_coh, L_pc, L_fitresult, L_gof, L_fig] = psychometric_plotter_1_direction(prob_left_only, 'LEFT ONLY');
+    AUD_prob_right_only = coherence_probability_1_direction(AUD_Right_dataout, trialInfo);
+    AUD_prob_left_only = coherence_probability_1_direction(AUD_Left_dataout, trialInfo);
+    VIS_prob_right_only = coherence_probability_1_direction(VIS_Right_dataout, trialInfo);
+    VIS_prob_left_only = coherence_probability_1_direction(VIS_Left_dataout, trialInfo);
+    
+    %%Make Rightward only graph with AUD and VIS
+    [R_coh, R_pc, R_fitresult, R_gof, R_fig_AV] = psychometric_plotter_1_direction(AUD_prob_right_only, VIS_prob_right_only, 'RIGHT ONLY');
+    
+    %%Make Leftward only graph with AUD and VIS
+    [L_coh, L_pc, L_fitresult, L_gof, L_fig_AV] = psychometric_plotter_1_direction(AUD_prob_left_only, VIS_prob_left_only, 'LEFT ONLY');
     
     %%Make Coh vs Trial graph to track progress
-    coh_vs_trial_fig = plot_coh_vs_trial(dataout);
+    coh_vs_trial_fig = plot_coh_vs_trial_modalities(AUD_dataout, VIS_dataout);
     
     %Save all figures to Figure Directory
-    saveas(fig_both, [figure_file_directory save_name '_Psyc_Func_LR.png'])
-    saveas(R_fig, [figure_file_directory save_name '_Psyc_Func_R.png'])
-    saveas(L_fig, [figure_file_directory save_name '_Psyc_Func_L.png'])
-    saveas(coh_vs_trial_fig, [figure_file_directory save_name '_Coh_vs_Trial.png'])
+    saveas(fig_both_AUD_VIS, [figure_file_directory save_name '_Psyc_Func_LR_AV.png'])
+    saveas(R_fig_AV, [figure_file_directory save_name '_Psyc_Func_R_AV.png'])
+    saveas(L_fig_AV, [figure_file_directory save_name '_Psyc_Func_L_AV.png'])
+    saveas(coh_vs_trial_fig, [figure_file_directory save_name '_Coh_vs_Trial_AV.png'])
     
     
     times = cell2mat(dataout(2:end,7)); %Extract the trial times
