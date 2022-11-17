@@ -495,11 +495,11 @@ num_catch_trials = dotInfo.catchtrials;
     
     %%Make Rightward only graph
     prob_right_only = coherence_probability_1_direction(Right_dataout, dotInfo);
-    [R_coh, R_pc, R_fitresult, R_gof, R_fig] = psychometric_plotter_1_direction(prob_right_only, 'RIGHT ONLY');
+    [R_coh, R_pc, R_fig] = psychometric_plotter_1_direction(prob_right_only, 'RIGHT ONLY');
     
     %%Make Leftward only graph
     prob_left_only = coherence_probability_1_direction(Left_dataout, dotInfo);
-    [L_coh, L_pc, L_fitresult, L_gof, L_fig] = psychometric_plotter_1_direction(prob_left_only, 'LEFT ONLY');
+    [L_coh, L_pc, L_fig] = psychometric_plotter_1_direction(prob_left_only, 'LEFT ONLY');
     
     %%Make Coh vs Trial graph to track progress 
     coh_vs_trial_fig = plot_coh_vs_trial(dataout);
