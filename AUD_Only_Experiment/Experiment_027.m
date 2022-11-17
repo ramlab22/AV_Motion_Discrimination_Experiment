@@ -560,23 +560,23 @@ num_catch_trials = audInfo.catchtrials;
     %Break down of each success rate based on coherence level 
     %Count how many rew and N/A per coherence 
      
-    prob = coherence_probability(dataout,audInfo)
+     prob = coherence_probability(dataout,audInfo)
 %    prob_zero = prob(1,:); 
     
     [Right_dataout, Left_dataout] = direction_splitter(dataout);
     prob_Right = directional_probability(Right_dataout, audInfo); 
     prob_Left = directional_probability(Left_dataout, audInfo); 
     
-    [x, y, fitresult, gof, fig_both] = psychometric_plotter(prob_Right,prob_Left);
+    [x, y, fig_both] = psychometric_plotter(prob_Right,prob_Left);
     Eye_Tracker_Plotter(eye_data_matrix);
     
     %%Make Rightward only graph
     prob_right_only = coherence_probability_1_direction(Right_dataout, audInfo);
-    [R_coh, R_pc, R_fitresult, R_gof, R_fig] = psychometric_plotter_1_direction(prob_right_only, 'RIGHT ONLY');
+    [R_coh, R_pc, R_fig] = psychometric_plotter_1_direction(prob_right_only, 'RIGHT ONLY');
     
     %%Make Leftward only graph
     prob_left_only = coherence_probability_1_direction(Left_dataout, audInfo);
-    [L_coh, L_pc, L_fitresult, L_gof, L_fig] = psychometric_plotter_1_direction(prob_left_only, 'LEFT ONLY');
+    [L_coh, L_pc, L_fig] = psychometric_plotter_1_direction(prob_left_only, 'LEFT ONLY');
 
     %%Make Coh vs Trial graph to track progress 
     coh_vs_trial_fig = plot_coh_vs_trial(dataout);
