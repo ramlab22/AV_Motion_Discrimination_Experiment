@@ -633,7 +633,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     VIS_prob_Right = directional_probability(VIS_Right_dataout, trialInfo);
     VIS_prob_Left = directional_probability(VIS_Left_dataout, trialInfo);
 
-    [x, y, fitresult, gof, fig_both_AUD_VIS] = psychometric_plotter_modalities(AUD_prob_Right, AUD_prob_Left, VIS_prob_Right, VIS_prob_Left);
+    [fig_both_AUD_VIS] = psychometric_plotter_modalities(AUD_prob_Right, AUD_prob_Left, VIS_prob_Right, VIS_prob_Left);
 
     Eye_Tracker_Plotter(eye_data_matrix);
     
@@ -644,10 +644,10 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     VIS_prob_left_only = coherence_probability_1_direction(VIS_Left_dataout, trialInfo);
     
     %%Make Rightward only graph with AUD and VIS
-    [R_coh, R_pc, R_fitresult, R_gof, R_fig_AV] = psychometric_plotter_1_direction(AUD_prob_right_only, VIS_prob_right_only, 'RIGHT ONLY');
+    [R_fig_AV] = psychometric_plotter_1_direction_modalities(AUD_prob_right_only, VIS_prob_right_only, 'RIGHT ONLY');
     
     %%Make Leftward only graph with AUD and VIS
-    [L_coh, L_pc, L_fitresult, L_gof, L_fig_AV] = psychometric_plotter_1_direction(AUD_prob_left_only, VIS_prob_left_only, 'LEFT ONLY');
+    [L_fig_AV] = psychometric_plotter_1_direction_modalities(AUD_prob_left_only, VIS_prob_left_only, 'LEFT ONLY');
     
     %%Make Coh vs Trial graph to track progress
     coh_vs_trial_fig = plot_coh_vs_trial_modalities(AUD_dataout, VIS_dataout);
