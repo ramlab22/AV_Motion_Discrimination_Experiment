@@ -110,7 +110,7 @@ viewDist = 53; %Viewing Distance from monitor in cm
 
 %%%%%%%%%%%%%%%%%%%%%%% Main Structures for variable names %%%%%%%%%%%%%%
  
-[ExpInfo, vstruct, dotInfo, audInfo] = CreateClassStructure(data, monWidth, viewDist, xCenter, yCenter);
+[ExpInfo, vstruct, audInfo] = CreateClassStructure(data, monWidth, viewDist, xCenter, yCenter);
     disp(ExpInfo)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%3
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -136,7 +136,7 @@ target_only_time_frames = round((ExpInfo.target_fixation_time/1000)/ ifi);
 %target_distance_from_fixpoint_pix=350; %+- x distance between fixation point location and target location in pixels
 %target_distance_from_fixpoint_pix=300; %+- x distance between fixation point location and target location in pixels
 target_distance_from_fixpoint_pix=270; %+- x distance between fixation point location and target location in pixels
-target_y_coord_pix = targ_adjust_y(dotInfo.apXYD(:,2)); %Pixel Y coordinate adjustment for the targets with relation to the RDK aperature
+target_y_coord_pix = targ_adjust_y(90); %Pixel Y coordinate adjustment for the targets with relation to the RDK aperature
 target_y_coord_volts = pixels2volts_Y(target_y_coord_pix);%yCenter+target_y_coord_pix); %Added to yCenter to account for shadlen dots functions using a 0,0 center coordinate
 
 volts_per_pixel=0.0078125; %10 volts/1280 pixels= X volts/1 pixel , This is for the X direction ONLY
@@ -550,8 +550,8 @@ audInfo.cohFreq =flip(freq');
 while length(audInfo.cohFreq) ~= length(audInfo.cohSet)
    audInfo.cohFreq(end+1) = 0; 
 end
-total_trials=trialcounter
-%total_trials = ExpInfo.num_trials;  
+%total_trials=trialcounter
+total_trials = ExpInfo.num_trials;  
 num_regular_trials = total_trials - audInfo.catchtrials;  
 num_catch_trials = audInfo.catchtrials; 
 
