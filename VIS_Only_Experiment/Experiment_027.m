@@ -465,13 +465,6 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     end
 %% End of Block 
 
-[ii, jj, kk] = unique(cell2mat(dataout(2:end,8)));
-freq = accumarray(kk,1); 
-dotInfo.cohFreq =flip(freq');
-while length(dotInfo.cohFreq) ~= length(dotInfo.cohSet)
-   dotInfo.cohFreq(end+1) = 0; 
-end
-
 total_trials = ExpInfo.num_trials; 
  
 
@@ -482,11 +475,15 @@ num_catch_trials = dotInfo.catchtrials;
 
     %Break down of each success rate based on coherence level 
     %Count how many rew and N/A per coherence 
-    
+    dotInfo.cohFreq = cohFreq_finder(dataout, dotInfo);
     prob = coherence_probability(dataout,dotInfo)
     prob_zero = prob(1,:); 
     
     [Right_dataout, Left_dataout] = direction_splitter(dataout);
+    
+    dotInfo.cohFreq_right = cohFreq_finder(Right_dataout, dotInfo);
+    dotInfo.cohFreq_left = cohFreq_finder(Left_dataout, dotInfo);
+    
     prob_Right = directional_probability(Right_dataout, dotInfo); 
     prob_Left = directional_probability(Left_dataout, dotInfo); 
     

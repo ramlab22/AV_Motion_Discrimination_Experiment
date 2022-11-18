@@ -1,10 +1,10 @@
-function [prob] = directional_probability(directional_dataout, audInfo) 
+function [prob] = directional_probability(directional_dataout, dotInfo) 
 
-coherence_rew_numbers = [audInfo.coherences;
-        zeros(1,length(audInfo.coherences));
-        zeros(1,length(audInfo.coherences))]; %Initilize top row(coherence lvls) and 2nd row(rew numbers) to zero, 3rd row(N/A trials)
+coherence_rew_numbers = [dotInfo.coherences;
+        zeros(1,length(dotInfo.coherences));
+        zeros(1,length(dotInfo.coherences))]; %Initilize top row(coherence lvls) and 2nd row(rew numbers) to zero, 3rd row(N/A trials)
 
-    coherences = audInfo.coherences;
+    coherences = dotInfo.coherences;
 
     for i_coherence = 1:length(coherences)
         for v = 1:length(directional_dataout(:,1))
@@ -27,14 +27,19 @@ coherence_rew_numbers = [audInfo.coherences;
     end
 
 
-    coherence_success_rate = [audInfo.coherences;
-        zeros(1,length(audInfo.coherences))]; %Initilize the top row, and percentages
-    for c = 1:length(audInfo.coherences)
-        coherence_success_rate(2,c) = coherence_rew_numbers(2,c)/((round(audInfo.cohFreq(c)/2))-coherence_rew_numbers(3,c));  %Subtract the trials where there was no chance for reward(N/A Target Correct)
+    coherence_success_rate = [dotInfo.coherences;
+        zeros(1,length(dotInfo.coherences))]; %Initilize the top row, and percentages
+    if directional_dataout{2,9} == 1 %Right
+        for c = 1:length(dotInfo.coherences)
+            coherence_success_rate(2,c) = coherence_rew_numbers(2,c)/(dotInfo.cohFreq_right(2,c))-(coherence_rew_numbers(3,c));  %Subtract the trials where there was no chance for reward(N/A Target Correct)
+        end
+    elseif directional_dataout{2,9} == 0 %Left
+        for c = 1:length(dotInfo.coherences)
+            coherence_success_rate(2,c) = coherence_rew_numbers(2,c)/(dotInfo.cohFreq_left(2,c))-(coherence_rew_numbers(3,c));  %Subtract the trials where there was no chance for reward(N/A Target Correct)
+        end
     end
-
     % All of the Coherence Success Rates in Percentage, regular
-    prob = [audInfo.coherences;
+    prob = [dotInfo.coherences;
         coherence_success_rate(2,:)*100];
 
     prob = prob';
