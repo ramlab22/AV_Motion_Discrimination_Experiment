@@ -594,19 +594,9 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     [AUD_dataout, VIS_dataout] = modality_splitter(dataout);
     
     % Get the Frequencies for each coherence in each modality
-    [ii, jj, kk] = unique(cell2mat(AUD_dataout(2:end,8)));
-    freq = accumarray(kk,1);
-    audInfo.cohFreq =flip(freq');
-    while length(audInfo.cohFreq) ~= length(audInfo.cohSet)
-        audInfo.cohFreq(end+1) = 0;
-    end
-    
-    [i, j, k] = unique(cell2mat(VIS_dataout(2:end,8)));
-    freq = accumarray(k,1);
-    dotInfo.cohFreq =flip(freq');
-    while length(dotInfo.cohFreq) ~= length(dotInfo.cohSet)
-        dotInfo.cohFreq(end+1) = 0;
-    end
+    [audInfo.cohFreq] = cohFreq_finder(AUD_dataout, audInfo);
+    [dotInfo.cohFreq] = cohFreq_finder(VIS_dataout, dotInfo);
+
     
     if trial_counter < ExpInfo.num_trials
         total_trials = trial_counter; 

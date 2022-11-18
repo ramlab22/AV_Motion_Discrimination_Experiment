@@ -28,7 +28,7 @@ VIS_fit_par = fminsearch(VIS_fun, VIS_parms, opts);
 
 x = -1:.01:1;
 AUD_p = cdf('Normal', x, AUD_fit_par(1), AUD_fit_par(2));
-VIS_p = cdf('Normal', x, AUD_fit_par(1), AUD_fit_par(2));
+VIS_p = cdf('Normal', x, VIS_fit_par(1), VIS_fit_par(2));
 
 % Plot fit with data.
 fig = figure( 'Name', 'Psychometric Function' );
