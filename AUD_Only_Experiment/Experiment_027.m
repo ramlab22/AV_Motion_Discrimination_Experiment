@@ -319,46 +319,29 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                 [eye_data_matrix] = Send_Eye_Position_Data(TDT, start_block_time, eye_data_matrix, 2, trialcounter); %Collect eye position data with timestamp
                 
                 d = sqrt(((x-h_voltage).^2)+((y-k_voltage).^2));
-                if frame < time_wait_frames(1)
-                    Screen('DrawDots', window,[h i_trial], ExpInfo.fixpoint_size_pix, fix_point_color, [], 2);
-                    %Flip to the screen
-                    vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
-                    
-                    if (d <= ExpInfo.rew_radius_volts)
-                        aud_correct_counter = aud_correct_counter + 1;
-                        if frame>10
-                            end_fixation_waitframes = 1;
-                        end
-                    end
-                    if d >= ExpInfo.rew_radius_volts && end_fixation_waitframes==1 %AMS-050622
-                        aud_correct_counter = 0;
-                        %Timeout for Failure to fixate on fixation, during
-                        %auditory stim period
-                        for frame_2 = 1:TO_time_frames
-                            Screen('FillRect', window, black);
-                            vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
-                            aud_timeout = 1;
-                            TDT.write('aud_off',1); %Turn off Audio 
-                        end
-                        break
+
+                Screen('DrawDots', window,[h i_trial], ExpInfo.fixpoint_size_pix, fix_point_color, [], 2);
+                %Flip to the screen
+                vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
+
+                if (d <= ExpInfo.rew_radius_volts)
+                    aud_correct_counter = aud_correct_counter + 1;
+                    if frame>10
+                        end_fixation_waitframes = 1;        
                     end
                 end
-                if frame > time_wait_frames(1)
-                    Screen('DrawDots', window,[h i_trial], ExpInfo.fixpoint_size_pix, fix_point_color, [], 2);
-                    vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
-                    if d <= ExpInfo.rew_radius_volts
-                        aud_correct_counter = aud_correct_counter + 1;
-                    else
-                        aud_correct_counter = 0; 
-                        %Timeout for Failure to fixate on fixation
-                        for frame_2 = 1:TO_time_frames
-                            Screen('FillRect', window, black);
-                            vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
-                            aud_timeout = 1;
-                            TDT.write('aud_off',1); %Turn off Audio
-                        end
-                        break
+
+                if d >= ExpInfo.rew_radius_volts && end_fixation_waitframes==1 %AMS-050622
+                    aud_correct_counter = 0;
+                    %Timeout for Failure to fixate on fixation, during
+                    %auditory stim period
+                    for frame_2 = 1:TO_time_frames
+                        Screen('FillRect', window, black);
+                        vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
+                        aud_timeout = 1;
+                        TDT.write('aud_off',1); %Turn off Audio
                     end
+                    break
                 end
             end
             

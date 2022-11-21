@@ -356,46 +356,27 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                     [eye_data_matrix] = Send_Eye_Position_Data(TDT, start_block_time, eye_data_matrix, 2, trialcounter); %Collect eye position data with timestamp
                     
                     d = sqrt(((x-h_voltage).^2)+((y-k_voltage).^2));
-                    if frame < time_wait_frames(1)
-                        Screen('DrawDots', window,[h i_trial], ExpInfo.fixpoint_size_pix, fix_point_color, [], 2);
-                        %Flip to the screen
-                        vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
-                        
-                        if (d <= ExpInfo.rew_radius_volts)
-                            aud_correct_counter = aud_correct_counter + 1;
-                            if frame>10
-                                end_fixation_waitframes = 1;
-                            end
-                        end
-                        if d >= ExpInfo.rew_radius_volts && end_fixation_waitframes==1 %AMS-050622
-                            aud_correct_counter = 0;
-                            %Timeout for Failure to fixate on fixation, during
-                            %auditory stim period
-                            for frame_2 = 1:TO_time_frames
-                                Screen('FillRect', window, black);
-                                vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
-                                aud_timeout = 1;
-                                TDT.write('aud_off',1); %Turn off Audio
-                            end
-                            break
+                    Screen('DrawDots', window,[h i_trial], ExpInfo.fixpoint_size_pix, fix_point_color, [], 2);
+                    %Flip to the screen
+                    vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
+                    
+                    if (d <= ExpInfo.rew_radius_volts)
+                        aud_correct_counter = aud_correct_counter + 1;
+                        if frame>10
+                            end_fixation_waitframes = 1;
                         end
                     end
-                    if frame > time_wait_frames(1)
-                        Screen('DrawDots', window,[h i_trial], ExpInfo.fixpoint_size_pix, fix_point_color, [], 2);
-                        vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
-                        if d <= ExpInfo.rew_radius_volts
-                            aud_correct_counter = aud_correct_counter + 1;
-                        else
-                            aud_correct_counter = 0;
-                            %Timeout for Failure to fixate on fixation
-                            for frame_2 = 1:TO_time_frames
-                                Screen('FillRect', window, black);
-                                vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
-                                aud_timeout = 1;
-                                TDT.write('aud_off',1); %Turn off Audio
-                            end
-                            break
+                    if d >= ExpInfo.rew_radius_volts && end_fixation_waitframes==1 %AMS-050622
+                        aud_correct_counter = 0;
+                        %Timeout for Failure to fixate on fixation, during
+                        %auditory stim period
+                        for frame_2 = 1:TO_time_frames
+                            Screen('FillRect', window, black);
+                            vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
+                            aud_timeout = 1;
+                            TDT.write('aud_off',1); %Turn off Audio
                         end
+                        break
                     end
                 end
                 
@@ -612,26 +593,26 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     %Break down of each success rate based on coherence level
     %Count how many rew and N/A per coherence
     
-    prob_AUD = coherence_probability(AUD_dataout,trialInfo)
-    prob_VIS = coherence_probability(VIS_dataout, trialInfo)
+    prob_AUD = coherence_probability(AUD_dataout, audInfo)
+    prob_VIS = coherence_probability(VIS_dataout, dotInfo)
     
     [AUD_Right_dataout, AUD_Left_dataout] = direction_splitter(AUD_dataout);
     [VIS_Right_dataout, VIS_Left_dataout] = direction_splitter(VIS_dataout);
     
-    AUD_prob_Right = directional_probability(AUD_Right_dataout, trialInfo);
-    AUD_prob_Left = directional_probability(AUD_Left_dataout, trialInfo);
-    VIS_prob_Right = directional_probability(VIS_Right_dataout, trialInfo);
-    VIS_prob_Left = directional_probability(VIS_Left_dataout, trialInfo);
+    AUD_prob_Right = directional_probability(AUD_Right_dataout, audInfo, 'Right');
+    AUD_prob_Left = directional_probability(AUD_Left_dataout, audInfo, 'Left');
+    VIS_prob_Right = directional_probability(VIS_Right_dataout, dotInfo, 'Right');
+    VIS_prob_Left = directional_probability(VIS_Left_dataout, dotInfo, 'Left');
 
     [fig_both_AUD_VIS] = psychometric_plotter_modalities(AUD_prob_Right, AUD_prob_Left, VIS_prob_Right, VIS_prob_Left);
 
     Eye_Tracker_Plotter(eye_data_matrix);
     
     
-    AUD_prob_right_only = coherence_probability_1_direction(AUD_Right_dataout, trialInfo);
-    AUD_prob_left_only = coherence_probability_1_direction(AUD_Left_dataout, trialInfo);
-    VIS_prob_right_only = coherence_probability_1_direction(VIS_Right_dataout, trialInfo);
-    VIS_prob_left_only = coherence_probability_1_direction(VIS_Left_dataout, trialInfo);
+    AUD_prob_right_only = coherence_probability_1_direction(AUD_Right_dataout, audInfo,'Right');
+    AUD_prob_left_only = coherence_probability_1_direction(AUD_Left_dataout, audInfo,'Left');
+    VIS_prob_right_only = coherence_probability_1_direction(VIS_Right_dataout, dotInfo,'Right');
+    VIS_prob_left_only = coherence_probability_1_direction(VIS_Left_dataout, dotInfo,'Left');
     
     %%Make Rightward only graph with AUD and VIS
     [R_fig_AV] = psychometric_plotter_1_direction_modalities(AUD_prob_right_only, VIS_prob_right_only, 'RIGHT ONLY');

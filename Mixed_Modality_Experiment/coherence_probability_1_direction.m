@@ -1,4 +1,4 @@
-function [prob] = coherence_probability_1_direction(dataout, dotInfo) 
+function [prob] = coherence_probability_1_direction(dataout, dotInfo, direction) 
 
 coherence_rew_numbers = [dotInfo.coherences;
         zeros(1,length(dotInfo.coherences));
@@ -31,11 +31,11 @@ coherence_rew_numbers = [dotInfo.coherences;
         zeros(1,length(dotInfo.coherences))]; %Initilize the top row, and percentages
     
 
-    if dataout{2,9} == 1 || dataout{2,9} == 0 %Right
+    if strcmp(direction, "Right") %Right
         for c = 1:length(dotInfo.coherences)
             coherence_success_rate(2,c) = coherence_rew_numbers(2,c)/((dotInfo.cohFreq_right(2,c))-(coherence_rew_numbers(3,c)));  %Subtract the trials where there was no chance for reward(N/A Target Correct)
         end
-    elseif dataout{2,9} == 0 %Left
+    elseif strcmp(direction, "Left") %Left
         for c = 1:length(dotInfo.coherences)
             coherence_success_rate(2,c) = coherence_rew_numbers(2,c)/((dotInfo.cohFreq_left(2,c))-(coherence_rew_numbers(3,c)));  %Subtract the trials where there was no chance for reward(N/A Target Correct)
         end
