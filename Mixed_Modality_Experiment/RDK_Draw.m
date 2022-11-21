@@ -32,8 +32,8 @@ for df = 1 : dotInfo.numDotField
     % dxdy is an N x 2 matrix that gives jumpsize in units on 0..1
     %   deg/sec * ap-unit/deg * sec/jump = ap-unit/jump
     dxdy{df} = repmat((dotInfo.speed(df)/10) * (10/apD(df)) * ...
-        (3/refresh_rate) * [cos(pi*trialInfo.dir(df)/180.0), ...
-        -sin(pi*trialInfo.dir(df)/180.0)], ndots(df),1);    
+        (3/refresh_rate) * [cos(pi*dotInfo.dir(df)/180.0), ...
+        -sin(pi*dotInfo.dir(df)/180.0)], ndots(df),1);    
     ss{df} = rand(ndots(df)*3, 2); % array of dot positions raw [x,y]
     % Divide dots into three sets
     Ls{df} = cumsum(ones(ndots(df),3)) + repmat([0 ndots(df) ndots(df)*2], ... 
@@ -120,8 +120,8 @@ while continue_show
         N = sum((this_s{df} > 1 | this_s{df} < 0)')' ~= 0;
         
         if sum(N) > 0
-            xdir = sin(pi*trialInfo.dir(df)/180.0);
-            ydir = cos(pi*trialInfo.dir(df)/180.0);
+            xdir = sin(pi*dotInfo.dir(df)/180.0);
+            ydir = cos(pi*dotInfo.dir(df)/180.0);
             % Flip a weighted coin to see which edge to put the replaced dots
             if rand < abs(xdir)/(abs(xdir) + abs(ydir))
                 this_s{df}(find(N==1),:) = [rand(sum(N),1),(xdir > 0)*ones(sum(N),1)];

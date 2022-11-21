@@ -32,10 +32,11 @@ VIS_p = cdf('Normal', x, VIS_fit_par(1), VIS_fit_par(2));
 
 % Plot fit with data.
 fig = figure( 'Name', 'Psychometric Function' );
-scatter(AUD_xData, AUD_yData, VIS_xData, VIS_yData)
-hold on 
+scatter(AUD_xData, AUD_yData)
+hold on
+scatter(VIS_xData, VIS_yData)
 plot(x, AUD_p, x, VIS_p);
-legend('AUD', 'AUD - NormCDF','VIS', 'VIS - NormCDF', 'Location', 'NorthEast', 'Interpreter', 'none' );
+legend('AUD','VIS', 'AUD - NormCDF', 'VIS - NormCDF', 'Location', 'NorthEast', 'Interpreter', 'none' );
 % Label axes
 xlabel( 'Coherence ((+)Rightward, (-)Leftward)', 'Interpreter', 'none' );
 ylabel( '% Rightward Response', 'Interpreter', 'none' );

@@ -197,29 +197,29 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
             trialInfo.modality = trialInfo.modality_list(randi(numel(trialInfo.modality_list)));
             trialInfo.modality=trialInfo.modality{1};
             if strcmp(trialInfo.modality, 'AUD')
-                trialInfo.dir = randi([0,1]); %for first trial, randomly choose 0 (Left) or 1 (Right) for dir
+                audInfo.dir = randi([0,1]); %for first trial, randomly choose 0 (Left) or 1 (Right) for dir
                 trialInfo.coh = audInfo.cohSet(staircase_index_aud);% (Value 0.0 - 1.0)
             elseif strcmp(trialInfo.modality, 'VIS')
-                trialInfo.dir = randsample([0, 180],1);%for first trial, randomly choose 0 (Right) or 180 (Left) for dir
+                dotInfo.dir = randsample([0, 180],1);%for first trial, randomly choose 0 (Right) or 180 (Left) for dir
                 trialInfo.coh = dotInfo.cohSet(staircase_index_dot);% (Value 0.0 - 1.0)
             end
         elseif trialcounter > 1
-            [trialInfo, staircase_index_dot, staircase_index_aud] = staircase_procedure(ExpInfo, trial_status, trialInfo, staircase_index_aud, staircase_index_dot, audInfo, dotInfo);        
+            [trialInfo, staircase_index_dot, staircase_index_aud, dotInfo, audInfo] = staircase_procedure(ExpInfo, trial_status, trialInfo, staircase_index_aud, staircase_index_dot, audInfo, dotInfo);        
         end %if first trial
         
-        if trialInfo.dir == 0 && strcmp(trialInfo.modality, 'VIS') || trialInfo.dir == 1 && strcmp(trialInfo.modality, 'AUD')
+        if (dotInfo.dir == 0 && strcmp(trialInfo.modality, 'VIS')) || (audInfo.dir == 1 && strcmp(trialInfo.modality, 'AUD'))
+            disp(trialInfo.modality)
             disp('Left to Right')
             disp(trialInfo.coh)
+        elseif (dotInfo.dir == 180 && strcmp(trialInfo.modality, 'VIS')) || (audInfo.dir == 0 && strcmp(trialInfo.modality, 'AUD'))
             disp(trialInfo.modality)
-        elseif trialInfo.dir == 180 && strcmp(trialInfo.modality, 'VIS') || trialInfo.dir == 0 && strcmp(trialInfo.modality, 'AUD')
             disp('Right to Left')
             disp(trialInfo.coh)
-            disp(trialInfo.modality)
         end
         
         %create CAM files if auditory
         if strcmp(trialInfo.modality,'AUD') 
-            [audInfo.CAM] = makeCAM(trialInfo.coh, trialInfo.dir, audInfo.set_dur, 0, 44100);
+            [audInfo.CAM] = makeCAM(trialInfo.coh, audInfo.dir, audInfo.set_dur, 0, 44100);
             [audInfo.adjustment_factor, CAM_1, CAM_2] = Signal_Creator(audInfo.CAM,audInfo.velocity); %Writes to CAM 1 and 2 for .rcx circuit to read
             [CAM_1_Cut_Ramped, CAM_2_Cut_Ramped, audInfo.window_duration, audInfo.ramp_dur] = aud_receptive_field_location(CAM_1,CAM_2, audInfo.t_start, audInfo.t_end);
             
@@ -408,7 +408,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         targ_timeout = 0;
         if fix_timeout ~= 1 && (aud_timeout ~= 1 && rdk_timeout ~= 1) && baron_fixation_training ~= 1
             %This picks the luminace of the targets based on correct direction response, also outputs correct target string variable, eg 'right'
-            [right_target_color,left_target_color,correct_target] = percentage_target_color_selection(trialInfo,trialcounter);
+            [right_target_color,left_target_color,correct_target] = percentage_target_color_selection(dotInfo, audInfo, trialInfo, trialcounter);
             
             for frame = 1:target_time_frames - waitframes
                 
@@ -562,7 +562,12 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         end_trial_time = hat;
         trial_time = end_trial_time-start_trial_time;
         
-        dataout(output_counter,1:11) = {trialcounter pos fix_reward stim_reward catchtrial target_reward trial_time trialInfo.coh trialInfo.dir incorrect_target_fixation trialInfo.modality};
+        if strcmp(trialInfo.modality, 'AUD')
+            dataout(output_counter,1:11) = {trialcounter pos fix_reward stim_reward catchtrial target_reward trial_time trialInfo.coh audInfo.dir incorrect_target_fixation trialInfo.modality};
+        elseif strcmp(trialInfo.modality, 'VIS')
+            dataout(output_counter,1:11) = {trialcounter pos fix_reward stim_reward catchtrial target_reward trial_time trialInfo.coh dotInfo.dir incorrect_target_fixation trialInfo.modality};
+        end
+        
         trialcounter = trialcounter + 1;
         
         if trialcounter <= total_trials
@@ -579,7 +584,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     [dotInfo.cohFreq] = cohFreq_finder(VIS_dataout, dotInfo);
 
     
-    if trial_counter < ExpInfo.num_trials
+    if trialcounter < ExpInfo.num_trials
         total_trials = trial_counter; 
     else
         total_trials = ExpInfo.num_trials;
@@ -596,24 +601,29 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     prob_AUD = coherence_probability(AUD_dataout, audInfo)
     prob_VIS = coherence_probability(VIS_dataout, dotInfo)
     
-    [AUD_Right_dataout, AUD_Left_dataout] = direction_splitter(AUD_dataout);
-    [VIS_Right_dataout, VIS_Left_dataout] = direction_splitter(VIS_dataout);
+    [AUD_Right_dataout, AUD_Left_dataout] = direction_splitter(AUD_dataout, 'AUD');
+    [VIS_Right_dataout, VIS_Left_dataout] = direction_splitter(VIS_dataout, 'VIS');
     
-    AUD_prob_Right = directional_probability(AUD_Right_dataout, audInfo, 'Right');
-    AUD_prob_Left = directional_probability(AUD_Left_dataout, audInfo, 'Left');
-    VIS_prob_Right = directional_probability(VIS_Right_dataout, dotInfo, 'Right');
-    VIS_prob_Left = directional_probability(VIS_Left_dataout, dotInfo, 'Left');
+    [audInfo.cohFreq_right] = cohFreq_finder(AUD_Right_dataout, audInfo);
+    [dotInfo.cohFreq_right] = cohFreq_finder(VIS_Right_dataout, dotInfo);
+    [audInfo.cohFreq_left] = cohFreq_finder(AUD_Left_dataout, audInfo);
+    [dotInfo.cohFreq_left] = cohFreq_finder(VIS_Left_dataout, dotInfo);
+    
+    AUD_prob_Right = directional_probability(AUD_Right_dataout, audInfo, 'Right', 'AUD');
+    AUD_prob_Left = directional_probability(AUD_Left_dataout, audInfo, 'Left','AUD');
+    VIS_prob_Right = directional_probability(VIS_Right_dataout, dotInfo, 'Right','VIS');
+    VIS_prob_Left = directional_probability(VIS_Left_dataout, dotInfo, 'Left', 'VIS');
 
     [fig_both_AUD_VIS] = psychometric_plotter_modalities(AUD_prob_Right, AUD_prob_Left, VIS_prob_Right, VIS_prob_Left);
 
     Eye_Tracker_Plotter(eye_data_matrix);
     
     
-    AUD_prob_right_only = coherence_probability_1_direction(AUD_Right_dataout, audInfo,'Right');
-    AUD_prob_left_only = coherence_probability_1_direction(AUD_Left_dataout, audInfo,'Left');
-    VIS_prob_right_only = coherence_probability_1_direction(VIS_Right_dataout, dotInfo,'Right');
-    VIS_prob_left_only = coherence_probability_1_direction(VIS_Left_dataout, dotInfo,'Left');
-    
+    AUD_prob_right_only = coherence_probability_1_direction(AUD_Right_dataout, audInfo,'Right','AUD');
+    AUD_prob_left_only = coherence_probability_1_direction(AUD_Left_dataout, audInfo,'Left','AUD');
+    VIS_prob_right_only = coherence_probability_1_direction(VIS_Right_dataout, dotInfo,'Right','VIS');
+    VIS_prob_left_only = coherence_probability_1_direction(VIS_Left_dataout, dotInfo,'Left','VIS');
+     
     %%Make Rightward only graph with AUD and VIS
     [R_fig_AV] = psychometric_plotter_1_direction_modalities(AUD_prob_right_only, VIS_prob_right_only, 'RIGHT ONLY');
     

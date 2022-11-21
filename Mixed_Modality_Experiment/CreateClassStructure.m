@@ -45,6 +45,7 @@ ExpInfo.ppd = 30;%pi * xCenter / atan(monWidth/viewDist/2) / 360;
 %% RDK Parameters
 
 dotInfo = struct;
+dotInfo.dir = 0; %Initilize for main loop purposes 
 dotInfo.catchtrials = 0; % # catch trials
 dotInfo.dirSet = dirBin(data); %See function dirBin.m
 dotInfo.random_incorrect_opacity_list = catch_trial_randomizer(ExpInfo,dotInfo);%Gives list of 1 = regular trial, 0 = catch trial, see function 
@@ -65,6 +66,7 @@ dotInfo.maxDotsPerFrame = 400; %Maximum number of dots per frame of the RDK aper
 %% Auditory Parameters 
 
 audInfo = struct; 
+audInfo.dir = 0; %Initilize for main loop purposes 
 audInfo.dirSet = dirBin(data); %[LR DU UD RL] 1 - Include, 0 - Exclude
 audInfo.catchtrials = 0;
 audInfo.random_incorrect_opacity_list = catch_trial_randomizer(ExpInfo,audInfo); 
