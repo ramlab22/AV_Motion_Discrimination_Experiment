@@ -1,4 +1,4 @@
-function [x, y, fitresult, gof, fig] = psychometric_plotter(prob_Right, prob_Left)
+function [x, y, fig] = psychometric_plotter(prob_Right, prob_Left)
 %PYSCHOMETRIC_PLOTTER Summary of this function goes here
 %  Must take 1-prob_Left to get the probability of a rightward choice, the
 %  input probabilities are in regards to the corrrect choice(i.e. in that
@@ -15,7 +15,7 @@ plot_data = [x; y]';
 %plot_data(end+1,:) = prob_zero(:,1:2); 
 plot_data = plot_data(~isnan(plot_data(:,2)),:); 
 
-[fitresult, gof, fig] = createFit_Weibull(plot_data(:,1)+10, plot_data(:,2)/100); 
+[fig] = createFit_NormCDF(plot_data(:,1), plot_data(:,2)/100); 
 % figure(1)
 % clf
 % 

@@ -110,7 +110,7 @@ viewDist = 53; %Viewing Distance from monitor in cm
 
 %%%%%%%%%%%%%%%%%%%%%%% Main Structures for variable names %%%%%%%%%%%%%%
  
-[ExpInfo, vstruct, dotInfo, audInfo] = CreateClassStructure(data, monWidth, viewDist, xCenter, yCenter);
+[ExpInfo, vstruct, audInfo] = CreateClassStructure(data, monWidth, viewDist, xCenter, yCenter);
     disp(ExpInfo)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%3
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -136,7 +136,7 @@ target_only_time_frames = round((ExpInfo.target_fixation_time/1000)/ ifi);
 %target_distance_from_fixpoint_pix=350; %+- x distance between fixation point location and target location in pixels
 %target_distance_from_fixpoint_pix=300; %+- x distance between fixation point location and target location in pixels
 target_distance_from_fixpoint_pix=270; %+- x distance between fixation point location and target location in pixels
-target_y_coord_pix = targ_adjust_y(dotInfo.apXYD(:,2)); %Pixel Y coordinate adjustment for the targets with relation to the RDK aperature
+target_y_coord_pix = targ_adjust_y(90); %Pixel Y coordinate adjustment for the targets with relation to the RDK aperature
 target_y_coord_volts = pixels2volts_Y(target_y_coord_pix);%yCenter+target_y_coord_pix); %Added to yCenter to account for shadlen dots functions using a 0,0 center coordinate
 
 volts_per_pixel=0.0078125; %10 volts/1280 pixels= X volts/1 pixel , This is for the X direction ONLY
@@ -319,46 +319,29 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                 [eye_data_matrix] = Send_Eye_Position_Data(TDT, start_block_time, eye_data_matrix, 2, trialcounter); %Collect eye position data with timestamp
                 
                 d = sqrt(((x-h_voltage).^2)+((y-k_voltage).^2));
-                if frame < time_wait_frames(1)
-                    Screen('DrawDots', window,[h i_trial], ExpInfo.fixpoint_size_pix, fix_point_color, [], 2);
-                    %Flip to the screen
-                    vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
-                    
-                    if (d <= ExpInfo.rew_radius_volts)
-                        aud_correct_counter = aud_correct_counter + 1;
-                        if frame>10
-                            end_fixation_waitframes = 1;
-                        end
-                    end
-                    if d >= ExpInfo.rew_radius_volts && end_fixation_waitframes==1 %AMS-050622
-                        aud_correct_counter = 0;
-                        %Timeout for Failure to fixate on fixation, during
-                        %auditory stim period
-                        for frame_2 = 1:TO_time_frames
-                            Screen('FillRect', window, black);
-                            vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
-                            aud_timeout = 1;
-                            TDT.write('aud_off',1); %Turn off Audio 
-                        end
-                        break
+
+                Screen('DrawDots', window,[h i_trial], ExpInfo.fixpoint_size_pix, fix_point_color, [], 2);
+                %Flip to the screen
+                vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
+
+                if (d <= ExpInfo.rew_radius_volts)
+                    aud_correct_counter = aud_correct_counter + 1;
+                    if frame>10
+                        end_fixation_waitframes = 1;        
                     end
                 end
-                if frame > time_wait_frames(1)
-                    Screen('DrawDots', window,[h i_trial], ExpInfo.fixpoint_size_pix, fix_point_color, [], 2);
-                    vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
-                    if d <= ExpInfo.rew_radius_volts
-                        aud_correct_counter = aud_correct_counter + 1;
-                    else
-                        aud_correct_counter = 0; 
-                        %Timeout for Failure to fixate on fixation
-                        for frame_2 = 1:TO_time_frames
-                            Screen('FillRect', window, black);
-                            vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
-                            aud_timeout = 1;
-                            TDT.write('aud_off',1); %Turn off Audio
-                        end
-                        break
+
+                if d >= ExpInfo.rew_radius_volts && end_fixation_waitframes==1 %AMS-050622
+                    aud_correct_counter = 0;
+                    %Timeout for Failure to fixate on fixation, during
+                    %auditory stim period
+                    for frame_2 = 1:TO_time_frames
+                        Screen('FillRect', window, black);
+                        vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
+                        aud_timeout = 1;
+                        TDT.write('aud_off',1); %Turn off Audio
                     end
+                    break
                 end
             end
             
@@ -544,12 +527,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         end
     end
 %% End of Block 
-[ii, jj, kk] = unique(cell2mat(dataout(2:end,8)));
-freq = accumarray(kk,1); 
-audInfo.cohFreq =flip(freq');
-while length(audInfo.cohFreq) ~= length(audInfo.cohSet)
-   audInfo.cohFreq(end+1) = 0; 
-end
+
 %total_trials=trialcounter
 total_trials = ExpInfo.num_trials;  
 num_regular_trials = total_trials - audInfo.catchtrials;  
@@ -559,24 +537,30 @@ num_catch_trials = audInfo.catchtrials;
     
     %Break down of each success rate based on coherence level 
     %Count how many rew and N/A per coherence 
+     audInfo.cohFreq = cohFreq_finder(dataout, audInfo);
      
-    prob = coherence_probability(dataout,audInfo)
+     prob = coherence_probability(dataout,audInfo)
 %    prob_zero = prob(1,:); 
     
     [Right_dataout, Left_dataout] = direction_splitter(dataout);
+    
+    audInfo.cohFreq_right = cohFreq_finder(Right_dataout, audInfo);
+    audInfo.cohFreq_left = cohFreq_finder(Left_dataout, audInfo);
+    
+    
     prob_Right = directional_probability(Right_dataout, audInfo); 
     prob_Left = directional_probability(Left_dataout, audInfo); 
     
-    [x, y, fitresult, gof, fig_both] = psychometric_plotter(prob_Right,prob_Left);
+    [x, y, fig_both] = psychometric_plotter(prob_Right,prob_Left);
     Eye_Tracker_Plotter(eye_data_matrix);
     
     %%Make Rightward only graph
     prob_right_only = coherence_probability_1_direction(Right_dataout, audInfo);
-    [R_coh, R_pc, R_fitresult, R_gof, R_fig] = psychometric_plotter_1_direction(prob_right_only, 'RIGHT ONLY');
+    [R_coh, R_pc, R_fig] = psychometric_plotter_1_direction(prob_right_only, 'RIGHT ONLY');
     
     %%Make Leftward only graph
     prob_left_only = coherence_probability_1_direction(Left_dataout, audInfo);
-    [L_coh, L_pc, L_fitresult, L_gof, L_fig] = psychometric_plotter_1_direction(prob_left_only, 'LEFT ONLY');
+    [L_coh, L_pc, L_fig] = psychometric_plotter_1_direction(prob_left_only, 'LEFT ONLY');
 
     %%Make Coh vs Trial graph to track progress 
     coh_vs_trial_fig = plot_coh_vs_trial(dataout);
