@@ -1,4 +1,4 @@
-function [fig] = createFit_NormCDF_1_direction(coh_list, pc, direction)
+function [fig] = createFit_NormCDF_1_direction(coh_list, pc, direction, dotInfo, save_name)
 %CREATEFIT(COH_LIST,PC_AUD)
 %  Create a fit.
 % direction = string 'RIGHT' or "LEFT' 
@@ -29,13 +29,21 @@ fit_par = fminsearch(fun, parms, opts);
 x = 0:.01:1;
 p = cdf('Normal', x, fit_par(1), fit_par(2));
 
+%Size of scatter point absed on frequency
+if strcmp(direction, "RIGHT ONLY")
+    sizes = nonzeros(dotInfo.cohFreq_right(2,:)');
+elseif strcmp(direction, "LEFT ONLY")
+    sizes = nonzeros(dotInfo.cohFreq_left(2,:)');
+end
+
 % Plot fit with data.
 fig = figure( 'Name', sprintf('Psychometric Function %s',direction) );
-scatter(xData, yData)
+scatter(xData, yData, sizes)
 hold on 
 plot(x, p);
 legend('% Rightward Resp. vs. Coherence', 'NormCDF', 'Location', 'NorthEast', 'Interpreter', 'none' );
 % Label axes
+title(sprintf('Visual Psych. Func. %s\n%s',direction, save_name), 'Interpreter', 'none');
 xlabel( 'Coherence %', 'Interpreter', 'none' );
 ylabel( '% Rightward Response', 'Interpreter', 'none' );
 xlim([0 1])

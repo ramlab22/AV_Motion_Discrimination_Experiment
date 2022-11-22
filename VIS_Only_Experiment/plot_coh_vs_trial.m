@@ -1,4 +1,4 @@
-function fig = plot_coh_vs_trial(dataout)
+function fig = plot_coh_vs_trial(dataout, save_name)
 hold on 
     trial_num = cell2mat(dataout(2:end,1));
     coh_level = cell2mat(dataout(2:end,8)); 
@@ -10,7 +10,7 @@ hold on
     
     xlabel('Trial Number');
     ylabel('Coherence Level');
-    title('Coherence Level vs. Trial Number')
+    title(sprintf('VIS Coherence Level vs. Trial Number\n%s', save_name), 'Interpreter', 'none');
     
 
  

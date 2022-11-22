@@ -1,4 +1,4 @@
-function [fig] = createFit_NormCDF(coh_list, pc)
+function [fig] = createFit_NormCDF(coh_list, pc, dotInfo, save_name)
 %CREATEFIT(COH_LIST,PC_AUD)
 %  Create a fit.
 %
@@ -29,13 +29,19 @@ fit_par = fminsearch(fun, parms, opts);
 x = -1:.01:1;
 p = cdf('Normal', x, fit_par(1), fit_par(2));
 
+%Plot different sizes based on amount of frequency of each coh
+sizes_L = flip(dotInfo.cohFreq_left(2,:)');%Slpit to left and Right 
+sizes_R = dotInfo.cohFreq_right(2,:)';
+all_sizes = nonzeros(vertcat(sizes_L, sizes_R));
+
 % Plot fit with data.
 fig = figure( 'Name', 'Psychometric Function' );
-scatter(xData, yData)
+scatter(xData, yData, all_sizes)
 hold on 
 plot(x, p);
 legend('% Rightward Resp. vs. Coherence', 'NormCDF', 'Location', 'NorthEast', 'Interpreter', 'none' );
 % Label axes
+title(sprintf('Visual Psych. Func. L&R\n%s',save_name),'Interpreter', 'none');
 xlabel( 'Coherence ((+)Rightward, (-)Leftward)', 'Interpreter', 'none' );
 ylabel( '% Rightward Response', 'Interpreter', 'none' );
 xlim([-1 1])
