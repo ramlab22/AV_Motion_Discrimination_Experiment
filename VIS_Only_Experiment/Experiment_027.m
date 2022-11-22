@@ -487,25 +487,25 @@ num_catch_trials = dotInfo.catchtrials;
     prob_Right = directional_probability(Right_dataout, dotInfo); 
     prob_Left = directional_probability(Left_dataout, dotInfo); 
     
-    [x, y, fig_both] = psychometric_plotter(prob_Right,prob_Left);
+    [x, y, fig_both] = psychometric_plotter(prob_Right,prob_Left, dotInfo, save_name);
     Eye_Tracker_Plotter(eye_data_matrix);
     
     %%Make Rightward only graph
     prob_right_only = coherence_probability_1_direction(Right_dataout, dotInfo);
-    [R_coh, R_pc, R_fig] = psychometric_plotter_1_direction(prob_right_only, 'RIGHT ONLY');
+    [R_coh, R_pc, R_fig] = psychometric_plotter_1_direction(prob_right_only, 'RIGHT ONLY', dotInfo, save_name);
     
     %%Make Leftward only graph
     prob_left_only = coherence_probability_1_direction(Left_dataout, dotInfo);
-    [L_coh, L_pc, L_fig] = psychometric_plotter_1_direction(prob_left_only, 'LEFT ONLY');
+    [L_coh, L_pc, L_fig] = psychometric_plotter_1_direction(prob_left_only, 'LEFT ONLY', dotInfo, save_name);
     
     %%Make Coh vs Trial graph to track progress 
-    coh_vs_trial_fig = plot_coh_vs_trial(dataout);
+    coh_vs_trial_fig = plot_coh_vs_trial(dataout, save_name);
     
     %Save all figures to Figure Directory
-    saveas(fig_both, [figure_file_directory save_name '_Psyc_Func_LR.png'])
-    saveas(R_fig, [figure_file_directory save_name '_Psyc_Func_R.png'])
-    saveas(L_fig, [figure_file_directory save_name '_Psyc_Func_L.png'])
-    saveas(coh_vs_trial_fig, [figure_file_directory save_name '_Coh_vs_Trial.png'])
+    saveas(fig_both, [figure_file_directory save_name '_VIS_Psyc_Func_LR.png'])
+    saveas(R_fig, [figure_file_directory save_name '_VIS_Psyc_Func_R.png'])
+    saveas(L_fig, [figure_file_directory save_name '_VIS_Psyc_Func_L.png'])
+    saveas(coh_vs_trial_fig, [figure_file_directory save_name '_VIS_Coh_vs_Trial.png'])
     
     times = cell2mat(dataout(2:end,7)); %Extract the trial times 
     Total_Block_Time = sum(times);
