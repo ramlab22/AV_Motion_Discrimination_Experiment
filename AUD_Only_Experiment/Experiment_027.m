@@ -185,9 +185,14 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         end_target_waitframes = 0; %variable to end target acquisition wait time once fixation is acquired
          
         %Initilize the auditory coherence and direction for each trial
+        %Initilize the auditory coherence and direction for each trial
+        if audInfo.random_incorrect_opacity_list(trialcounter) == 0
+            catchtrial = 'Yes';
+            fix_point_color = [0 255 0]; %Green 
+        elseif audInfo.random_incorrect_opacity_list(trialcounter) == 1
+            catchtrial = 'No';
+            fix_point_color = white;
 
-        catchtrial = 'No'; %All trials will not be catch, new staircase procedure
-        fix_point_color = white;
 
         if trialcounter == 1
             staircase_index = 1; %Initialize index for first trial 

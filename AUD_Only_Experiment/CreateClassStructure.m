@@ -6,7 +6,8 @@ function  [ExpInfo, dstruct, audInfo]= CreateClassStructure(data, monWidth, view
 
 ExpInfo.t_angle = data(1,1); % Fixation Dot and Target Dots Visual Angle in Degrees
 ExpInfo.rew_angle = data(2,1);% Reward Window Visual Angle in Degrees
-ExpInfo.num_trials = data(3,1); % Number of Trials for 1 block
+ExpInfo.num_trials = data(3,1); % Number of total Trials for 1 block
+ExpInfo.catch_trials = round((data(61,1)/100)*(ExpInfo.num_trials)); %Number of Catch Trials for 1 block, given in percentage from GUI so translate into # of catch trials
 ExpInfo.stim_time = data(4,1); %Time of stimulus(RDK) presentaiton (ms)
 ExpInfo.iti = data(5,1);%Intertrial Interval (ms)
 ExpInfo.fixation_time = data(6,1);% Time to fixate on fixation point before RDK Starts presenting == time of presenting fixation point 
@@ -46,7 +47,7 @@ ExpInfo.ppd = 30;%pi * xCenter / atan(monWidth/viewDist/2) / 360;
 %% Auditory Parameters 
 
 audInfo.dirSet = dirBin(data); %[LR DU UD RL] 1 - Include, 0 - Exclude
-audInfo.catchtrials = 0;
+audInfo.catchtrials = ExpInfo.catch_trials;
 audInfo.random_incorrect_opacity_list = catch_trial_randomizer(ExpInfo,audInfo); 
 audInfo.cohSet = (nonzeros(data(50:60,1)))'./100; %This is the descending list of Coherences 
 audInfo.coherences = audInfo.cohSet; %This is for use in other functions for success calcs
