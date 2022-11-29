@@ -16,7 +16,7 @@ coherence_rew_numbers = [dotInfo.coherences;
                     coherence_rew_numbers(3,i_coherence) = coherence_rew_numbers(3,i_coherence)+1;
                 end
             elseif dataout{v,9} == 180 %Left Trial
-                if (strcmp(dataout{v,6},'Yes')) && (dataout{v,8} == coherences(i_coherence))  && (strcmp(dataout{v,5},'No')) %Target Reward & Not a Catch Trial
+                if (strcmp(dataout{v,6},'No')) && (dataout{v,8} == coherences(i_coherence))  && (strcmp(dataout{v,5},'No')) %Target Reward & Not a Catch Trial
                     coherence_rew_numbers(2,i_coherence) = coherence_rew_numbers(2,i_coherence)+1;
                 end
                 if  (strcmp(dataout{v,6},'N/A')) && (dataout{v,8} == coherences(i_coherence)) && (strcmp(dataout{v,5},'No')) %No chance for target reward & Not a catch trial
