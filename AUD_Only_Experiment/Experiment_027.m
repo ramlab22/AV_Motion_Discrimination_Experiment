@@ -192,7 +192,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         elseif audInfo.random_incorrect_opacity_list(trialcounter) == 1
             catchtrial = 'No';
             fix_point_color = white;
-
+        end
 
         if trialcounter == 1
             staircase_index = 1; %Initialize index for first trial 
