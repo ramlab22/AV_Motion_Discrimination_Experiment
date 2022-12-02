@@ -160,6 +160,7 @@ gate_off_time = .1;
 total_blocks = 1; 
 total_trials = ExpInfo.num_trials; 
 dataout = cell(total_trials+1,10);
+rng('default');
  
 %% RDK Initilization Stuff
 
@@ -417,6 +418,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                         incorrect_counter2 = incorrect_counter2 + 1;
                     end
                     if incorrect_counter2 > target_only_time_frames
+                        incorrect_counter2=0;
                        
 %                         for frame_2 = 1:TO_time_frames %added 10/13/22-AMS
 %                             Screen('FillRect', window, black);
@@ -428,8 +430,8 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                     
                 end
                 if frame > time_wait_frames(2)
-                    if correct_counter2 > target_only_time_frames || incorrect_counter2 > target_only_time_frames
-                        break %added 10/8/22-AMS
+                    if correct_counter2 > target_only_time_frames
+                        break %added 10/31/22-AMS
                     end
                     if (isRightTargetFixation && strcmp('right',correct_target)) || (isLeftTargetFixation && strcmp('left',correct_target))
                         correct_counter2 = correct_counter2 + 1;

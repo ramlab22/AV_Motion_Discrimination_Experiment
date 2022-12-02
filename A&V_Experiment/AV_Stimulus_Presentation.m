@@ -1,6 +1,7 @@
 function [av_timeout] = AV_Stimulus_Presentation(ExpInfo, dotInfo, curWindow, xCenter, yCenter, h_voltage, k_voltage, TDT)
 % dotInfo will be a struct with all of the information concerning the RDK stimulus
 %look at CreateClassStructure.m function 
+dotInfo.coh = ExpInfo.coh; 
 
 Screen('Flip', curWindow);
 ifi = Screen('GetFlipInterval', curWindow);
