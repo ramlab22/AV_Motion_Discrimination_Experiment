@@ -471,8 +471,8 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     end
 %% End of Block 
 total_trials = ExpInfo.num_trials;  
-num_regular_trials = total_trials - audInfo.catchtrials;  
-num_catch_trials = audInfo.catchtrials; 
+num_regular_trials = total_trials - ExpInfo.num_catchtrials;  
+num_catch_trials = ExpInfo.num_catchtrials; 
 
 [Fixation_Success_Rate, AV_Success_Rate, Target_Success_Rate_Regular, Target_Success_Rate_Catch] = SR_CALC(dataout,total_trials,num_regular_trials,num_catch_trials)
     
