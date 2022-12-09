@@ -188,7 +188,8 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         %Initilize the auditory coherence and direction for each trial
         if audInfo.random_incorrect_opacity_list(trialcounter) == 0
             catchtrial = 'Yes';
-            fix_point_color = [0 255 0]; %Green 
+        %    fix_point_color = [0 255 0]; %Green 
+             fix_point_color = white;
         elseif audInfo.random_incorrect_opacity_list(trialcounter) == 1
             catchtrial = 'No';
             fix_point_color = white;
