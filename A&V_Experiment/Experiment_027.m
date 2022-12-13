@@ -177,7 +177,11 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         if trialcounter == 1
             staircase_index = 1; %Initialize index for first trial
             audInfo.dir = randi([0,1]); %for first trial, randomly choose 0 (Left) or 1 (Right) for dir
-            dotInfo.dir = randsample([0, 180],1);%for first trial, randomly choose 0 (Right) or 180 (Left) for dir
+            if audInfo.dir == 1 %L to R
+                dotInfo.dir = 0;% randomly choose 0 (Right) or 180 (Left) for dir
+            else
+                dotInfo.dir = 180;
+            end
             ExpInfo.coh = ExpInfo.cohSet(staircase_index);% (Value 0.0 - 1.0)
         elseif trialcounter > 1
             [ExpInfo, staircase_index, dotInfo, audInfo] = staircase_procedure(ExpInfo, trial_status, staircase_index, audInfo, dotInfo);        
@@ -480,7 +484,7 @@ num_catch_trials = ExpInfo.num_catchtrials;
     %Count how many rew and N/A per coherence 
      ExpInfo.cohFreq = cohFreq_finder(dataout, ExpInfo);
      
-    prob = coherence_probability(dataout,audInfo)
+    prob = coherence_probability(dataout,ExpInfo)
 %    prob_zero = prob(1,:); 
     
     [Right_dataout, Left_dataout] = direction_splitter(dataout);
@@ -500,8 +504,8 @@ num_catch_trials = ExpInfo.num_catchtrials;
     [R_coh, R_pc, R_fig] = psychometric_plotter_1_direction(prob_right_only, 'RIGHT ONLY', ExpInfo, save_name);
     
     %%Make Leftward only graph
-    prob_left_only = coherence_probability_1_direction(Left_dataout, audInfo);
-    [L_coh, L_pc, L_fig] = psychometric_plotter_1_direction(prob_left_only, 'LEFT ONLY', audInfo, save_name);
+    prob_left_only = coherence_probability_1_direction(Left_dataout, ExpInfo);
+    [L_coh, L_pc, L_fig] = psychometric_plotter_1_direction(prob_left_only, 'LEFT ONLY', ExpInfo, save_name);
     
     %%Make Coh vs Trial graph to track progress 
     coh_vs_trial_fig = plot_coh_vs_trial(dataout, save_name);

@@ -13,7 +13,7 @@ refresh_rate = 1/ifi;
     rng(rseed,'v5uniform');
         
 
-    coh = dotInfo.coh/1000;
+    coh = dotInfo.coh;
     apD = dotInfo.apXYD(:,3); % diameter of aperture
     center = repmat([xCenter yCenter],size(dotInfo.apXYD(:,1)));
 

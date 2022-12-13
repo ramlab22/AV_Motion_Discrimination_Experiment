@@ -16,6 +16,7 @@ ExpInfo.fail_timeout = data(16,1); %Failure of trial timeout in (ms)
 ExpInfo.rdk_angle = data(17,1); %RDK stimulus visual angle
 ExpInfo.target_fixation_time = data(18,1);% Time to fixate inside the target point window in order to get Reward
 ExpInfo.cohSet = (nonzeros(data(50:60,1)))'./100;
+ExpInfo.probs = data(43:46,1);
 ExpInfo.coherences = ExpInfo.cohSet;
 ExpInfo.random_incorrect_opacity_list = catch_trial_randomizer(ExpInfo);
 
