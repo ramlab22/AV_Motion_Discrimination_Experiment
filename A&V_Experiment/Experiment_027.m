@@ -234,7 +234,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
             [eye_data_matrix] = Send_Eye_Position_Data(TDT, start_block_time, eye_data_matrix, 1, trialcounter);
             d = sqrt(((x-h_voltage).^2)+((y-k_voltage).^2));
             if frame < time_wait_frames(1) 
-                Screen('DrawDots', window,[h k], ExpInfo.fixpoint_size_pix, white, [], 2);
+                Screen('DrawDots', window,[h k], ExpInfo.fixpoint_size_pix, fix_point_color, [], 2);
                 %Flip to the screen
                 vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
               
@@ -259,7 +259,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                 end
             end
             if frame > time_wait_frames(1)
-                Screen('DrawDots', window,[h k], ExpInfo.fixpoint_size_pix, white, [], 2);
+                Screen('DrawDots', window,[h k], ExpInfo.fixpoint_size_pix, fix_point_color, [], 2);
                 vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
                 if correct_counter > fix_only_time_frames %break out of loop if already fixated for required amount of time
                     break %added 10/31/22-AMS
