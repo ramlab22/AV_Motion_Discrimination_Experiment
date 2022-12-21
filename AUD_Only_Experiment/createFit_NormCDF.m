@@ -27,7 +27,25 @@ opts = optimset('MaxFunEvals',50000, 'MaxIter',10000);
 fit_par = fminsearch(fun, parms, opts);
 
 x = -1:.01:1;
+
+[ci,bootstat] = bootci(100,@(x)[mean(x) std(x)],yData);
+SE = (ci(2,:) - ci(1,:))./(2*1.96);
+z = parms./SE;
+p_values = exp(-0.717.*z - 0.416.*z.^2);
+
+% plot(bootstat(:,1),bootstat(:,2),'o')
+% hold on 
+% plot(mu, sigma, "*")
+% xline(ci(1,1),':')
+% xline(ci(2,1),':')
+% yline(ci(1,2),':')
+% yline(ci(2,2),':')
+% xlabel('Mean')
+% ylabel('Standard Deviation')
+% legend('Bootstrapped Coeff.', 'Chosen Coeff.')
+
 p = cdf('Normal', x, fit_par(1), fit_par(2));
+
 
 %Plot different sizes based on amount of frequency of each coh
 sizes_L = flip(audInfo.cohFreq_left(2,:)');%Slpit to left and Right 
@@ -48,5 +66,6 @@ ylabel( '% Rightward Response', 'Interpreter', 'none' );
 xlim([-1 1])
 ylim([0 1])
 grid on
-
+text(0,.2,"p value for CDF coeffs. (mean): " + p_values(1))
+text(0,.1, "p value for CDF coeffs. (std): " + p_values(2))
 end
