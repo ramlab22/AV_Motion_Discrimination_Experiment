@@ -557,7 +557,7 @@ num_catch_trials = audInfo.catchtrials;
     prob_Right = directional_probability(Right_dataout, audInfo); 
     prob_Left = directional_probability(Left_dataout, audInfo); 
     
-    [x, y, fig_both] = psychometric_plotter(prob_Right,prob_Left, audInfo, save_name);
+    [x, y, fig_both, coeff_p_values] = psychometric_plotter(prob_Right,prob_Left, audInfo, save_name);
     Eye_Tracker_Plotter(eye_data_matrix);
     
     %%Make Rightward only graph
@@ -587,7 +587,7 @@ end
 %%
 
 % Save all block info and add to a .mat file for later analysis  
-save([data_file_directory save_name],'dataout','Fixation_Success_Rate','AUD_Success_Rate','Target_Success_Rate_Regular','Target_Success_Rate_Catch','ExpInfo','audInfo','Total_Block_Time','eye_data_matrix');
+save([data_file_directory save_name],'dataout','Fixation_Success_Rate','AUD_Success_Rate','Target_Success_Rate_Regular','Target_Success_Rate_Catch','ExpInfo','audInfo','Total_Block_Time','eye_data_matrix', "coeff_p_values");
 disp('Experiment Data Exported to Behavioral Data Folder')
 sca; 
 

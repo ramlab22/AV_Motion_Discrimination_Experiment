@@ -1,4 +1,4 @@
-function [fig] = createFit_NormCDF(coh_list, pc, audInfo, save_name)
+function [fig, p_values] = createFit_NormCDF(coh_list, pc, audInfo, save_name)
 %CREATEFIT(COH_LIST,PC_AUD)
 %  Create a fit.
 %

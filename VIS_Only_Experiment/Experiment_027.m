@@ -465,9 +465,9 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     end
 %% End of Block 
 
-%total_trials = ExpInfo.num_trials; 
+total_trials = ExpInfo.num_trials; 
 
-total_trials = trialcounter;
+%total_trials = trialcounter;
 num_regular_trials = total_trials - dotInfo.catchtrials; 
 num_catch_trials = dotInfo.catchtrials;
 
@@ -487,7 +487,7 @@ num_catch_trials = dotInfo.catchtrials;
     prob_Right = directional_probability(Right_dataout, dotInfo); 
     prob_Left = directional_probability(Left_dataout, dotInfo); 
     
-    [x, y, fig_both] = psychometric_plotter(prob_Right,prob_Left, dotInfo, save_name);
+    [x, y, fig_both, coeff_p_values] = psychometric_plotter(prob_Right,prob_Left, dotInfo, save_name);
     Eye_Tracker_Plotter(eye_data_matrix);
     
     %%Make Rightward only graph
@@ -515,7 +515,7 @@ num_catch_trials = dotInfo.catchtrials;
 end
 %%
 % Save all block info and add to a .mat file for later analysis  
-save([data_file_directory save_name],'dataout','Fixation_Success_Rate','RDK_Success_Rate','Target_Success_Rate_Regular','Target_Success_Rate_Catch','ExpInfo','dotInfo','Total_Block_Time', 'eye_data_matrix');
+save([data_file_directory save_name],'dataout','Fixation_Success_Rate','RDK_Success_Rate','Target_Success_Rate_Regular','Target_Success_Rate_Catch','ExpInfo','dotInfo','Total_Block_Time', 'eye_data_matrix', 'coeff_p_values');
 disp('Experiment Data Exported to Behavioral Data Folder')
 sca; 
 
