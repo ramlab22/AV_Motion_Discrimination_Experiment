@@ -29,6 +29,8 @@ fit_par = fminsearch(fun, parms, opts);
 x = -1:.01:1;
 p = cdf('Normal', x, fit_par(1), fit_par(2));
 
+[p_values, bootstat] = p_value_calc(yData, parms);
+
 %Plot different sizes based on amount of frequency of each coh
 sizes_L = flip(dotInfo.cohFreq_left(2,:)');%Slpit to left and Right 
 sizes_R = dotInfo.cohFreq_right(2,:)';
@@ -47,5 +49,7 @@ ylabel( '% Rightward Response', 'Interpreter', 'none' );
 xlim([-1 1])
 ylim([0 1])
 grid on
+text(0,.2,"p value for CDF coeffs. (mean): " + p_values(1))
+text(0,.1, "p value for CDF coeffs. (std): " + p_values(2))
 
 end

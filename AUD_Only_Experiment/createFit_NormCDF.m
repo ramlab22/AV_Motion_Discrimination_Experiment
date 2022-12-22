@@ -28,10 +28,8 @@ fit_par = fminsearch(fun, parms, opts);
 
 x = -1:.01:1;
 
-[ci,bootstat] = bootci(100,@(x)[mean(x) std(x)],yData);
-SE = (ci(2,:) - ci(1,:))./(2*1.96);
-z = parms./SE;
-p_values = exp(-0.717.*z - 0.416.*z.^2);
+[p_values, bootstat] = p_value_calc(yData, parms);
+
 
 % plot(bootstat(:,1),bootstat(:,2),'o')
 % hold on 
