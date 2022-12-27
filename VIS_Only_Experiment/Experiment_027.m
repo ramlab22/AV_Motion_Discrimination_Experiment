@@ -514,8 +514,9 @@ num_catch_trials = dotInfo.catchtrials;
     
 end
 %%
+[n_trials_with_response,n_trials_with_reward,proportion_response_reversals_after_correct_response,proportion_response_reversals_after_incorrect_response] = response_reversal_proportions2(dataout)
 % Save all block info and add to a .mat file for later analysis  
-save([data_file_directory save_name],'dataout','Fixation_Success_Rate','RDK_Success_Rate','Target_Success_Rate_Regular','Target_Success_Rate_Catch','ExpInfo','dotInfo','Total_Block_Time', 'eye_data_matrix', 'coeff_p_values');
+save([data_file_directory save_name],'dataout','Fixation_Success_Rate','AUD_Success_Rate','Target_Success_Rate_Regular','Target_Success_Rate_Catch','ExpInfo','dotInfo','Total_Block_Time','eye_data_matrix', "coeff_p_values",'n_trials_with_response','n_trials_with_reward','proportion_response_reversals_after_correct_response','proportion_response_reversals_after_incorrect_response');
 disp('Experiment Data Exported to Behavioral Data Folder')
 sca; 
 

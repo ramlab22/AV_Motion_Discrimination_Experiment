@@ -1,4 +1,4 @@
-function [] = response_reversal_proportions2(dataout,audInfo)
+function [n_trials_with_response,n_trials_with_reward,proportion_response_reversals_after_correct_response,proportion_response_reversals_after_incorrect_response] = response_reversal_proportions2(dataout)
 dataout_columnlabels=dataout(1,:);
 
 motion_directions=cell2mat(dataout(2:end,9)); %get list of motion directions, righward=1, leftward=0
@@ -56,5 +56,6 @@ for j_trial = 1:(n_completedtrials-1)
 end
 n_completedtrials
 n_trials_with_response=response_reversals_correct+response_reversals_incorrect+response_nonreversals_correct+response_nonreversals_incorrect
+n_trials_with_reward=response_reversals_correct+response_nonreversals_correct
 proportion_response_reversals_after_correct_response=response_reversals_correct/(response_reversals_correct+response_nonreversals_correct)
 proportion_response_reversals_after_incorrect_response=response_reversals_incorrect/(response_reversals_incorrect+response_nonreversals_incorrect)
