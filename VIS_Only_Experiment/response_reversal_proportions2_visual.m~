@@ -1,7 +1,7 @@
-function [n_trials_with_response,n_trials_with_reward,proportion_response_reversals_after_correct_response,proportion_response_reversals_after_incorrect_response] = response_reversal_proportions2(dataout)
+function [n_trials_with_response,n_trials_with_reward,proportion_response_reversals_after_correct_response,proportion_response_reversals_after_incorrect_response] = response_reversal_proportions2_visual(dataout)
 dataout_columnlabels=dataout(1,:);
 
-motion_directions=cell2mat(dataout(2:end,9)); %get list of motion directions, righward=1, leftward=0
+motion_directions=cell2mat(dataout(2:end,9)); %get list of motion directions, 0(Right) or 180(left)
 %motion_directions=audInfo.random_dir_list';
 n_completedtrials=length(motion_directions);
 completed_dataout=dataout(2:n_completedtrials+1,:);
@@ -16,7 +16,7 @@ response_direction=nan(n_completedtrials,1); %direction of subject's responses
 
 %get whether subject responded rightward (1) or leftward (0) on each trial
 for i_trial = 1:n_completedtrials
-    if motion_directions(i_trial,1) == 1 & response_accuracy{i_trial,1}(2) == 'e'
+    if motion_directions(i_trial,1) == 0 & response_accuracy{i_trial,1}(2) == 'e'
         response_direction(i_trial,1) = 1;
     end
     if motion_directions(i_trial,1) == 1 & response_accuracy{i_trial,1}(2) == 'o'

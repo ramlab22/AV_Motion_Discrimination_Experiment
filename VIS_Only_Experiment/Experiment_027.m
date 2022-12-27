@@ -163,7 +163,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     coh_counter = 1;
     disp(['Trial #: ',num2str(trialcounter),'/',num2str(total_trials)])
     output_counter = output_counter + 1;
-    dataout(output_counter,1:10) = {'Trial #' 'Position #' 'Fixation Correct' 'Auditory Reward' 'Catch Trial' 'Target Correct' 'Total Trial Time (sec)' 'Coherence Level' 'Direction of Motion' 'Incorrect Target Fixation'}; %Initialize Columns for data output cell
+    dataout(output_counter,1:10) = {'Trial #' 'Position #' 'Fixation Correct' 'Visual Reward' 'Catch Trial' 'Target Correct' 'Total Trial Time (sec)' 'Coherence Level' 'Direction of Motion' 'Incorrect Target Fixation'}; %Initialize Columns for data output cell
     start_block_time = hat; 
     
     while (trialcounter <= total_trials) && (BreakState ~= 1) % each trial
@@ -514,9 +514,9 @@ num_catch_trials = dotInfo.catchtrials;
     
 end
 %%
-[n_trials_with_response,n_trials_with_reward,proportion_response_reversals_after_correct_response,proportion_response_reversals_after_incorrect_response] = response_reversal_proportions2(dataout)
+[n_trials_with_response,n_trials_with_reward,proportion_response_reversals_after_correct_response,proportion_response_reversals_after_incorrect_response] = response_reversal_proportions2_visual(dataout)
 % Save all block info and add to a .mat file for later analysis  
-save([data_file_directory save_name],'dataout','Fixation_Success_Rate','AUD_Success_Rate','Target_Success_Rate_Regular','Target_Success_Rate_Catch','ExpInfo','dotInfo','Total_Block_Time','eye_data_matrix', "coeff_p_values",'n_trials_with_response','n_trials_with_reward','proportion_response_reversals_after_correct_response','proportion_response_reversals_after_incorrect_response');
+save([data_file_directory save_name],'dataout','Fixation_Success_Rate','RDK_Success_Rate','Target_Success_Rate_Regular','Target_Success_Rate_Catch','ExpInfo','dotInfo','Total_Block_Time','eye_data_matrix', "coeff_p_values",'n_trials_with_response','n_trials_with_reward','proportion_response_reversals_after_correct_response','proportion_response_reversals_after_incorrect_response');
 disp('Experiment Data Exported to Behavioral Data Folder')
 sca; 
 
