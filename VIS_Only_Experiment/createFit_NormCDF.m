@@ -36,6 +36,10 @@ sizes_L = flip(dotInfo.cohFreq_left(2,:)');%Slpit to left and Right
 sizes_R = dotInfo.cohFreq_right(2,:)';
 all_sizes = nonzeros(vertcat(sizes_L, sizes_R));
 
+if length(xData) ~= length(all_sizes)
+    all_sizes = all_sizes(1:length(xData));
+end
+
 % Plot fit with data.
 fig = figure( 'Name', 'Psychometric Function' );
 scatter(xData, yData, all_sizes)

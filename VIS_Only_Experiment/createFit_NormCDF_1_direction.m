@@ -36,6 +36,10 @@ elseif strcmp(direction, "LEFT ONLY")
     sizes = nonzeros(dotInfo.cohFreq_left(2,:)');
 end
 
+if length(xData) ~= length(sizes)
+    sizes = sizes(1:length(xData));
+end
+
 % Plot fit with data.
 fig = figure( 'Name', sprintf('Psychometric Function %s',direction) );
 scatter(xData, yData, sizes)
