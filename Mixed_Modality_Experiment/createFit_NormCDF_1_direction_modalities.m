@@ -39,6 +39,14 @@ elseif strcmp(direction, "LEFT ONLY")
     sizes_VIS = nonzeros(dotInfo.cohFreq_left(2,:)');
 end
 
+if length(AUD_xData) ~= length(sizes_AUD)
+    sizes_AUD = sizes_AUD(1:length(AUD_xData));
+end
+
+if length(VIS_xData) ~= length(sizes_VIS)
+    sizes_VIS = sizes_VIS(1:length(AUD_xData));
+end
+
 % Plot fit with data.
 fig = figure( 'Name', sprintf('Psychometric Function %s',direction) );
 scatter(AUD_xData, AUD_yData, sizes_AUD)

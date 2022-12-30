@@ -614,7 +614,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     VIS_prob_Right = directional_probability(VIS_Right_dataout, dotInfo, 'Right','VIS');
     VIS_prob_Left = directional_probability(VIS_Left_dataout, dotInfo, 'Left', 'VIS');
 
-    [fig_both_AUD_VIS] = psychometric_plotter_modalities(AUD_prob_Right, AUD_prob_Left, VIS_prob_Right, VIS_prob_Left, audInfo, dotInfo, save_name);
+    [fig_both_AUD_VIS, AUD_p_values, VIS_p_values] = psychometric_plotter_modalities(AUD_prob_Right, AUD_prob_Left, VIS_prob_Right, VIS_prob_Left, audInfo, dotInfo, save_name);
 
     Eye_Tracker_Plotter(eye_data_matrix);
     
@@ -649,7 +649,7 @@ end
 %%
 
 % Save all block info and add to a .mat file for later analysis  
-save([data_file_directory save_name],'dataout','Fixation_Success_Rate','Stim_Success_Rate','Target_Success_Rate_Regular','Target_Success_Rate_Catch','ExpInfo','audInfo','Total_Block_Time','eye_data_matrix');
+save([data_file_directory save_name],'dataout','Fixation_Success_Rate','Stim_Success_Rate','Target_Success_Rate_Regular','Target_Success_Rate_Catch','ExpInfo','audInfo','Total_Block_Time','eye_data_matrix', 'AUD_p_values', 'VIS_p_values');
 disp('Experiment Data Exported to Behavioral Data Folder')
 sca; 
 
