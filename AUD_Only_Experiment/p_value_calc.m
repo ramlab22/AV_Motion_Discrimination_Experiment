@@ -1,4 +1,4 @@
-function [p_values, bootstat] = p_value_calc(yData, parms)
+function [p_values, bootstat,ci] = p_value_calc(yData, parms)
 % p value calculations from here 
 % https://www.bmj.com/content/343/bmj.d2304
 
@@ -9,6 +9,7 @@ function [p_values, bootstat] = p_value_calc(yData, parms)
 
 
 [ci,bootstat] = bootci(100,@(x)[mean(x) std(x)],yData);
+ci
 SE = (ci(2,:) - ci(1,:))./(2*1.96);
 z = parms./SE;
 p_values = exp(-0.717.*z - 0.416.*z.^2);

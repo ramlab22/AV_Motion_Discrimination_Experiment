@@ -1,4 +1,4 @@
-function [fig, p_values] = createFit_NormCDF(coh_list, pc, audInfo, save_name)
+function [fig, p_values,ci] = createFit_NormCDF(coh_list, pc, audInfo, save_name)
 %CREATEFIT(COH_LIST,PC_AUD)
 %  Create a fit.
 %
@@ -28,7 +28,7 @@ fit_par = fminsearch(fun, parms, opts);
 
 x = -1:.01:1;
 
-[p_values, bootstat] = p_value_calc(yData, parms);
+[p_values, bootstat,ci] = p_value_calc(yData, parms);
 
 
 % plot(bootstat(:,1),bootstat(:,2),'o')
