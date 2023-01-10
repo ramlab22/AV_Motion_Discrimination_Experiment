@@ -20,7 +20,7 @@ function fig = plot_coh_vs_trial_modalities(AUD_dataout, VIS_dataout, save_name)
     plot(VIS_trial_num, VIS_coh_level);
     xlabel('Trial Number');
     ylabel('Coherence Level');
-    title(sprintf('VIS Coherence Level vs. Trial Number\n%s', save_name), 'Interpreter', 'none'))
+    title(sprintf('VIS Coherence Level vs. Trial Number\n%s', save_name), 'Interpreter', 'none')
 
     
 end

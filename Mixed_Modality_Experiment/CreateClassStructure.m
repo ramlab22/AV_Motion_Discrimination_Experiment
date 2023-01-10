@@ -72,11 +72,10 @@ audInfo.catchtrials = 0;
 audInfo.random_incorrect_opacity_list = catch_trial_randomizer(ExpInfo,audInfo); 
 audInfo.cohSet = (nonzeros(data(50:60,1)))'./100; %This is the descending list of Coherences 
 audInfo.coherences = audInfo.cohSet; %This is for use in other functions for success calcs
-
-audInfo.set_dur = 2.523;%Seconds, This is going to be set as long as the speakers dont move, the actual duration of the stimulus will be set by the t_start and t_end variables
+audInfo.velocity = data(29,1); %deg/sec
+audInfo.set_dur = 78/(audInfo.velocity) ;%Seconds, This is going to be set as long as the speakers dont move, the actual duration of the stimulus will be set by the t_start and t_end variables
 audInfo.t_start = data(27,1); % In ms, , this will also determine "Location" of perceptive field 
 audInfo.t_end = data(28,1);  % In ms, 
-audInfo.velocity = data(29,1); %deg/sec
 audInfo.muxSet = [0]; %Set to zero for now which only includes LR and RL directions
 audInfo.random_mux_list = zeros(1,(ExpInfo.num_trials)); %Set to zeros for now which only includes LR and RL directions
 audInfo.Incorrect_Opacity = 1;   
