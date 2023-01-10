@@ -1,4 +1,4 @@
-function [fig] = createFit_NormCDF_modalities(AUD_coh_list, AUD_pc, VIS_coh_list, VIS_pc, audInfo, dotInfo, save_name)
+function [fig, AUD_p_values, VIS_p_values] = createFit_NormCDF_modalities(AUD_coh_list, AUD_pc, VIS_coh_list, VIS_pc, audInfo, dotInfo, save_name)
 %CREATEFIT(COH_LIST,PC_AUD)
 %  Create a fit.
 
@@ -30,6 +30,9 @@ x = -1:.01:1;
 AUD_p = cdf('Normal', x, AUD_fit_par(1), AUD_fit_par(2));
 VIS_p = cdf('Normal', x, VIS_fit_par(1), VIS_fit_par(2));
 
+[AUD_p_values, bootstat_AUD] = p_value_calc(AUD_yData,AUD_parms);
+[VIS_p_values, bootstat_VIS] = p_value_calc(VIS_yData,VIS_parms);
+
 %Plot different sizes based on amount of frequency of each coh
 sizes_L_AUD = flip(audInfo.cohFreq_left(2,:)');%Slpit to left and Right 
 sizes_R_AUD = audInfo.cohFreq_right(2,:)';
@@ -38,6 +41,14 @@ all_sizes_AUD = nonzeros(vertcat(sizes_L_AUD, sizes_R_AUD));
 sizes_L_VIS = flip(dotInfo.cohFreq_left(2,:)');%Slpit to left and Right 
 sizes_R_VIS = dotInfo.cohFreq_right(2,:)';
 all_sizes_VIS = nonzeros(vertcat(sizes_L_VIS, sizes_R_VIS));
+
+if length(AUD_xData) ~= length(all_sizes_AUD)
+    all_sizes_AUD = all_sizes_AUD(1:length(AUD_xData));
+end
+
+if length(VIS_xData) ~= length(all_sizes_VIS)
+    all_sizes_VIS = all_sizes_VIS(1:length(VIS_xData));
+end
 
 % Plot fit with data.
 fig = figure( 'Name', 'Psychometric Function' );
