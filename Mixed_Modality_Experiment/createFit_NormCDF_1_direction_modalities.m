@@ -51,7 +51,7 @@ end
 fig = figure( 'Name', sprintf('Psychometric Function %s',direction) );
 scatter(AUD_xData, AUD_yData, sizes_AUD)
 hold on 
-scatter(VIS_xData, VIS_yData_ sizes_VIS)
+scatter(VIS_xData, VIS_yData, sizes_VIS)
 plot(x, AUD_p, x, VIS_p);
 legend('AUD','VIS', 'AUD - NormCDF','VIS - NormCDF', 'Location', 'NorthEast', 'Interpreter', 'none' );
 % Label axes

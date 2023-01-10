@@ -242,7 +242,15 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
 
         %This Includes the reward for fixating for required fixation time
         for frame = 1:fix_time_frames - waitframes
-
+            if baron_fixation_training==1 
+                if mod(frame,2) ~= 0
+                    x = TDT.read('x');
+                    y = TDT.read('y');
+                end
+            else
+                x = TDT.read('x');
+                y = TDT.read('y');
+            end
             x = TDT.read('x');
             y = TDT.read('y');
             [eye_data_matrix] = Send_Eye_Position_Data(TDT, start_block_time, eye_data_matrix, 1, trialcounter); %Collect eye position data with timestamp
@@ -359,6 +367,8 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                 aud_reward = 'Yes';
                 if baron_fixation_training==1
                     TDT.trg(1); %add in if fixation only
+                    incorrect_target_fixation='N/A';
+                    
                 end
             else
                 aud_reward = 'No';
