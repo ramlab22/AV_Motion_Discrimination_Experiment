@@ -186,9 +186,15 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         end_target_waitframes = 0; %variable to end target acquisition wait time once fixation is acquired
          
         %Initilize the auditory coherence and direction for each trial
-
-        catchtrial = 'No'; %All trials will not be catch, new staircase procedure
-        fix_point_color = white;
+        %Initilize the auditory coherence and direction for each trial
+        if audInfo.random_incorrect_opacity_list(trialcounter) == 0
+            catchtrial = 'Yes';
+        %    fix_point_color = [0 255 0]; %Green 
+             fix_point_color = white;
+        elseif audInfo.random_incorrect_opacity_list(trialcounter) == 1
+            catchtrial = 'No';
+            fix_point_color = white;
+        end
 
         if trialcounter == 1
             staircase_index = 1; %Initialize index for first trial 
@@ -237,7 +243,15 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
 
         %This Includes the reward for fixating for required fixation time
         for frame = 1:fix_time_frames - waitframes
-
+            if baron_fixation_training==1 
+                if mod(frame,2) ~= 0
+                    x = TDT.read('x');
+                    y = TDT.read('y');
+                end
+            else
+                x = TDT.read('x');
+                y = TDT.read('y');
+            end
             x = TDT.read('x');
             y = TDT.read('y');
             [eye_data_matrix] = Send_Eye_Position_Data(TDT, start_block_time, eye_data_matrix, 1, trialcounter); %Collect eye position data with timestamp
@@ -354,6 +368,8 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                 aud_reward = 'Yes';
                 if baron_fixation_training==1
                     TDT.trg(1); %add in if fixation only
+                    incorrect_target_fixation='N/A';
+                    
                 end
             else
                 aud_reward = 'No';
@@ -553,7 +569,7 @@ num_catch_trials = audInfo.catchtrials;
     prob_Right = directional_probability(Right_dataout, audInfo); 
     prob_Left = directional_probability(Left_dataout, audInfo); 
     
-    [x, y, fig_both] = psychometric_plotter(prob_Right,prob_Left, audInfo, save_name);
+    [x, y, fig_both, coeff_p_values,CIs_of_LR_fit] = psychometric_plotter(prob_Right,prob_Left, audInfo, save_name);
     Eye_Tracker_Plotter(eye_data_matrix);
     
     %%Make Rightward only graph
@@ -581,9 +597,9 @@ num_catch_trials = audInfo.catchtrials;
     
 end
 %%
-
+[n_trials_with_response,n_trials_with_reward,proportion_response_reversals_after_correct_response,proportion_response_reversals_after_incorrect_response] = response_reversal_proportions2(dataout);
 % Save all block info and add to a .mat file for later analysis  
-save([data_file_directory save_name],'dataout','Fixation_Success_Rate','AUD_Success_Rate','Target_Success_Rate_Regular','Target_Success_Rate_Catch','ExpInfo','audInfo','Total_Block_Time','eye_data_matrix');
+save([data_file_directory save_name],'dataout','Fixation_Success_Rate','AUD_Success_Rate','Target_Success_Rate_Regular','Target_Success_Rate_Catch','ExpInfo','audInfo','Total_Block_Time','eye_data_matrix', "coeff_p_values",'CIs_of_LR_fit','n_trials_with_response','n_trials_with_reward','proportion_response_reversals_after_correct_response','proportion_response_reversals_after_incorrect_response');
 disp('Experiment Data Exported to Behavioral Data Folder')
 sca; 
 

@@ -1,4 +1,4 @@
-function [fig] = createFit_NormCDF(coh_list, pc, audInfo, save_name)
+function [fig, p_values,ci] = createFit_NormCDF(coh_list, pc, audInfo, save_name)
 %CREATEFIT(COH_LIST,PC_AUD)
 %  Create a fit.
 %
@@ -27,13 +27,32 @@ opts = optimset('MaxFunEvals',50000, 'MaxIter',10000);
 fit_par = fminsearch(fun, parms, opts);
 
 x = -1:.01:1;
+
+[p_values, bootstat,ci] = p_value_calc(yData, parms);
+
+
+% plot(bootstat(:,1),bootstat(:,2),'o')
+% hold on 
+% plot(mu, sigma, "*")
+% xline(ci(1,1),':')
+% xline(ci(2,1),':')
+% yline(ci(1,2),':')
+% yline(ci(2,2),':')
+% xlabel('Mean')
+% ylabel('Standard Deviation')
+% legend('Bootstrapped Coeff.', 'Chosen Coeff.')
+
 p = cdf('Normal', x, fit_par(1), fit_par(2));
+
 
 %Plot different sizes based on amount of frequency of each coh
 sizes_L = flip(audInfo.cohFreq_left(2,:)');%Slpit to left and Right 
 sizes_R = audInfo.cohFreq_right(2,:)';
 all_sizes = nonzeros(vertcat(sizes_L, sizes_R));
 
+if length(xData) ~= length(all_sizes)
+    all_sizes = all_sizes(1:length(xData));
+end
 
 % Plot fit with data.
 fig = figure( 'Name', 'Psychometric Function' );
@@ -48,5 +67,6 @@ ylabel( '% Rightward Response', 'Interpreter', 'none' );
 xlim([-1 1])
 ylim([0 1])
 grid on
-
+text(0,.2,"p value for CDF coeffs. (mean): " + p_values(1))
+text(0,.1, "p value for CDF coeffs. (std): " + p_values(2))
 end
