@@ -1,6 +1,7 @@
 function [av_timeout] = AV_Stimulus_Presentation(ExpInfo, dotInfo, curWindow, xCenter, yCenter, h_voltage, k_voltage, TDT)
 % dotInfo will be a struct with all of the information concerning the RDK stimulus
 %look at CreateClassStructure.m function 
+dotInfo.coh = ExpInfo.coh; 
 
 Screen('Flip', curWindow);
 ifi = Screen('GetFlipInterval', curWindow);
@@ -12,7 +13,7 @@ refresh_rate = 1/ifi;
     rng(rseed,'v5uniform');
         
 
-    coh = dotInfo.coh/1000;
+    coh = dotInfo.coh;
     apD = dotInfo.apXYD(:,3); % diameter of aperture
     center = repmat([xCenter yCenter],size(dotInfo.apXYD(:,1)));
 
