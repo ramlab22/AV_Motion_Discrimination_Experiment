@@ -6,7 +6,7 @@ function  [ExpInfo, dstruct, dotInfo, audInfo]= CreateClassStructure(data, monWi
 ExpInfo.t_angle = data(1,1); % Fixation Dot and Target Dots Visual Angle in Degrees
 ExpInfo.rew_angle = data(2,1);% Reward Window Visual Angle in Degrees
 ExpInfo.num_trials = data(3,1); % Number of Trials for 1 block
-ExpInfo.num_catchtrials = round((data(71,1)/100)*ExpInfo.num_trials);
+ExpInfo.catch_trials = 0;
 ExpInfo.stim_time = data(4,1); %Time of stimulus(RDK) presentaiton (ms)
 ExpInfo.iti = data(5,1);%Intertrial Interval (ms)
 ExpInfo.fixation_time = data(6,1);% Time to fixate on fixation point before RDK Starts presenting == time of presenting fixation point 
@@ -18,6 +18,7 @@ ExpInfo.target_fixation_time = data(18,1);% Time to fixate inside the target poi
 ExpInfo.cohSet = (nonzeros(data(50:60,1)))'./100;
 ExpInfo.probs = data(43:46,1);
 ExpInfo.coherences = ExpInfo.cohSet;
+ExpInfo.incorrect_opacity = 1; %No catchtrials for now
 ExpInfo.random_incorrect_opacity_list = catch_trial_randomizer(ExpInfo);
 
 %% This is the random position number generator
@@ -65,10 +66,10 @@ dotInfo.maxDotsPerFrame = 400; %Maximum number of dots per frame of the RDK aper
 %% Auditory Parameters 
 audInfo.dirSet = dirBin_aud(data); %[LR DU UD RL] 1 - Include, 0 - Exclude
 audInfo.random_dir_list = randomizer(ExpInfo,audInfo); 
-audInfo.set_dur = 2.523;%Seconds, This is going to be set as long as the speakers dont move, the actual duration of the stimulus will be set by the t_start and t_end variables
 audInfo.t_start = data(27,1); % In ms, , this will also determine "Location" of perceptive field 
 audInfo.t_end = data(28,1);  % In ms,
 audInfo.velocity = data(29,1); %deg/sec
+audInfo.set_dur = 78/(audInfo.velocity);
 audInfo.muxSet = [0]; %Set to zero for now which only includes LR and RL directions
 audInfo.mux = 0;
 audInfo.random_mux_list = zeros(1,(ExpInfo.num_trials)); %Set to zeros for now which only includes LR and RL directions

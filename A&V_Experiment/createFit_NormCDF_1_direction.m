@@ -42,7 +42,7 @@ hold on
 plot(x, p);
 legend('% Rightward Resp. vs. Coherence', 'NormCDF', 'Location', 'NorthEast', 'Interpreter', 'none' );
 % Label axes
-title(sprintf('Auditory Psych. Func. %s\n%s',direction, save_name),'Interpreter','none');
+title(sprintf('AV Psych. Func. %s\n%s',direction, save_name),'Interpreter','none');
 xlabel( 'Coherence %', 'Interpreter', 'none' );
 ylabel( '% Rightward Response', 'Interpreter', 'none' );
 xlim([0 1])

@@ -7,7 +7,7 @@ function fig = plot_coh_vs_trial(dataout, save_name)
     plot(trial_num, coh_level);
     xlabel('Trial Number');
     ylabel('Coherence Level');
-    title(sprintf('AUD Coherence Level vs. Trial Number\n%s',save_name),'Interpreter','none');
+    title(sprintf('AV Coherence Level vs. Trial Number\n%s',save_name),'Interpreter','none');
     
 
  

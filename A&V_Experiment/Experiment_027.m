@@ -179,7 +179,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
             audInfo.dir = randi([0,1]); %for first trial, randomly choose 0 (Left) or 1 (Right) for dir
             if audInfo.dir == 1 %L to R
                 dotInfo.dir = 0;% randomly choose 0 (Right) or 180 (Left) for dir
-            else
+            else %R to L
                 dotInfo.dir = 180;
             end
             ExpInfo.coh = ExpInfo.cohSet(staircase_index);% (Value 0.0 - 1.0)
@@ -320,7 +320,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         targ_timeout = 0;
         if fix_timeout ~= 1 && av_timeout ~= 1 
             %This picks the luminace of the targets based on correct direction response, also outputs correct target string variable, eg 'right'
-            [right_target_color,left_target_color,correct_target] = target_color_selection(audInfo, dotInfo);
+            [right_target_color,left_target_color,correct_target] = target_color_selection(ExpInfo, audInfo, dotInfo);
             
             for frame = 1:target_time_frames - waitframes
                 
@@ -474,9 +474,14 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         end
     end
 %% End of Block 
-total_trials = ExpInfo.num_trials;  
-num_regular_trials = total_trials - ExpInfo.num_catchtrials;  
-num_catch_trials = ExpInfo.num_catchtrials; 
+if trialcounter < ExpInfo.num_trials
+    total_trials = trialcounter;
+else
+    total_trials = ExpInfo.num_trials;
+end
+
+num_regular_trials = total_trials - ExpInfo.catch_trials;  
+num_catch_trials = ExpInfo.catch_trials; 
 
 [Fixation_Success_Rate, AV_Success_Rate, Target_Success_Rate_Regular, Target_Success_Rate_Catch] = SR_CALC(dataout,total_trials,num_regular_trials,num_catch_trials)
     

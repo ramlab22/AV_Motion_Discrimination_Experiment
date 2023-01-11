@@ -13,10 +13,10 @@ function [right_target_color,left_target_color,correct_target] = target_color_se
     
     if strcmp(correct_target,'right')
         right_target_color = [255; 255; 255; 1];
-        left_target_color = [255; 255; 255;ExpInfo.Incorrect_Opacity];%incorrect target ; RGBA value, a = alpha which is the opacity of the dot value 0-1.0
+        left_target_color = [255; 255; 255; ExpInfo.incorrect_opacity];%incorrect target ; RGBA value, a = alpha which is the opacity of the dot value 0-1.0
         
     elseif strcmp(correct_target,'left')
-        right_target_color = [255; 255; 255;ExpInfo.Incorrect_Opacity]; %incorrect target
+        right_target_color = [255; 255; 255; ExpInfo.incorrect_opacity]; %incorrect target
         left_target_color = [255; 255; 255; 1];
         
     % elseif strcmp(correct_target,'both')
