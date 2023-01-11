@@ -585,7 +585,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
 
     
     if trialcounter < ExpInfo.num_trials
-        total_trials = trial_counter; 
+        total_trials = trialcounter; 
     else
         total_trials = ExpInfo.num_trials;
     end
