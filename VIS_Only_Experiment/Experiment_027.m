@@ -465,9 +465,12 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     end
 %% End of Block 
 
-total_trials = ExpInfo.num_trials; 
+if trialcounter < ExpInfo.num_trials
+    total_trials = trialcounter;
+else
+    total_trials = ExpInfo.num_trials;
+end
 
-%total_trials = trialcounter;
 num_regular_trials = total_trials - dotInfo.catchtrials; 
 num_catch_trials = dotInfo.catchtrials;
 
