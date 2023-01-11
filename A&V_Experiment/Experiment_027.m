@@ -157,7 +157,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     trialcounter = 1;
     disp(['Trial #: ',num2str(trialcounter),'/',num2str(total_trials)])
     output_counter = output_counter + 1;
-    dataout(output_counter,1:10) = {'Trial #' 'Position #' 'Fixation Correct' 'AV Reward' 'Catch Trial' 'Target Correct' 'Total Trial Time (sec)' 'Coherence Level' 'Direction of Motion' 'Incorrect Target Fixation'}; %Initialize Columns for data output cell
+    dataout(output_counter,1:12) = {'Trial #' 'Position #' 'Fixation Correct' 'AV Reward' 'Catch Trial' 'Target Correct' 'Total Trial Time (sec)' 'AUD Coherence Level' 'AUD Direction of Motion' 'Incorrect Target Fixation' 'VIS Coherence Level' 'VIS Direction of Motion'}; %Initialize Columns for data output cell
     start_block_time = hat; 
     
     while (trialcounter <= total_trials) && (BreakState ~= 1) % each trial
@@ -182,7 +182,9 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
             else %R to L
                 dotInfo.dir = 180;
             end
-            ExpInfo.coh = ExpInfo.cohSet(staircase_index);% (Value 0.0 - 1.0)
+            audInfo.coh = audInfo.cohSet(staircase_index);% (Value 0.0 - 1.0)
+            dotInfo.coh = dotInfo.cohset(staircase_index);
+           
         elseif trialcounter > 1
             [ExpInfo, staircase_index, dotInfo, audInfo] = staircase_procedure(ExpInfo, trial_status, staircase_index, audInfo, dotInfo);        
         end %if first trial
@@ -190,16 +192,18 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         
         if (audInfo.dir == 1 && dotInfo.dir == 0)
             disp('AV Left to Right')
-            disp(ExpInfo.coh)
+            disp('AUD Coh - '+audInfo.coh)
+            disp('VIS Coh - '+dotInfo.coh)
         elseif (audInfo.dir == 0 && dotInfo.dir == 180)
             disp('AV Right to Left')
-            disp(ExpInfo.coh)
+            disp('AUD Coh - '+audInfo.coh)
+            disp('VIS Coh - '+dotInfo.coh)
         end
         
  
             
       
-        [audInfo.CAM] = makeCAM(ExpInfo.coh, audInfo.dir, audInfo.set_dur, 0, 44100);
+        [audInfo.CAM] = makeCAM(audInfo.coh, audInfo.dir, audInfo.set_dur, 0, 44100);
         [audInfo.adjustment_factor, CAM_1, CAM_2] = Signal_Creator(audInfo.CAM,audInfo.velocity); %Writes to CAM 1 and 2 for .rcx circuit to read
         [CAM_1_Cut_Ramped, CAM_2_Cut_Ramped, audInfo.window_duration, audInfo.ramp_dur] = aud_receptive_field_location(CAM_1,CAM_2, audInfo.t_start, audInfo.t_end); 
                 
@@ -466,7 +470,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     end_trial_time = hat;
     trial_time = end_trial_time-start_trial_time;
     
-        dataout(output_counter,1:10) = {trialcounter pos fix_reward av_reward catchtrial target_reward trial_time ExpInfo.coh audInfo.dir incorrect_target_fixation}; 
+        dataout(output_counter,1:12) = {trialcounter pos fix_reward av_reward catchtrial target_reward trial_time audInfo.coh audInfo.dir incorrect_target_fixation dotInfo.coh dotInfo.dir}; 
         trialcounter = trialcounter + 1;
         
         if trialcounter <= total_trials

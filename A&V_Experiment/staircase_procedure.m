@@ -9,7 +9,8 @@ function [ExpInfo, staircase_index, dotInfo, audInfo] = staircase_procedure(ExpI
         if x_rand <= ExpInfo.probs(1) %Prob of Coherence lowering
             if staircase_index < length(ExpInfo.cohSet) %Check to make sure we don't go lower than the lowest value possible
                 staircase_index = staircase_index + 1; %Decrease the coherence
-                ExpInfo.coh = (ExpInfo.cohSet(staircase_index));
+                audInfo.coh = (audInfo.cohSet(staircase_index));
+                dotInfo.coh = (dotInfo.cohSet(staircase_index));
             end
     
         end
@@ -36,7 +37,8 @@ function [ExpInfo, staircase_index, dotInfo, audInfo] = staircase_procedure(ExpI
     
             if staircase_index > 1 %Check to make sure we don't go higher than the highest value possible
                 staircase_index = staircase_index - 1; %Increase the coherence
-                ExpInfo.coh = (ExpInfo.cohSet(staircase_index));
+                audInfo.coh = (audInfo.cohSet(staircase_index));
+                dotInfo.coh = (dotInfo.cohSet(staircase_index));
             end
     
         end
