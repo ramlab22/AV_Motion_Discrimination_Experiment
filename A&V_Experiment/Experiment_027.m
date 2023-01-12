@@ -183,7 +183,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                 dotInfo.dir = 180;
             end
             audInfo.coh = audInfo.cohSet(staircase_index);% (Value 0.0 - 1.0)
-            dotInfo.coh = dotInfo.cohset(staircase_index);
+            dotInfo.coh = dotInfo.cohSet(staircase_index);
            
         elseif trialcounter > 1
             [ExpInfo, staircase_index, dotInfo, audInfo] = staircase_procedure(ExpInfo, trial_status, staircase_index, audInfo, dotInfo);        
@@ -192,12 +192,12 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         
         if (audInfo.dir == 1 && dotInfo.dir == 0)
             disp('AV Left to Right')
-            disp('AUD Coh - '+audInfo.coh)
-            disp('VIS Coh - '+dotInfo.coh)
+            disp(['AUD Coh - ', num2str(audInfo.coh)])
+            disp(['VIS Coh - ', num2str(dotInfo.coh)])
         elseif (audInfo.dir == 0 && dotInfo.dir == 180)
             disp('AV Right to Left')
-            disp('AUD Coh - '+audInfo.coh)
-            disp('VIS Coh - '+dotInfo.coh)
+            disp(['AUD Coh - ', num2str(audInfo.coh)])
+            disp(['VIS Coh - ', num2str(dotInfo.coh)])
         end
         
  
