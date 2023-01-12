@@ -477,6 +477,14 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
             disp(['Trial #: ',num2str(trialcounter),'/',num2str(total_trials)])
         end
     end
+    %% Match up the AUD and VIS Directions , 1 = L to R , 0 = R to L
+for i = 1:length(dataout(:,1))
+    if dataout{i,12} == 0
+        dataout{i,12} = 1 ;
+    elseif dataout{i,12} == 180
+        dataout{i,12} = 0;
+    end
+end
 %% End of Block 
 if trialcounter < ExpInfo.num_trials
     total_trials = trialcounter;
@@ -491,10 +499,12 @@ num_catch_trials = ExpInfo.catch_trials;
     
     %Break down of each success rate based on coherence level 
     %Count how many rew and N/A per coherence 
-     ExpInfo.cohFreq = cohFreq_finder(dataout, ExpInfo);
-     
-    prob = coherence_probability(dataout,ExpInfo)
-%    prob_zero = prob(1,:); 
+     audInfo.cohFreq = cohFreq_finder_aud(dataout, audInfo);
+     dotInfo.cohFreq = cohFreq_finder_vis(dataout, dotInfo);
+
+    prob_aud = coherence_probability_aud(dataout,audInfo)
+    prob_vis = coherence_probability_vis(dataout, dotInfo)
+
     
     [Right_dataout, Left_dataout] = direction_splitter(dataout);
     

@@ -51,6 +51,7 @@ dotInfo = struct;
 
 dotInfo.dirSet = dirBin_vis(data); %See function dirBin_vis.m
 dotInfo.cohSet = (nonzeros(data(61:71,1)))'./100;
+dotInfo.coherences = dotInfo.cohSet;
 dotInfo.rdk_size_pix = angle2pixels(ExpInfo.rdk_angle); %RDK window size in pixels
 dotInfo.apXYD = [0 90 (ExpInfo.rdk_angle*10)]; % Location x,y pixels (0,0 is center of screen) and diameter of the aperature, currently in visual degrees - MULTPLIED by 10 because of Shadlen dots code, needed to be an integer
 dotInfo.speed = data(20,1); %Degrees per second?
@@ -72,6 +73,7 @@ audInfo.t_end = data(28,1);  % In ms,
 audInfo.velocity = data(29,1); %deg/sec
 audInfo.set_dur = 78/(audInfo.velocity);
 audInfo.cohSet = (nonzeros(data(50:60,1)))'./100;
+audInfo.coherences = audInfo.cohSet;
 audInfo.muxSet = [0]; %Set to zero for now which only includes LR and RL directions
 audInfo.mux = 0;
 audInfo.random_mux_list = zeros(1,(ExpInfo.num_trials)); %Set to zeros for now which only includes LR and RL directions
