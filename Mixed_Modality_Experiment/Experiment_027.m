@@ -198,10 +198,10 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
             trialInfo.modality=trialInfo.modality{1};
             if strcmp(trialInfo.modality, 'AUD')
                 audInfo.dir = randi([0,1]); %for first trial, randomly choose 0 (Left) or 1 (Right) for dir
-                trialInfo.coh = audInfo.cohSet(staircase_index_aud);% (Value 0.0 - 1.0)
+                audInfo.coh = audInfo.cohSet(staircase_index_aud);% (Value 0.0 - 1.0)
             elseif strcmp(trialInfo.modality, 'VIS')
                 dotInfo.dir = randsample([0, 180],1);%for first trial, randomly choose 0 (Right) or 180 (Left) for dir
-                trialInfo.coh = dotInfo.cohSet(staircase_index_dot);% (Value 0.0 - 1.0)
+                dotInfo.coh = dotInfo.cohSet(staircase_index_dot);% (Value 0.0 - 1.0)
             end
         elseif trialcounter > 1
             [trialInfo, staircase_index_dot, staircase_index_aud, dotInfo, audInfo] = staircase_procedure(ExpInfo, trial_status, trialInfo, staircase_index_aud, staircase_index_dot, audInfo, dotInfo);        
@@ -210,16 +210,25 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         if (dotInfo.dir == 0 && strcmp(trialInfo.modality, 'VIS')) || (audInfo.dir == 1 && strcmp(trialInfo.modality, 'AUD'))
             disp(trialInfo.modality)
             disp('Left to Right')
-            disp(trialInfo.coh)
+            if strcmp(trialInfo.modality, 'VIS')
+                disp(dotInfo.coh)
+            elseif strcmp(trialInfo.modality, 'AUD')
+                disp(audInfo.coh)
+            end
+
         elseif (dotInfo.dir == 180 && strcmp(trialInfo.modality, 'VIS')) || (audInfo.dir == 0 && strcmp(trialInfo.modality, 'AUD'))
             disp(trialInfo.modality)
             disp('Right to Left')
-            disp(trialInfo.coh)
+            if strcmp(trialInfo.modality, 'VIS')
+                disp(dotInfo.coh)
+            elseif strcmp(trialInfo.modality, 'AUD')
+                disp(audInfo.coh)
+            end
         end
         
         %create CAM files if auditory
         if strcmp(trialInfo.modality,'AUD') 
-            [audInfo.CAM] = makeCAM(trialInfo.coh, audInfo.dir, audInfo.set_dur, 0, 44100);
+            [audInfo.CAM] = makeCAM(audInfo.coh, audInfo.dir, audInfo.set_dur, 0, 44100);
             [audInfo.adjustment_factor, CAM_1, CAM_2] = Signal_Creator(audInfo.CAM,audInfo.velocity); %Writes to CAM 1 and 2 for .rcx circuit to read
             [CAM_1_Cut_Ramped, CAM_2_Cut_Ramped, audInfo.window_duration, audInfo.ramp_dur] = aud_receptive_field_location(CAM_1,CAM_2, audInfo.t_start, audInfo.t_end);
             
@@ -321,7 +330,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
             
             if fix_timeout ~= 1
                 % Draw the RDK
-                [rdk_timeout, eye_data_matrix] = RDK_Draw(ExpInfo, dotInfo, trialInfo, window, xCenter, yCenter, h_voltage, k_voltage, TDT, start_block_time, eye_data_matrix, trialcounter, fix_point_color);
+                [rdk_timeout, eye_data_matrix] = RDK_Draw(ExpInfo, dotInfo, window, xCenter, yCenter, h_voltage, k_voltage, TDT, start_block_time, eye_data_matrix, trialcounter, fix_point_color);
                 if rdk_timeout ~= 1
                     rdk_reward = 'Yes';
                     if baron_fixation_training==1
@@ -563,9 +572,9 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         trial_time = end_trial_time-start_trial_time;
         
         if strcmp(trialInfo.modality, 'AUD')
-            dataout(output_counter,1:11) = {trialcounter pos fix_reward stim_reward catchtrial target_reward trial_time trialInfo.coh audInfo.dir incorrect_target_fixation trialInfo.modality};
+            dataout(output_counter,1:11) = {trialcounter pos fix_reward stim_reward catchtrial target_reward trial_time audInfo.coh audInfo.dir incorrect_target_fixation trialInfo.modality};
         elseif strcmp(trialInfo.modality, 'VIS')
-            dataout(output_counter,1:11) = {trialcounter pos fix_reward stim_reward catchtrial target_reward trial_time trialInfo.coh dotInfo.dir incorrect_target_fixation trialInfo.modality};
+            dataout(output_counter,1:11) = {trialcounter pos fix_reward stim_reward catchtrial target_reward trial_time dotInfo.coh dotInfo.dir incorrect_target_fixation trialInfo.modality};
         end
         
         trialcounter = trialcounter + 1;
