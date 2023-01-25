@@ -196,13 +196,13 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
             staircase_index_dot = 1;
             trialInfo.modality = trialInfo.modality_list(randi(numel(trialInfo.modality_list)));
             trialInfo.modality=trialInfo.modality{1};
-            if strcmp(trialInfo.modality, 'AUD')
-                audInfo.dir = randi([0,1]); %for first trial, randomly choose 0 (Left) or 1 (Right) for dir
-                audInfo.coh = audInfo.cohSet(staircase_index_aud);% (Value 0.0 - 1.0)
-            elseif strcmp(trialInfo.modality, 'VIS')
-                dotInfo.dir = randsample([0, 180],1);%for first trial, randomly choose 0 (Right) or 180 (Left) for dir
-                dotInfo.coh = dotInfo.cohSet(staircase_index_dot);% (Value 0.0 - 1.0)
-            end
+            
+            audInfo.dir = randi([0,1]); %for first trial, randomly choose 0 (Left) or 1 (Right) for dir
+            audInfo.coh = audInfo.cohSet(staircase_index_aud);% (Value 0.0 - 1.0)
+
+            dotInfo.dir = randsample([0, 180],1);%for first trial, randomly choose 0 (Right) or 180 (Left) for dir
+            dotInfo.coh = dotInfo.cohSet(staircase_index_dot);% (Value 0.0 - 1.0)
+
         elseif trialcounter > 1
             [trialInfo, staircase_index_dot, staircase_index_aud, dotInfo, audInfo] = staircase_procedure(ExpInfo, trial_status, trialInfo, staircase_index_aud, staircase_index_dot, audInfo, dotInfo);        
         end %if first trial
