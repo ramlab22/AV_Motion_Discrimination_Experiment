@@ -1,4 +1,4 @@
-function [rdk_timeout, eye_data_matrix] = RDK_Draw(ExpInfo, dotInfo, trialInfo, curWindow, xCenter, yCenter, h_voltage, k_voltage, TDT, start_block_time, eye_data_matrix, trial, fix_point_color)
+function [rdk_timeout, eye_data_matrix] = RDK_Draw(ExpInfo, dotInfo, curWindow, xCenter, yCenter, h_voltage, k_voltage, TDT, start_block_time, eye_data_matrix, trial, fix_point_color)
 % dotInfo will be a struct with all of the information concerning the RDK stimulus
 %look at CreateClassStructure.m function 
 
@@ -12,7 +12,7 @@ refresh_rate = 1/ifi;
     rng(rseed,'v5uniform');
         
 
-    coh = trialInfo.coh;
+    coh = dotInfo.coh;
     apD = dotInfo.apXYD(:,3); % diameter of aperture
     center = repmat([xCenter yCenter],size(dotInfo.apXYD(:,1)));
 

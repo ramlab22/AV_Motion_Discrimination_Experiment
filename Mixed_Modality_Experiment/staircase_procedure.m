@@ -7,20 +7,10 @@ function [trialInfo, staircase_index_dot, staircase_index_aud, dotInfo, audInfo]
             if x_rand <= ExpInfo.probs(5) %Prob of modality switch
                 if strcmp(trialInfo.modality, 'VIS')
                     trialInfo.modality = 'AUD';
-%                     %Make sure that direction is for AUD
-%                     if trialInfo.dir == 0 %VIS Right 
-%                         trialInfo.dir = 1; %AUD Right
-%                     elseif trialInfo.dir == 180 %VIS Left
-%                         trialInfo.dir = 0; %AUD Left
-%                     end
+
                 elseif strcmp(trialInfo.modality, 'AUD')
                     trialInfo.modality = 'VIS';
-                    %Make sure that direction is for VIS
-%                     if trialInfo.dir == 1 %AUD Right 
-%                         trialInfo.dir = 0; %VIS Right
-%                     elseif trialInfo.dir == 0 %AUD Left
-%                         trialInfo.dir = 180; %VIS Left
-%                     end
+
                 end
             end
         
@@ -28,12 +18,12 @@ function [trialInfo, staircase_index_dot, staircase_index_aud, dotInfo, audInfo]
                 if strcmp(trialInfo.modality, 'VIS')
                     if staircase_index_dot < length(dotInfo.cohSet) %Check to make sure we don't go lower than the lowest value possible
                         staircase_index_dot = staircase_index_dot + 1; %Decrease the coherence
-                        trialInfo.coh = (dotInfo.cohSet(staircase_index_dot)); 
+                        dotInfo.coh = (dotInfo.cohSet(staircase_index_dot)); 
                     end
                 elseif strcmp(trialInfo.modality, 'AUD')
                     if staircase_index_aud < length(audInfo.cohSet) %Check to make sure we don't go lower than the lowest value possible
                         staircase_index_aud = staircase_index_aud + 1; %Decrease the coherence
-                        trialInfo.coh = (audInfo.cohSet(staircase_index_aud)); 
+                        audInfo.coh = (audInfo.cohSet(staircase_index_aud)); 
                     end
                 end
             end
@@ -85,12 +75,12 @@ function [trialInfo, staircase_index_dot, staircase_index_aud, dotInfo, audInfo]
                 if strcmp(trialInfo.modality, 'VIS')
                     if staircase_index_dot > 1 %Check to make sure we don't go higher than the highest value possible
                         staircase_index_dot = staircase_index_dot - 1; %Increase the coherence
-                        trialInfo.coh = (dotInfo.cohSet(staircase_index_dot)); 
+                        dotInfo.coh = (dotInfo.cohSet(staircase_index_dot)); 
                     end
                 elseif strcmp(trialInfo.modality, 'AUD')
                     if staircase_index_aud > 1 %Check to make sure we don't go higher than the highest value possible
                         staircase_index_aud = staircase_index_aud - 1; %Increase the coherence
-                        trialInfo.coh = (audInfo.cohSet(staircase_index_aud)); 
+                        audInfo.coh = (audInfo.cohSet(staircase_index_aud)); 
                     end
                 end
             end
