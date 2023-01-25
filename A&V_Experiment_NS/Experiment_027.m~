@@ -1,0 +1,269 @@
+%% Experiment Script for 027 %%%%%%%%%%%%%%%%%%%%%%%%%%
+% Psychtoolbox RDK Visual Stimulus presentation 
+% written 04/21/22 - Jackson Mayfield 
+clear;
+close all; 
+clc; 
+sca;
+
+%  Version info
+Version = 'Experiment_027_v.1.0' ; % after code changes, change version
+
+%% Run App to get Paramters for test
+%In order to change any GUI paramters, go to Experiment_Parameters.mlapp
+%for code on the actual app 
+
+% CHANGE THIS TO GET PARAMETERS FOR RDK
+  app = Experiment_Parameters; 
+  while isvalid(app); pause(0.1); end
+  
+%Gets all of the paramters data from the GUI and puts into a matrix 
+opts = delimitedTextImportOptions;
+opts.EmptyLineRule = 'read';
+data_cell = readmatrix('data_cell.txt',opts);
+data = str2double(data_cell); 
+
+for i = 1:length(data) %Gets all State Buttons for Position to initialize as zeros 
+   if isnan(data(i))
+       data(i) = 0;
+   end
+end
+
+
+%% Output Settings
+%Creates a directory for storage of block data from experiment 
+
+output_filename = input('Please Input experiment filename as DATE_MONKEY_BLOCK#\nex = 042122_Bravo_2 : ','s');
+if isempty(output_filename)
+    return;
+else
+    save_name = output_filename;
+end
+check_go = 1;
+file_name_check = ['C:\Users\jacks\Downloads\Adriana Stuff\REDO\Behavioral_Data\' save_name '.mat'];
+file_check = dir(file_name_check);
+if ~isempty(file_check)
+    button = questdlg('File name exists, do you want to continue?',...
+        'Continue Operation','Yes','No','Help','No');
+    if strcmp(button,'Yes')
+        disp('Creating file')
+        check_go = 1;
+    elseif strcmp(button,'No')
+        disp('Canceled file operation')
+        check_go = 0;
+    elseif strcmp(button,'Help')
+        disp('Sorry, no help available')
+        check_go = 0;
+    end
+end
+if ~check_go
+    return
+end
+
+%% Initialization 
+%ptb_cfg = o_ptb.PTB_Config(); %configure objective ptb toolbox 
+% Outputs all data into new structures for ease of use in later code
+[ExpInfo, vstruct] = CreateClassStructure(data);
+
+% Psychtoolbox 
+screenNumber = 2;
+white = WhiteIndex(screenNumber);
+black = BlackIndex(screenNumber);
+[screenXpixels, screenYpixels] = Screen('WindowSize', screenNumber);
+[xCenter, yCenter] = RectCenter([0 0 screenXpixels screenYpixels]);
+Screen('Preference', 'VisualDebugLevel', 3);
+window = Screen('OpenWindow', screenNumber, black); 
+
+% Fixation Position structure
+[dot_coord] = position_coordinates(screenXpixels, screenYpixels, xCenter, yCenter);
+
+% Initialize eye display figure
+[Figdata, hFig, hAxes, hLine] = InitEyeDisplay;
+
+%Initialize Block info
+
+BreakState = 0;
+output_counter = 0;
+save_counter = 1;
+correct_counter = 0;
+block_counter = 1;
+gate_off_time = .1;
+ReactionTime = 0;
+total_blocks = 1; 
+total_trials = ExpInfo.num_trials; 
+
+% Initilize connection to TDT Hardware
+
+% We are going to have to create new circuit with channels that include:
+% 1. Input from X and Y Eyetracker Voltages 
+% 2. Output to reward system, based on input from X and Y Eyetracker
+% 3. 
+
+
+%% Main Code
+
+WaitSecs(2);
+while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
+    trialcounter = 1;
+    output_counter = output_counter + 1;
+    dataout(output_counter,1:6) = {'Trial' 'Position' 'Correct' 'Success' 'Resp. Time' 'Notes'} %Initialize Columns for data output cell
+
+    
+    while (trialcounter <= total_trials) && (BreakState ~= 1) % each trial
+        output_counter = output_counter + 1;
+        start_time = GetSecs; %Trial Start Time
+        
+
+        %%  Trial loop parameters
+        %   Required duration of fixation
+        frame_time_queue = [ExpInfo.fixation_time,ExpInfo.stim_time,ExpInfo.target_fixation_time];  %   {'Fixation'; 'Stimulus';'target'}
+        %   Off-screen windows to be copied for each frame
+        window_queue = {f; WindowStructure(CurrentClass).frame(1).end; WindowStructure(CurrentClass).frame(2).end};
+              
+        eye_display_queue = {...
+            AllCoordinates.fRect, FixWindowSize; ...
+            AllCoordinates.fRect, FixWindowSize; ...
+            AllCoordinates.fRect, FixWindowSize; ...
+            AllCoordinates.cRect(CurrentClass, :, 2), TargWindowSize};
+        %   Audio to be played (if any) at the time of window copying (e.g. fixon.wav)
+%         audio_queue = {'', []; '', []; '', []; '', []};
+        %   Max lead time allowed between window copying and fixation on
+        aquisition_time_queue  = [1; 0;0.6];
+        %   Requred fixation window center and size in visual degrees (and thus in
+        %   R-hand coordinates)
+        eye_target_queue = {...
+            [0, 0], [Display.FixationWindow]; ... % Fixation epoch
+            ClassStructure(CurrentClass).frame(1).stim(1).end, [Display.TargetWindow]}; % Target epoch
+        time_stamp_queue = [];
+        Statecode = 0;
+        FixState = 0;
+        Result = 0;
+        Statecode = Statecode + 1;
+        %%  Core loop
+        for frame_idx = 1:numel(window_queue)
+            %   Step 1: Display current window
+            outputSingleScan(DO,[0,0,0,0,1,0,1,0]);
+            Screen('CopyWindow',window_queue{frame_idx},window);
+            Screen(window,'Flip');
+            %   Screen updating timestamps ('CueOn', 'TargetOn' etc.)
+            time_stamp_queue(Statecode) = GetSecs;
+            outputSingleScan(DO,[0,0,0,0,0,0,1,0]);
+            %                 wavesoundplay(audio_queue{frame_idx, 1}, audio_queue{frame_idx, 1});
+            UpdateEyeDisplay(eye_display_queue{frame_idx, 1}, eye_display_queue{frame_idx, 2}, eye_display_queue{frame_idx, 1},vstruct, hLine,'on')
+            %   Step 2: Aquire fixation (if allowed)
+            breaktime = GetSecs;
+            if aquisition_time_queue(frame_idx) > 0
+                FixState = 0;
+                while (FixState <= 0) && ((GetSecs - breaktime) < aquisition_time_queue(frame_idx))
+                    DisplayEye(Display, hAxes, hLine);
+                    [FixState] = CheckFixation(eye_target_queue{frame_idx, 1}, eye_target_queue{frame_idx, 2}, Display);
+                end
+                if (FixState == 0)
+                    break
+                end
+                %   Aquiring new fixation means +1 Statecode
+                Statecode = Statecode + 1;
+                %   Fixation in timestamps
+                time_stamp_queue(Statecode) = GetSecs;
+            end
+            %   Step3: Maintain fixation
+            breaktime = GetSecs;
+            while (FixState == 1) && ((GetSecs - breaktime) < frame_time_queue(frame_idx))
+                DisplayEye(Display, hAxes, hLine);
+                [FixState] = CheckFixation(eye_target_queue{frame_idx, 1}, eye_target_queue{frame_idx, 2}, Display);
+            end
+            if (FixState == 0)
+                break
+            end
+            % Successful maintanance of fixation means +1 Statecode
+            Statecode = Statecode + 1;
+        end
+        %% Trial end
+        finish_Statecode = sum(aquisition_time_queue > 0) + numel(aquisition_time_queue) + 1;
+        if Statecode == finish_Statecode
+            Result = 1;
+            %     wavesoundplay('correct.wav',0.6);
+        elseif Statecode == finish_Statecode - 2 % Not moving to target location
+            Result = 0;
+            %     wavesoundplay('wrong.wav',0.6);
+        else %  Aborted trial before target epoch
+            Result = 0;
+            %         wavesoundplay('abort.wav',0.8);
+        end
+        % End-of-trial screen
+        breaktime = GetSecs;
+        outputSingleScan(DO,[0,0,0,0,1,0,1,0]);
+        Screen('CopyWindow',r,window);
+        Screen(window,'Flip');
+        outputSingleScan(DO,[0,0,0,0,0,0,1,0]);
+        UpdateEyeDisplay(eye_display_queue{frame_idx, 1}, eye_display_queue{frame_idx, 2}, eye_display_queue{frame_idx, 1},vstruct, hLine,'off')
+        AllData.trials(save_counter).EndofTrialtime = GetSecs;  %  end of trial time, same as fixoff time in passive task
+        AllData.trials(save_counter).timestamp_queue = time_stamp_queue;
+        AllData.trials(save_counter).Statecode = Statecode;
+        if Result == 1  %  correct trial, give reward
+            AllData.trials(save_counter).Reward = 'Yes';
+            correct_counter = correct_counter + 1;
+            dataout(output_counter,1:7) = {output_counter-block_counter, CurrentClass, correct_counter, 1, ReactionTime, ClassStructure(CurrentClass).Notes, Statecode}
+            for burst = 1:num_burst
+                outputSingleScan(DO, [1 0 0 0 0 0 1 0]);
+                WaitSecs(0.65);
+                outputSingleScan(DO, [0 0 0 0 0 0 1 0]);
+                WaitSecs(0.10);
+            end
+            intertrial_interval = intertrial_interval_correct - gate_off_time;
+            repeat_counter = repeat_counter + 1;
+            IndexHist(CurrentClass) = CurrentClass; % store correct trial class indices
+        else
+            AllData.trials(save_counter).Reward = 'No';
+            dataout(output_counter,1:7) = {output_counter-block_counter, CurrentClass, correct_counter, 0, ReactionTime, ClassStructure(CurrentClass).Notes, Statecode}
+            intertrial_interval = intertrial_interval_error - gate_off_time;
+        end
+        %   Logging NIDAQ listener output
+        all_eye     = trial_eye_data;
+        all_eyetime = trial_eye_timestamp;
+        %   Stops and flushes the NIDAQ listener until the next trial
+        %   all_eyetime now starts at 0 each trial
+        eyeX = (((all_eye(:,1)-Display.Xscalecenter).*Display.Xscale));
+        eyeY = (((all_eye(:,2)-Display.Yscalecenter).*Display.Yscale));
+        set(hLine(4), 'XData',all_eyetime,...
+            'YData', eyeX);
+        set(hLine(5), 'XData',all_eyetime,...
+            'YData', eyeY);
+        set(hAxes(2),'YLim', [-15 15],'XLim', [0 sum(datain(1:4)) + fix_aquisition + target_aquisition]);
+        set(hAxes(3),'YLim', [-15 15],'XLim', [0 sum(datain(1:4)) + fix_aquisition + target_aquisition]);
+        drawnow
+        %   Remaining trials shuffling
+        IndexTotl = randperm(total_trials);
+        IndexTemp = IndexTotl(~ismember(IndexTotl,IndexHist));  % delete previous correct trial class index
+        if ~isempty(IndexTemp)
+            CurrentClass = real_trials(IndexTemp(1));
+        end
+        outputSingleScan(DO, [0 0 0 0 0 0 0 0]);
+        Screen(window,'FillRect',black)  % Clear screen
+        %  Intertrial inverval
+        while ((GetSecs - breaktime) < intertrial_interval) && (BreakState ~=1)
+            DisplayEye(Display, hAxes, hLine);
+            BreakState = CheckBreakState;
+        end
+        %   Do not log eye data until end of trial
+        all_eye     = trial_eye_data;
+        all_eyetime = trial_eye_timestamp;
+        AllData.trials(save_counter).eye_time = all_eyetime;
+        AllData.trials(save_counter).eye_loc = all_eye;
+        stop(ai);
+        if (BreakState == 1)
+            break;
+        end
+        trialcounter = trialcounter + 1;
+        save_counter = save_counter + 1;
+    end
+    block_counter = block_counter + 1;
+end
+% catch
+%     lasterror
+% end
+save(['C:\Users\CCLAB\Documents\MATLAB\Behavioral_Data\' save_name],'AllData');
+% clear
+%CleanUp
+
+
