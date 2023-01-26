@@ -398,8 +398,10 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                     if baron_fixation_training==1
                         TDT.trg(1); %add in if fixation only
                     end
-                else
+                elseif aud_correct_counter < fix_time_frames - waitframes - time_wait_frames(1)
                     aud_reward = 'No';
+                else
+                    aud_reward = 'N/A';
                 end
                 
             end
