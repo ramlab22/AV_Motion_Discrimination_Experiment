@@ -187,25 +187,33 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
          
         %Initilize the auditory coherence and direction for each trial
         %Initilize the auditory coherence and direction for each trial
-        if audInfo.random_incorrect_opacity_list(trialcounter) == 0
-            catchtrial = 'Yes';
-        %    fix_point_color = [0 255 0]; %Green 
-             fix_point_color = white;
-        elseif audInfo.random_incorrect_opacity_list(trialcounter) == 1
-            catchtrial = 'No';
-            fix_point_color = white;
-        end
+%         if audInfo.random_incorrect_opacity_list(trialcounter) == 0
+%             catchtrial = 'Yes';
+%         %    fix_point_color = [0 255 0]; %Green 
+%              fix_point_color = white;
+%         elseif audInfo.random_incorrect_opacity_list(trialcounter) == 1
+%             catchtrial = 'No';
+%             fix_point_color = white;
+%         end
 
-        if trialcounter == 1
-            staircase_index = 1; %Initialize index for first trial 
-            audInfo.dir = randi([0,1]); %for first trial, randomly choose 0 or 1 for dir
-            audInfo.mux = 0; %Set to zero for now, we only need L and R trials 
-            audInfo.coh = audInfo.cohSet(staircase_index);% (Value 0.0 - 1.0)
-        elseif trialcounter > 1
-            [audInfo, staircase_index] = staircase_procedure(trial_status, audInfo, staircase_index);
-        end
+% No catch trials for now
+        catchtrial = 'No';
+        fix_point_color = white;
 
-        
+
+%         if trialcounter == 1
+% %             staircase_index = 1; %Initialize index for first trial 
+%             audInfo.dir = randi([0,1]); %for first trial, randomly choose 0 or 1 for dir
+%             audInfo.mux = 0; %Set to zero for now, we only need L and R trials 
+%             audInfo.coh = audInfo.cohSet(staircase_index);% (Value 0.0 - 1.0)
+%         elseif trialcounter > 1
+%             [audInfo, staircase_index] = staircase_procedure(trial_status, audInfo, staircase_index);
+%         end
+
+        audInfo.dir = randi([0,1]); %randomly choose 0 or 1 for dir
+        audInfo.mux = 0; %Set to zero for now, we only need L and R trials 
+        audInfo.coh = audInfo.random_coh_list(trialcounter);% Random Coherence for each trial
+
         if audInfo.dir == 1 && audInfo.mux == 0
             disp('Left to Right')
             disp(audInfo.coh)

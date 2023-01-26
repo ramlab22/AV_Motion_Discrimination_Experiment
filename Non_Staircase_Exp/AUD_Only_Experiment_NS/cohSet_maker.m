@@ -2,8 +2,8 @@ function [cohSet] = cohSet_maker(audInfo)
 %Makes as many coherence values needed for amount of regular trials
 cohSet = []; 
 
-for i = 1:length(audInfo.cohFreq)
-    for j = 1:audInfo.cohFreq(i)   
+for i = 1:length(audInfo.cohSet)
+    for j = 1:audInfo.coh_Freq_Set(i)   
               cohSet(end+1) = audInfo.coherences(i);
     end
 end
