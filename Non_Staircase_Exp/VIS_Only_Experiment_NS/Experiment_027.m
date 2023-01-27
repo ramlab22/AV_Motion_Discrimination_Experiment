@@ -7,9 +7,9 @@ close all;
 sca;
 %  Version info
 Version = 'Experiment_027_v.2.0' ; % after code changes, change version
-file_directory='C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\AUD_Only_Experiment';
-data_file_directory = 'C:\Jackson\Adriana Stuff\AV_Behavioral_Data\'; 
-figure_file_directory = 'C:\Jackson\Adriana Stuff\AV_Figures\'; 
+file_directory='C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\Non_Staircase_Exp\VIS_Only_Experiment_NS';
+data_file_directory = 'C:\Jackson\Adriana Stuff\AV_Behavioral_Data\Non_Staircase';
+figure_file_directory = 'C:\Jackson\Adriana Stuff\AV_Figures\Non_Staircase'; 
 
 %when running baron on fixation training set to 1
 baron_fixation_training=0;
@@ -173,18 +173,14 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         end_target_waitframes = 0; %variable to end target acquisition wait time once fixation is acquired
 
         %Inititlize the coherence and direction for each trial
+        
+        dotInfo.dir = dotInfo.random_dir_list(trialcounter); %randomly choose 0 or 1 for dir
+        dotInfo.coh = dotInfo.random_coh_list(trialcounter);% Random Coherence for each trial
 
         catchtrial = 'No';
         fix_point_color = white;
         
-        if trialcounter == 1
-            staircase_index = 1; %Initialize index for first trial 
-            dir_matrix = [0,180];
-            dotInfo.dir = dir_matrix(randi([1,2])); %for first trial, randomly choose 0(Right) or 180(left) for dir
-            dotInfo.coh = dotInfo.cohSet(staircase_index);% (Value 0.0 - 1.0)
-        elseif trialcounter > 1
-            [dotInfo, staircase_index] = staircase_procedure(trial_status, dotInfo, staircase_index);
-        end
+
         
         if dotInfo.dir == 0 
             disp('Left to Right')
@@ -504,11 +500,11 @@ num_catch_trials = dotInfo.catchtrials;
     %%Make Coh vs Trial graph to track progress 
     coh_vs_trial_fig = plot_coh_vs_trial(dataout, save_name);
     
-    %Save all figures to Figure Directory
-    saveas(fig_both, [figure_file_directory save_name '_VIS_Psyc_Func_LR.png'])
-    saveas(R_fig, [figure_file_directory save_name '_VIS_Psyc_Func_R.png'])
-    saveas(L_fig, [figure_file_directory save_name '_VIS_Psyc_Func_L.png'])
-    saveas(coh_vs_trial_fig, [figure_file_directory save_name '_VIS_Coh_vs_Trial.png'])
+    %Save all figures to Figure Directory - NS = Non Staircase
+    saveas(fig_both, [figure_file_directory save_name '_NS_VIS_Psyc_Func_LR.png'])
+    saveas(R_fig, [figure_file_directory save_name '_NS_VIS_Psyc_Func_R.png'])
+    saveas(L_fig, [figure_file_directory save_name '_NS_VIS_Psyc_Func_L.png'])
+    saveas(coh_vs_trial_fig, [figure_file_directory save_name '_NS_VIS_Coh_vs_Trial.png'])
     
     times = cell2mat(dataout(2:end,7)); %Extract the trial times 
     Total_Block_Time = sum(times);

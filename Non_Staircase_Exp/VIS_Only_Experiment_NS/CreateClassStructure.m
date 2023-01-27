@@ -47,9 +47,11 @@ dotInfo.catchtrials = 0; % # catch trials
 dotInfo.dirSet = dirBin(data); %See function dirBin.m
 dotInfo.random_incorrect_opacity_list = catch_trial_randomizer(ExpInfo,dotInfo);%Gives list of 1 = regular trial, 0 = catch trial, see function 
 dotInfo.rdk_size_pix = angle2pixels(ExpInfo.rdk_angle); %RDK window size in pixels
-dotInfo.cohSet = (nonzeros(data(50:60,1)))'./100; %This is the descending list of Coherences 
-%dotInfo.random_dir_list = randomizer(ExpInfo,dotInfo);
+dotInfo.coh_Freq_Set = (nonzeros(data(50:60,1)))'; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
+dotInfo.cohSet = [100 70.7 50 35.4 25 17.7 12.5 8.9 6.3 4.5 3.2]./100; %Coh List to choose from
 dotInfo.coherences = dotInfo.cohSet; 
+dotInfo.random_coh_list = cohSet_maker(dotInfo); %Random list of coherence Values for total trials
+dotInfo.random_dir_list = dir_randomizer(ExpInfo, dotInfo); %Random directions, 50% R and L for each coherence
 dotInfo.probs = data(43:46,1)'; %This is the input probablities for the staircase procedure protocol
 dotInfo.apXYD = [0 90 (ExpInfo.rdk_angle*10)]; % Location x,y pixels (0,0 is center of screen) and diameter of the aperature, currently in visual degrees - MULTPLIED by 10 because of Shadlen dots code, needed to be an integer
 dotInfo.speed = data(20,1); %Degrees per second?
