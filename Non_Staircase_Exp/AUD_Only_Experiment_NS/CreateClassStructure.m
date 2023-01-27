@@ -55,6 +55,7 @@ audInfo.coh_Freq_Set = (nonzeros(data(50:60,1)))'; %This is the descending list 
 audInfo.cohSet = [100 70.7 50 35.4 25 17.7 12.5 8.9 6.3 4.5 3.2]./100; %Coh List to choose from
 audInfo.coherences = audInfo.cohSet; %This is for use in other functions for success calcs
 audInfo.random_coh_list = cohSet_maker(audInfo); %Random list of coherence Values for total trials
+audInfo.random_dir_list = dir_randomizer(ExpInfo, audInfo); %Random directions, 50% R and L for each coherence
 audInfo.probs = data(43:46,1)'; %This is the input probablities for the staircase procedure protocol
 audInfo.velocity = data(29,1); %deg/sec
 audInfo.set_dur = 78/(audInfo.velocity) ;%Seconds, This is going to be set as long as the speakers dont move, the actual duration of the stimulus will be set by the t_start and t_end variables

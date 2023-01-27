@@ -1,4 +1,4 @@
-function [random_dir_list] = randomizer(ExpInfo,audInfo)
+function [random_dir_list] = dir_randomizer(ExpInfo,audInfo)
 %RANDOMIZER - Takes the Directions randomly
 %places them in different trial positions based on regular coherence
 %locations and catch trial(1 coherence) locations
@@ -16,16 +16,15 @@ function [random_dir_list] = randomizer(ExpInfo,audInfo)
 
         if length(audInfo.dirSet) > 1 %If we have more than 1 direction to choose from
 
-            numberOfElements = sum(audInfo.cohSet == c); %Sums all of the same coherences from the random list cohSet
+            numberOfElements = sum(audInfo.random_coh_list == c); %Sums all of the same coherences from the random list 
             per_R = 50; % the percentage of Right Targets, 50% will make an even number of L and R trials
-         %   per_R = 70; % the percentage of Right Targets, 50% will make an even number of L and R trials
 
             numberOfOnes = round(numberOfElements * per_R / 100);
             % Make initial signal with proper number of 0's and 1's.
             signal = [ones(1, numberOfOnes), zeros(1, numberOfElements - numberOfOnes)];
             % Scramble them up with randperm
             signal = signal(randperm(length(signal)));%For Direction
-            indeces = find(audInfo.cohSet == c); 
+            indeces = find(audInfo.random_coh_list == c); 
             
             for i = 1:numberOfElements
                 if signal(i) == 0
