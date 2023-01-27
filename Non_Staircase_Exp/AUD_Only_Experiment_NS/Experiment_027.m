@@ -7,9 +7,9 @@ close all;
 sca;
 %  Version info
 Version = 'Experiment_027_v.2.0' ; % after code changes, change version
-file_directory='C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\AUD_Only_Experiment';
-data_file_directory = 'C:\Jackson\Adriana Stuff\AV_Behavioral_Data\';
-figure_file_directory = 'C:\Jackson\Adriana Stuff\AV_Figures\'; 
+file_directory='C:\Users\jacks\Documents\Vanderbilt\AV_Motion_Discrimination_Experiment\Non_Staircase_Exp\AUD_Only_Experiment_NS';
+data_file_directory = 'C:\Jackson\Adriana Stuff\AV_Behavioral_Data\Non_Staircase';
+figure_file_directory = 'C:\Jackson\Adriana Stuff\AV_Figures\Non_Staircase'; 
 
 %when running baron on fixation training set to 1
 baron_fixation_training=0;
@@ -576,11 +576,11 @@ num_catch_trials = audInfo.catchtrials;
     %%Make Coh vs Trial graph to track progress 
     coh_vs_trial_fig = plot_coh_vs_trial(dataout, save_name);
     
-    %Save all figures to Figure Directory
-    saveas(fig_both, [figure_file_directory save_name '_AUD_Psyc_Func_LR.png'])
-    saveas(R_fig, [figure_file_directory save_name '_AUD_Psyc_Func_R.png'])
-    saveas(L_fig, [figure_file_directory save_name '_AUD_Psyc_Func_L.png'])
-    saveas(coh_vs_trial_fig, [figure_file_directory save_name '_AUD_Coh_vs_Trial.png'])
+    %Save all figures to Figure Directory - NS = Non Staircase
+    saveas(fig_both, [figure_file_directory save_name '_NS_AUD_Psyc_Func_LR.png'])
+    saveas(R_fig, [figure_file_directory save_name '_NS_AUD_Psyc_Func_R.png'])
+    saveas(L_fig, [figure_file_directory save_name '_NS_AUD_Psyc_Func_L.png'])
+    saveas(coh_vs_trial_fig, [figure_file_directory save_name '_NS_AUD_Coh_vs_Trial.png'])
     
     
     times = cell2mat(dataout(2:end,7)); %Extract the trial times 
