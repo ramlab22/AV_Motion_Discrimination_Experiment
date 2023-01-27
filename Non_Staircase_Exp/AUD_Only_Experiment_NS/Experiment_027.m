@@ -7,7 +7,7 @@ close all;
 sca;
 %  Version info
 Version = 'Experiment_027_v.2.0' ; % after code changes, change version
-file_directory='C:\Users\jacks\Documents\Vanderbilt\AV_Motion_Discrimination_Experiment\Non_Staircase_Exp\AUD_Only_Experiment_NS';
+file_directory='C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\Non_Staircase_Exp\AUD_Only_Experiment_NS';
 data_file_directory = 'C:\Jackson\Adriana Stuff\AV_Behavioral_Data\Non_Staircase';
 figure_file_directory = 'C:\Jackson\Adriana Stuff\AV_Figures\Non_Staircase'; 
 
