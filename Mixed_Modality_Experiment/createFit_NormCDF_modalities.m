@@ -55,10 +55,10 @@ VIS_threshold_location=find(VIS_p >= chosen_threshold, 1);
 VIS_threshold=x(1,VIS_threshold_location);
 % Plot fit with data.
 fig = figure( 'Name', 'Psychometric Function' );
-scatter(AUD_xData, AUD_yData, all_sizes_AUD)
+scatter(AUD_xData, AUD_yData, all_sizes_AUD, 'red', 'filled')
 hold on
-scatter(VIS_xData, VIS_yData, all_sizes_VIS)
-plot(x, AUD_p, x, VIS_p);
+scatter(VIS_xData, VIS_yData, all_sizes_VIS, 'blue', 'filled')
+plot(x, AUD_p, "Color", "red", x, VIS_p, "Color", "blue");
 legend('AUD','VIS', 'AUD - NormCDF', 'VIS - NormCDF', 'Location', 'NorthEast', 'Interpreter', 'none' );
 % Label axes
 title(sprintf('AUD & VIS Psych. Func. L&R\n%s', save_name), 'Interpreter', 'none');

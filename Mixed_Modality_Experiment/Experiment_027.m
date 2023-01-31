@@ -662,7 +662,7 @@ VIS_threshold
 %%
 
 % Save all block info and add to a .mat file for later analysis  
-save([data_file_directory save_name],'dataout','Fixation_Success_Rate','Stim_Success_Rate','Target_Success_Rate_Regular','Target_Success_Rate_Catch','ExpInfo','audInfo','Total_Block_Time','eye_data_matrix', 'AUD_p_values', 'VIS_p_values','AUD_threshold','VIS_threshold');
+save([data_file_directory save_name],'dataout','Fixation_Success_Rate','Stim_Success_Rate','Target_Success_Rate_Regular','Target_Success_Rate_Catch','ExpInfo','audInfo','dotInfo','Total_Block_Time','eye_data_matrix', 'AUD_p_values', 'VIS_p_values','AUD_threshold','VIS_threshold');
 disp('Experiment Data Exported to Behavioral Data Folder')
 sca; 
 
