@@ -17,10 +17,8 @@ if baron_fixation_training==1
     target_reward='N/A';
 end
 
-addpath('C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\AUD_Only_Experiment\Auditory Stimulus');
-addpath('C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\AUD_Only_Experiment\Eye_Movement_Data'); 
-
-       
+addpath('C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\Non_Staircase_Exp\AUD_Only_Experiment_NS\Auditory Stimulus');
+addpath('C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\Non_Staircase_Exp\AUD_Only_Experiment_NS\Eye_Movement_Data'); 
 
 %% Run App to get Paramters for test
 %In order to change any GUI paramters, go to Experiment_Parameters.mlapp

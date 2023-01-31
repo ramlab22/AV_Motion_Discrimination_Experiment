@@ -7,9 +7,9 @@ close all;
 sca;
 %  Version info
 Version = 'Experiment_027_v.2.1' ; % after code changes, change version
-file_directory='C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\A&V_Experiment';
-data_file_directory = 'C:\Jackson\Adriana Stuff\AV_Behavioral_Data\'; 
-figure_file_directory = 'C:\Jackson\Adriana Stuff\AV_Figures\'; 
+file_directory='C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\Non_Staircase_Exp\A&V_Experiment_NS';
+data_file_directory = 'C:\Jackson\Adriana Stuff\AV_Behavioral_Data\Non_Staircase';
+figure_file_directory = 'C:\Jackson\Adriana Stuff\AV_Figures\Non_Staircase'; 
 
 %when running baron on fixation training set to 1
 % baron_fixation_training=0;
@@ -17,8 +17,8 @@ figure_file_directory = 'C:\Jackson\Adriana Stuff\AV_Figures\';
 %     target_reward='N/A';
 % end
 
-addpath('C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\A&V_Experiment\Auditory Stimulus');
-addpath('C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\A&V_Experiment\Eye_Movement_Data'); 
+addpath('C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\Non_Staircase_Exp\A&V_Experiment_NS\Auditory Stimulus');
+addpath('C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\Non_Staircase_Exp\A&V_Experiment_NS\Eye_Movement_Data'); 
        
 
 %% Run App to get Paramters for test
