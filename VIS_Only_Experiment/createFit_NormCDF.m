@@ -1,4 +1,4 @@
-function [fig, p_values] = createFit_NormCDF(coh_list, pc, dotInfo, save_name)
+function [fig, p_values,ci,threshold] = createFit_NormCDF(coh_list, pc, dotInfo,chosen_threshold, save_name)
 %CREATEFIT(COH_LIST,PC_AUD)
 %  Create a fit.
 %
@@ -39,7 +39,8 @@ all_sizes = nonzeros(vertcat(sizes_L, sizes_R));
 if length(xData) ~= length(all_sizes)
     all_sizes = all_sizes(1:length(xData));
 end
-
+threshold_location=find(p >= chosen_threshold, 1);
+threshold=x(1,threshold_location);
 % Plot fit with data.
 fig = figure( 'Name', 'Psychometric Function' );
 scatter(xData, yData, all_sizes)

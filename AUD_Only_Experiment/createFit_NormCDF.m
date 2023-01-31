@@ -1,4 +1,4 @@
-function [fig, p_values,ci] = createFit_NormCDF(coh_list, pc, audInfo, save_name)
+function [fig, p_values,ci,threshold] = createFit_NormCDF(coh_list, pc, audInfo,chosen_threshold, save_name)
 %CREATEFIT(COH_LIST,PC_AUD)
 %  Create a fit.
 %
@@ -43,7 +43,9 @@ x = -1:.01:1;
 % legend('Bootstrapped Coeff.', 'Chosen Coeff.')
 
 p = cdf('Normal', x, fit_par(1), fit_par(2));
-
+%get threshold
+threshold_location=find(p >= chosen_threshold, 1);
+threshold=x(1,threshold_location);
 
 %Plot different sizes based on amount of frequency of each coh
 sizes_L = flip(audInfo.cohFreq_left(2,:)');%Slpit to left and Right 
