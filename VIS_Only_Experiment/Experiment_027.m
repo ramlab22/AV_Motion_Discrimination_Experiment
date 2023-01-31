@@ -11,6 +11,8 @@ file_directory='C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\AUD
 data_file_directory = 'C:\Jackson\Adriana Stuff\AV_Behavioral_Data\'; 
 figure_file_directory = 'C:\Jackson\Adriana Stuff\AV_Figures\'; 
 
+chosen_threshold=0.72; %what % rightward response you want to set to get threshold
+
 %when running baron on fixation training set to 1
 baron_fixation_training=0;
 if baron_fixation_training==1
@@ -490,7 +492,7 @@ num_catch_trials = dotInfo.catchtrials;
     prob_Right = directional_probability(Right_dataout, dotInfo); 
     prob_Left = directional_probability(Left_dataout, dotInfo); 
     
-    [x, y, fig_both, coeff_p_values] = psychometric_plotter(prob_Right,prob_Left, dotInfo, save_name);
+    [x, y, fig_both, coeff_p_values,CIs_of_LR_fit,threshold] = psychometric_plotter(prob_Right,prob_Left, dotInfo, chosen_threshold,save_name);
     Eye_Tracker_Plotter(eye_data_matrix);
     
     %%Make Rightward only graph
@@ -516,10 +518,11 @@ num_catch_trials = dotInfo.catchtrials;
     block_counter = block_counter + 1;
     
 end
+threshold
 %%
 [n_trials_with_response,n_trials_with_reward,proportion_response_reversals_after_correct_response,proportion_response_reversals_after_incorrect_response] = response_reversal_proportions2_visual(dataout);
 % Save all block info and add to a .mat file for later analysis  
-save([data_file_directory save_name],'dataout','Fixation_Success_Rate','RDK_Success_Rate','Target_Success_Rate_Regular','Target_Success_Rate_Catch','ExpInfo','dotInfo','Total_Block_Time','eye_data_matrix', "coeff_p_values",'n_trials_with_response','n_trials_with_reward','proportion_response_reversals_after_correct_response','proportion_response_reversals_after_incorrect_response');
+save([data_file_directory save_name],'dataout','Fixation_Success_Rate','RDK_Success_Rate','Target_Success_Rate_Regular','Target_Success_Rate_Catch','ExpInfo','dotInfo','Total_Block_Time','eye_data_matrix', "coeff_p_values",'n_trials_with_response','n_trials_with_reward','proportion_response_reversals_after_correct_response','proportion_response_reversals_after_incorrect_response','threshold');
 disp('Experiment Data Exported to Behavioral Data Folder')
 sca; 
 
