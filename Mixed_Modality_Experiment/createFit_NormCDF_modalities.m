@@ -1,4 +1,4 @@
-function [fig, AUD_p_values, VIS_p_values] = createFit_NormCDF_modalities(AUD_coh_list, AUD_pc, VIS_coh_list, VIS_pc, audInfo, dotInfo, save_name)
+function [fig, AUD_p_values, VIS_p_values,AUD_threshold,VIS_threshold] = createFit_NormCDF_modalities(AUD_coh_list, AUD_pc, VIS_coh_list, VIS_pc, audInfo, dotInfo, chosen_threshold,save_name)
 %CREATEFIT(COH_LIST,PC_AUD)
 %  Create a fit.
 
@@ -49,13 +49,16 @@ end
 if length(VIS_xData) ~= length(all_sizes_VIS)
     all_sizes_VIS = all_sizes_VIS(1:length(VIS_xData));
 end
-
+AUD_threshold_location=find(AUD_p >= chosen_threshold, 1);
+AUD_threshold=x(1,AUD_threshold_location);
+VIS_threshold_location=find(VIS_p >= chosen_threshold, 1);
+VIS_threshold=x(1,VIS_threshold_location);
 % Plot fit with data.
 fig = figure( 'Name', 'Psychometric Function' );
-scatter(AUD_xData, AUD_yData, all_sizes_AUD)
+scatter(AUD_xData, AUD_yData, all_sizes_AUD, 'red', 'filled')
 hold on
-scatter(VIS_xData, VIS_yData, all_sizes_VIS)
-plot(x, AUD_p, x, VIS_p);
+scatter(VIS_xData, VIS_yData, all_sizes_VIS, 'blue', 'filled')
+plot(x, AUD_p, "Color", "red", x, VIS_p, "Color", "blue");
 legend('AUD','VIS', 'AUD - NormCDF', 'VIS - NormCDF', 'Location', 'NorthEast', 'Interpreter', 'none' );
 % Label axes
 title(sprintf('AUD & VIS Psych. Func. L&R\n%s', save_name), 'Interpreter', 'none');
