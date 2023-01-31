@@ -58,7 +58,7 @@ fig = figure( 'Name', 'Psychometric Function' );
 scatter(AUD_xData, AUD_yData, all_sizes_AUD, 'red', 'filled')
 hold on
 scatter(VIS_xData, VIS_yData, all_sizes_VIS, 'blue', 'filled')
-plot(x, AUD_p, "Color", "red", x, VIS_p, "Color", "blue");
+plot(x, AUD_p, "red", x, VIS_p, "blue");
 legend('AUD','VIS', 'AUD - NormCDF', 'VIS - NormCDF', 'Location', 'NorthEast', 'Interpreter', 'none' );
 % Label axes
 title(sprintf('AUD & VIS Psych. Func. L&R\n%s', save_name), 'Interpreter', 'none');

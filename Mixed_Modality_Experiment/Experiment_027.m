@@ -625,6 +625,8 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     VIS_prob_Right = directional_probability(VIS_Right_dataout, dotInfo, 'Right','VIS');
     VIS_prob_Left = directional_probability(VIS_Left_dataout, dotInfo, 'Left', 'VIS');
 
+    chosen_threshold = .72; 
+
     [fig_both_AUD_VIS, AUD_p_values, VIS_p_values,AUD_threshold,VIS_threshold] = psychometric_plotter_modalities(AUD_prob_Right, AUD_prob_Left, VIS_prob_Right, VIS_prob_Left, audInfo, dotInfo,chosen_threshold, save_name);
 
     Eye_Tracker_Plotter(eye_data_matrix);
