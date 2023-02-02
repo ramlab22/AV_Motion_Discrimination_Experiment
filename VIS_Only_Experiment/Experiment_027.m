@@ -492,7 +492,7 @@ num_catch_trials = dotInfo.catchtrials;
     prob_Right = directional_probability(Right_dataout, dotInfo); 
     prob_Left = directional_probability(Left_dataout, dotInfo); 
     
-    [x, y, fig_both, coeff_p_values,CIs_of_LR_fit,threshold] = psychometric_plotter(prob_Right,prob_Left, dotInfo, chosen_threshold,save_name);
+    [x, y, fig_both, coeff_p_values,threshold] = psychometric_plotter(prob_Right,prob_Left, dotInfo, chosen_threshold,save_name);
     Eye_Tracker_Plotter(eye_data_matrix);
     
     %%Make Rightward only graph

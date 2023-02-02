@@ -1,4 +1,4 @@
-function [fig, p_values,ci,threshold] = createFit_NormCDF(coh_list, pc, dotInfo,chosen_threshold, save_name)
+function [fig, p_values,threshold] = createFit_NormCDF(coh_list, pc, dotInfo,chosen_threshold, save_name)
 %CREATEFIT(COH_LIST,PC_AUD)
 %  Create a fit.
 %
