@@ -587,12 +587,16 @@ num_catch_trials = audInfo.catchtrials;
 
     %%Make Coh vs Trial graph to track progress 
     coh_vs_trial_fig = plot_coh_vs_trial(dataout, save_name);
-    
+    %%Make performance vs Trial graph to track progress 
+    interval_val=20;
+    condition=2; %set condition to auditory
+    accuracy_vs_trial_fig = plot_unisensory_accuracy_vs_trial(dataout, save_name,interval_val,condition)
     %Save all figures to Figure Directory
     saveas(fig_both, [figure_file_directory save_name '_AUD_Psyc_Func_LR.png'])
     saveas(R_fig, [figure_file_directory save_name '_AUD_Psyc_Func_R.png'])
     saveas(L_fig, [figure_file_directory save_name '_AUD_Psyc_Func_L.png'])
     saveas(coh_vs_trial_fig, [figure_file_directory save_name '_AUD_Coh_vs_Trial.png'])
+    saveas(accuracy_vs_trial_fig, [figure_file_directory save_name '_AUD_Acc_vs_Trial.png'])
     
     
     times = cell2mat(dataout(2:end,7)); %Extract the trial times 
@@ -605,7 +609,7 @@ threshold
 %%
 [n_trials_with_response,n_trials_with_reward,proportion_response_reversals_after_correct_response,proportion_response_reversals_after_incorrect_response] = response_reversal_proportions2(dataout);
 % Save all block info and add to a .mat file for later analysis  
-save([data_file_directory save_name],'dataout','Fixation_Success_Rate','AUD_Success_Rate','Target_Success_Rate_Regular','Target_Success_Rate_Catch','ExpInfo','audInfo','Total_Block_Time','eye_data_matrix', "coeff_p_values",'CIs_of_LR_fit','n_trials_with_response','n_trials_with_reward','proportion_response_reversals_after_correct_response','proportion_response_reversals_after_incorrect_response','threshold');
+save([data_file_directory save_name],'save_name','dataout','Fixation_Success_Rate','AUD_Success_Rate','Target_Success_Rate_Regular','Target_Success_Rate_Catch','ExpInfo','audInfo','Total_Block_Time','eye_data_matrix', "coeff_p_values",'CIs_of_LR_fit','n_trials_with_response','n_trials_with_reward','proportion_response_reversals_after_correct_response','proportion_response_reversals_after_incorrect_response','threshold');
 disp('Experiment Data Exported to Behavioral Data Folder')
 sca; 
 
