@@ -1,4 +1,4 @@
-function [adjustment_factor, CAM_1, CAM_2] = Signal_Creator(CAM,dB_value)
+function [adjustment_factor, CAM_1, CAM_2] = Signal_Creator(CAM,velocity)
     %SIGNAL_CREATOR Summary of this function goes here
     
     %Inputs:
@@ -19,13 +19,20 @@ function [adjustment_factor, CAM_1, CAM_2] = Signal_Creator(CAM,dB_value)
     arr2 = resample(CAM(:,2), p, q);
     CAM_1 = arr1; 
     CAM_2 = arr2; 
+    %% New stuff for changing the auditory velocity based on the slope of the CAM signals 
+    
+    %Modification of slope
+    standard_velo = 78/2.523 ; %This comes from the 78 degree field for AUD and the set 2.523 seconds for TOTAL stim time
+    adjustment_factor = velocity/standard_velo; %Gives a factor to multpy signal by in order to get desired velocity from GUI 
+
+
     
     %%  This is for the signal adjustment factor, based on dB values from the
     % speaker calibration test. Excel file with equations is found in C:\Jackson\Adriana Stuff\Speaker Calibration Room 027.xlsx
  
-    %THIS equation ONLY WORKS UP TO 80 dB, y = 6.7129ln(x) + 84.125
-
-        voltage = exp((dB_value-84.125)/(6.7129)); %Based on average logrithimic trendline fit equation
+%     %THIS equation ONLY WORKS UP TO 80 dB, y = 6.7129ln(x) + 84.125
+% 
+%         voltage = exp((dB_value-84.125)/(6.7129)); %Based on average logrithimic trendline fit equation
         
 %     elseif dB_value > 80
 %         voltage = -1*(((25*dB_value)+1411)/(176));
@@ -34,9 +41,9 @@ function [adjustment_factor, CAM_1, CAM_2] = Signal_Creator(CAM,dB_value)
 
 
     %Given the required max voltage we can calculate the adjustment factor to send to the .rcx circuit,
-    %because the non adjusted max value = +-3 V (1.0 adjustment factor)
-    
-    adjustment_factor = voltage./3; 
+%     %because the non adjusted max value = +-3 V (1.0 adjustment factor)
+%     
+%     adjustment_factor = voltage./3; 
     
 %     %% Writes the CAM signals into f32 file for reading on the RX8
 %     
