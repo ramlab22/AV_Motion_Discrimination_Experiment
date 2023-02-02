@@ -646,11 +646,14 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     %%Make Coh vs Trial graph to track progress
     coh_vs_trial_fig = plot_coh_vs_trial_modalities(AUD_dataout, VIS_dataout, save_name);
     
+    %make accuracy vs trial graph
+    accuracy_vs_trial_fig = plot_AndV_accuracy_vs_trial(dataout, save_name, interval_val)
     %Save all figures to Figure Directory
     saveas(fig_both_AUD_VIS, [figure_file_directory save_name '_Psyc_Func_LR_AV_Mixed.png'])
     saveas(R_fig_AV, [figure_file_directory save_name '_Psyc_Func_R_AV_Mixed.png'])
     saveas(L_fig_AV, [figure_file_directory save_name '_Psyc_Func_L_AV_Mixed.png'])
     saveas(coh_vs_trial_fig, [figure_file_directory save_name '_Coh_vs_Trial_AV_Mixed.png'])
+    saveas(accuracy_vs_trial_fig, [figure_file_directory save_name '_Acc_vs_Trial_AV_Mixed.png'])
     
     
     times = cell2mat(dataout(2:end,7)); %Extract the trial times
@@ -664,7 +667,7 @@ VIS_threshold
 %%
 [n_trials_with_response,n_trials_with_reward,proportion_response_reversals_after_correct_response,proportion_response_reversals_after_incorrect_response] = response_reversal_proportions_mixedmodality(dataout)
 % Save all block info and add to a .mat file for later analysis  
-save([data_file_directory save_name],'dataout','Fixation_Success_Rate','Stim_Success_Rate','Target_Success_Rate_Regular','Target_Success_Rate_Catch','ExpInfo','audInfo','dotInfo','Total_Block_Time','eye_data_matrix', 'AUD_p_values', 'VIS_p_values','n_trials_with_response','n_trials_with_reward','proportion_response_reversals_after_correct_response','proportion_response_reversals_after_incorrect_response','AUD_threshold','VIS_threshold');
+save([data_file_directory save_name],'save_name','dataout','Fixation_Success_Rate','Stim_Success_Rate','Target_Success_Rate_Regular','Target_Success_Rate_Catch','ExpInfo','audInfo','dotInfo','Total_Block_Time','eye_data_matrix', 'AUD_p_values', 'VIS_p_values','n_trials_with_response','n_trials_with_reward','proportion_response_reversals_after_correct_response','proportion_response_reversals_after_incorrect_response','AUD_threshold','VIS_threshold');
 
 disp('Experiment Data Exported to Behavioral Data Folder')
 sca; 
