@@ -1,4 +1,4 @@
-function  [ExpInfo, dstruct, dotInfo, audInfo, trialInfo]= CreateClassStructure(data, monWidth, viewDist, xCenter, yCenter) %Puts all data input into structure for neatness
+function  [ExpInfo, dstruct, dotInfo, audInfo, AVInfo,  trialInfo]= CreateClassStructure(data, monWidth, viewDist, xCenter, yCenter) %Puts all data input into structure for neatness
 %% Jack Mayfield 4/22/22
 
 
@@ -79,6 +79,14 @@ audInfo.t_end = data(28,1);  % In ms,
 audInfo.muxSet = [0]; %Set to zero for now which only includes LR and RL directions
 audInfo.random_mux_list = zeros(1,(ExpInfo.num_trials)); %Set to zeros for now which only includes LR and RL directions
 audInfo.Incorrect_Opacity = 1;   
+
+%% AV Parameters 
+% AV Right = 1 , AV Left = 0
+AVInfo = struct; 
+AVInfo.dir = 0; %Initilize for main loop purposes 
+AVInfo.cohSet_dot = dotInfo.cohSet;
+AVInfo.cohSet_aud = audInfo.cohSet; 
+
 
 %% trial info
 trialInfo.catchtrials = 0;

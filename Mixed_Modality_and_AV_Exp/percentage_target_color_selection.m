@@ -1,4 +1,4 @@
-function [right_target_color,left_target_color,correct_target] = percentage_target_color_selection(dotInfo, audInfo, trialInfo, trialcounter)
+function [right_target_color,left_target_color,correct_target] = percentage_target_color_selection(dotInfo, audInfo, AVInfo, trialInfo, trialcounter)
 
  
 %picks luminance of targets based on which direcction of stimulus is occcuring at each trial
@@ -15,6 +15,14 @@ function [right_target_color,left_target_color,correct_target] = percentage_targ
             correct_target = 'right';
 
         elseif dotInfo.dir == 180
+            correct_target = 'left';
+
+        end
+    elseif strcmp(trialInfo.modality, 'AV')
+        if AVInfo.dir == 1
+            correct_target = 'right';
+
+        elseif AVInfo.dir == 0
             correct_target = 'left';
 
         end
