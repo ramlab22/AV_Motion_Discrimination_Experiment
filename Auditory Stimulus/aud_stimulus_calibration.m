@@ -1,7 +1,8 @@
-
+clear all;
 
 file_directory='C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\Auditory Stimulus';  
 TDT = TDTRP([file_directory '\speaker_calibration.rcx'],'RX8'); 
+pause(3)
 
 %Gets all of the paramters data from the GUI and puts into a matrix 
 opts = delimitedTextImportOptions;
@@ -20,7 +21,7 @@ end
 audInfo.coh = 1;
 audInfo.dir = 1;
 audInfo.mux = 0;
-aud_off = 1;
+aud_off = 0;
 TDT.write('aud_off',aud_off);
 
 [audInfo.CAM] = makeCAM(audInfo.coh, audInfo.dir, audInfo.set_dur, 0, 44100);
@@ -34,9 +35,11 @@ TDT.write('ramp_dur',audInfo.ramp_dur);
 TDT.write('CAM_1',CAM_1_Cut_Ramped); %Signal 1 
 TDT.write('CAM_2',CAM_2_Cut_Ramped); %Signal 2
 
+
+TDT.trg(4); %Reset the max_db level to room
 pause(1)
 TDT.trg(2); %Start stimulus
-pause(2)
+pause(3)
 TDT.read('MAX_DB')
 
 TDT.halt();
