@@ -647,6 +647,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     coh_vs_trial_fig = plot_coh_vs_trial_modalities(AUD_dataout, VIS_dataout, save_name);
     
     %make accuracy vs trial graph
+    interval_val=20;
     accuracy_vs_trial_fig = plot_AndV_accuracy_vs_trial(dataout, save_name, interval_val)
     %Save all figures to Figure Directory
     saveas(fig_both_AUD_VIS, [figure_file_directory save_name '_Psyc_Func_LR_AV_Mixed.png'])
