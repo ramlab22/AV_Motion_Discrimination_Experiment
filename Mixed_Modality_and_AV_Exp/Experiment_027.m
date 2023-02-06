@@ -196,8 +196,8 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
             staircase_index_dot = 1;
             staircase_index_av = 1;
 
-            trialInfo.modality = trialInfo.modality_list(randi(numel(trialInfo.modality_list)));
-            trialInfo.modality=trialInfo.modality{1};
+            trialInfo.modality = trialInfo.modality_list(randi(numel(trialInfo.modality_list)));%Randomly choose modality
+            trialInfo.modality = trialInfo.modality{1};
             
             audInfo.dir = randi([0,1]); %for first trial, randomly choose 0 (Left) or 1 (Right) for dir
             audInfo.coh = audInfo.cohSet(staircase_index_aud);% (Value 0.0 - 1.0)
@@ -210,7 +210,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
             AVInfo.coh_dot = AVInfo.cohSet_dot(staircase_index_av);% (Value 0.0 - 1.0)
 
         elseif trialcounter > 1
-            [trialInfo, staircase_index_dot, staircase_index_aud, staircase_index_av, dotInfo, audInfo, AVInfo] = staircase_procedure(ExpInfo, trial_status, trialInfo, staircase_index_aud, staircase_index_dot, audInfo, dotInfo);        
+            [trialInfo, staircase_index_dot, staircase_index_aud, staircase_index_av, dotInfo, audInfo, AVInfo] = staircase_procedure(ExpInfo, trial_status, trialInfo, staircase_index_aud, staircase_index_dot, staircase_index_av, audInfo, dotInfo, AVInfo);        
         end %if first trial
         
         if  (dotInfo.dir == 0 && strcmp(trialInfo.modality, 'VIS')) || ...
@@ -254,7 +254,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
             [CAM_1_Cut_Ramped, CAM_2_Cut_Ramped, audInfo.window_duration, audInfo.ramp_dur] = aud_receptive_field_location(CAM_1,CAM_2, audInfo.t_start, audInfo.t_end);
            
         elseif strcmp(trialInfo.modality,'AV') 
-            [audInfo.CAM] = makeCAM(AVInfo.coh, AVInfo.dir, audInfo.set_dur, 0, 44100);
+            [audInfo.CAM] = makeCAM(AVInfo.coh_aud, AVInfo.dir, audInfo.set_dur, 0, 44100);
             [audInfo.adjustment_factor, CAM_1, CAM_2] = Signal_Creator(audInfo.CAM,audInfo.velocity); %Writes to CAM 1 and 2 for .rcx circuit to read
             [CAM_1_Cut_Ramped, CAM_2_Cut_Ramped, audInfo.window_duration, audInfo.ramp_dur] = aud_receptive_field_location(CAM_1,CAM_2, audInfo.t_start, audInfo.t_end);
         
@@ -473,7 +473,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         targ_timeout = 0;
         if fix_timeout ~= 1 && (aud_timeout ~= 1 && rdk_timeout ~= 1 && av_timeout ~= 1) && baron_fixation_training ~= 1
             %This picks the luminace of the targets based on correct direction response, also outputs correct target string variable, eg 'right'
-            [right_target_color,left_target_color,correct_target] = percentage_target_color_selection(dotInfo, audInfo, trialInfo, trialcounter);
+            [right_target_color,left_target_color,correct_target] = percentage_target_color_selection(dotInfo, audInfo, AVInfo, trialInfo, trialcounter);
             
             for frame = 1:target_time_frames - waitframes
                 
