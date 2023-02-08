@@ -7,7 +7,7 @@ function [Right_dataout, Left_dataout] = direction_splitter(dataout, modality)
 % dir_list = num2cell(dotInfo.random_dir_list);
 % dir_list = dir_list';
 % dataout(2:end,9) = dir_list;
-if strcmp(modality, 'AUD')
+if strcmp(modality, 'AUD') || strcmp(modality, 'AV')
     direction_list = dataout(2:end,9); 
     mat = cell2mat(direction_list); 
     R_test = (mat == 1) ;
@@ -25,6 +25,7 @@ elseif strcmp(modality, 'VIS')
     L_indeces = find(L_test == 1);
     Right_dataout = dataout(R_indeces+1,:); 
     Left_dataout = dataout(L_indeces+1,:); 
+    
 end
 
 end

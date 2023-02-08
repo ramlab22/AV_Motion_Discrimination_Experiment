@@ -85,7 +85,9 @@ audInfo.Incorrect_Opacity = 1;
 AVInfo = struct; 
 AVInfo.dir = 0; %Initilize for main loop purposes 
 AVInfo.cohSet_dot = dotInfo.cohSet;
-AVInfo.cohSet_aud = audInfo.cohSet; 
+AVInfo.cohSet_aud = audInfo.cohSet;
+AVInfo.coherences_dot = AVInfo.cohSet_dot;
+AVInfo.coherences_aud = AVInfo.cohSet_aud;
 
 
 %% trial info
