@@ -597,13 +597,15 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     
     if trialcounter < ExpInfo.num_trials
         total_trials = trialcounter; 
+        ExpInfo.num_trials=total_trials;
     else
         total_trials = ExpInfo.num_trials;
     end
 
     num_regular_trials = total_trials - trialInfo.catchtrials;
     num_catch_trials = trialInfo.catchtrials;
-    
+    %num_regular_trials=total_trials;
+    %num_catch_trials=0;
     [Fixation_Success_Rate, Stim_Success_Rate, Target_Success_Rate_Regular, Target_Success_Rate_Catch] = SR_CALC(dataout,total_trials,num_regular_trials,num_catch_trials)
     
     %Break down of each success rate based on coherence level
