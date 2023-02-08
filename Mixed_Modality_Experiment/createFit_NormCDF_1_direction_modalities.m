@@ -44,7 +44,7 @@ if length(AUD_xData) ~= length(sizes_AUD)
 end
 
 if length(VIS_xData) ~= length(sizes_VIS)
-    sizes_VIS = sizes_VIS(1:length(AUD_xData));
+    sizes_VIS = sizes_VIS(1:length(VIS_xData));
 end
 
 % Plot fit with data.
