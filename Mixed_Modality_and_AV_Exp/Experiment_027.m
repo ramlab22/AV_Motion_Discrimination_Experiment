@@ -694,9 +694,16 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     
     chosen_threshold = .72; 
 
-    [fig_both_AUD_VIS, AUD_p_values, VIS_p_values,AUD_threshold,VIS_threshold] = ...
-        psychometric_plotter_modalities(AUD_prob_Right, AUD_prob_Left, VIS_prob_Right, ...
-                                        VIS_prob_Left, audInfo, dotInfo,chosen_threshold, save_name);
+    [fig_3_AUD_VIS_AV, AUD_p_values, VIS_p_values,AUD_threshold,VIS_threshold] = ...
+        psychometric_plotter_modalities(AUD_prob_Right, AUD_prob_Left, ...
+                                        VIS_prob_Right, VIS_prob_Left,...
+                                        AV_prob_Right, AV_prob_Left,...
+                                        audInfo, dotInfo, AVInfo, chosen_threshold, save_name);
+
+    aud_threshold = sprintf('AUD Threshold: %d',AUD_threshold);
+    disp(aud_threshold)
+    vis_threshold = sprintf('AUD Threshold: %d',VIS_threshold);
+    disp(vis_threshold)
 
     Eye_Tracker_Plotter(eye_data_matrix);
     
@@ -716,7 +723,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     coh_vs_trial_fig = plot_coh_vs_trial_modalities(AUD_dataout, VIS_dataout, save_name);
     
     %Save all figures to Figure Directory
-    saveas(fig_both_AUD_VIS, [figure_file_directory save_name '_Psyc_Func_LR_AV_Mixed.png'])
+    saveas(fig_3_AUD_VIS_AV, [figure_file_directory save_name '_Psyc_Func_LR_AV_Mixed.png'])
     saveas(R_fig_AV, [figure_file_directory save_name '_Psyc_Func_R_AV_Mixed.png'])
     saveas(L_fig_AV, [figure_file_directory save_name '_Psyc_Func_L_AV_Mixed.png'])
     saveas(coh_vs_trial_fig, [figure_file_directory save_name '_Coh_vs_Trial_AV_Mixed.png'])
@@ -728,8 +735,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     block_counter = block_counter + 1;
     
 end
-AUD_threshold
-VIS_threshold
+
 %%
 [n_trials_with_response,n_trials_with_reward,proportion_response_reversals_after_correct_response,proportion_response_reversals_after_incorrect_response] = response_reversal_proportions_mixedmodality(dataout)
 % Save all block info and add to a .mat file for later analysis  
