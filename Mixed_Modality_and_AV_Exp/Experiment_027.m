@@ -680,7 +680,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     [dotInfo.cohFreq_left] = cohFreq_finder(VIS_Left_dataout, dotInfo);
 %Since its congruent AV, aud and vis should be same number of freq, just at
 %different coherences for A and V lists
-%     [AVInfo.cohFreq_right_aud, AVInfo.cohFreq_right_vis] = cohFreq_finder_AV(AV_Right_dataout, AVInfo);
+     [AVInfo.cohFreq_right_aud, AVInfo.cohFreq_right_vis] = cohFreq_finder_AV(AV_Right_dataout, AVInfo);
 %     [AVInfo.cohFreq_left_aud, AVInfo.cohFreq_left_vis] = cohFreq_finder_AV(AV_Left_dataout, AVInfo);
 
     AUD_prob_Right = directional_probability(AUD_Right_dataout, audInfo, 'Right', 'AUD');

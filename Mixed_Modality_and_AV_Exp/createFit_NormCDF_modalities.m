@@ -108,7 +108,7 @@ plot(x, AUD_p, "red",...
         x, AV_aud_p, 'green',...
         x, AV_vis_p, 'black');
 
-legend('AUD','VIS','AV_aud','AV_vis', 'AUD - NormCDF', 'VIS - NormCDF','AV_aud - NormCDF', 'AV_vis - NormCDF', 'Location', 'NorthEast', 'Interpreter', 'none' );
+legend('AUD','VIS','AV_aud','AV_vis', 'AUD - NormCDF', 'VIS - NormCDF','AV_aud - NormCDF', 'AV_vis - NormCDF', 'Location', 'Best', 'Interpreter', 'none' );
 % Label axes
 title(sprintf('AUD,VIS,AV Psych. Func. L&R\n%s', save_name), 'Interpreter', 'none');
 xlabel( 'Coherence ((+)Rightward, (-)Leftward)', 'Interpreter', 'none' );
