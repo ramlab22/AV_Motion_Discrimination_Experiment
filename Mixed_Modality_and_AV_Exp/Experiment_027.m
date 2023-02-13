@@ -680,8 +680,8 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     [dotInfo.cohFreq_left] = cohFreq_finder(VIS_Left_dataout, dotInfo);
 %Since its congruent AV, aud and vis should be same number of freq, just at
 %different coherences for A and V lists
-    [AVInfo.cohFreq_right_aud, AVInfo.cohFreq_right_vis] = cohFreq_finder_AV(AV_Right_dataout, AVInfo);
-    [AVInfo.cohFreq_left_aud, AVInfo.cohFreq_left_vis] = cohFreq_finder_AV(AV_Left_dataout, AVInfo);
+%     [AVInfo.cohFreq_right_aud, AVInfo.cohFreq_right_vis] = cohFreq_finder_AV(AV_Right_dataout, AVInfo);
+%     [AVInfo.cohFreq_left_aud, AVInfo.cohFreq_left_vis] = cohFreq_finder_AV(AV_Left_dataout, AVInfo);
 
     AUD_prob_Right = directional_probability(AUD_Right_dataout, audInfo, 'Right', 'AUD');
     AUD_prob_Left = directional_probability(AUD_Left_dataout, audInfo, 'Left','AUD');
@@ -700,9 +700,9 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                                         AV_prob_Right, AV_prob_Left,...
                                         audInfo, dotInfo, AVInfo, chosen_threshold, save_name);
 
-    aud_threshold = sprintf('AUD Threshold: %d',AUD_threshold);
+    aud_threshold = sprintf('AUD Threshold: %.2f',AUD_threshold);
     disp(aud_threshold)
-    vis_threshold = sprintf('AUD Threshold: %d',VIS_threshold);
+    vis_threshold = sprintf('VIS Threshold: %.2f',VIS_threshold);
     disp(vis_threshold)
 
     Eye_Tracker_Plotter(eye_data_matrix);
@@ -710,14 +710,23 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     
     AUD_prob_right_only = coherence_probability_1_direction(AUD_Right_dataout, audInfo,'Right','AUD');
     AUD_prob_left_only = coherence_probability_1_direction(AUD_Left_dataout, audInfo,'Left','AUD');
+    
     VIS_prob_right_only = coherence_probability_1_direction(VIS_Right_dataout, dotInfo,'Right','VIS');
     VIS_prob_left_only = coherence_probability_1_direction(VIS_Left_dataout, dotInfo,'Left','VIS');
+
+
      
     %%Make Rightward only graph with AUD and VIS
-    [R_fig_AV] = psychometric_plotter_1_direction_modalities(AUD_prob_right_only, VIS_prob_right_only, 'RIGHT ONLY', audInfo, dotInfo, save_name);
+    [R_fig_AV] = psychometric_plotter_1_direction_modalities(AUD_prob_right_only,...
+                                                             VIS_prob_right_only,...
+                                                             AV_prob_Right, ...
+                                                             'RIGHT ONLY', audInfo, dotInfo, AVInfo, save_name);
     
     %%Make Leftward only graph with AUD and VIS
-    [L_fig_AV] = psychometric_plotter_1_direction_modalities(AUD_prob_left_only, VIS_prob_left_only, 'LEFT ONLY', audInfo, dotInfo, save_name);
+    [L_fig_AV] = psychometric_plotter_1_direction_modalities(AUD_prob_left_only,...
+                                                             VIS_prob_left_only,...
+                                                             AV_prob_Left, ...
+                                                             'LEFT ONLY', audInfo, dotInfo, AVInfo, save_name);
     
     %%Make Coh vs Trial graph to track progress
     coh_vs_trial_fig = plot_coh_vs_trial_modalities(AUD_dataout, VIS_dataout, save_name);

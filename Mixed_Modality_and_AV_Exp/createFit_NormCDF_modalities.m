@@ -97,15 +97,12 @@ VIS_threshold_location=find(VIS_p >= chosen_threshold, 1);
 VIS_threshold=x(1,VIS_threshold_location);
 % Plot fit with data.
 fig = figure( 'Name', 'Psychometric Function' );
-hold on
 scatter(AUD_xData, AUD_yData, all_sizes_AUD, 'red', 'filled')
 hold on
 scatter(VIS_xData, VIS_yData, all_sizes_VIS, 'blue', 'filled')
-hold on 
 scatter(AV_aud_xData, AV_aud_yData, all_sizes_AV_aud, 'green', 'filled')
-hold on
 scatter(AV_vis_xData, AV_vis_yData, all_sizes_AV_vis, 'black', 'filled')
-hold on
+
 plot(x, AUD_p, "red",...
         x, VIS_p, "blue",...
         x, AV_aud_p, 'green',...
