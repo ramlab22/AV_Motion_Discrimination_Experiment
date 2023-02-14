@@ -7,7 +7,7 @@ close all;
 sca;
 %  Version info
 Version = 'Experiment_027_v.2.0' ; % after code changes, change version
-file_directory='C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\AUD_Only_Experiment';
+file_directory='C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\Mixed_Modality_and_AV_Exp';
 data_file_directory = 'C:\Jackson\Adriana Stuff\AV_Behavioral_Data\';
 figure_file_directory = 'C:\Jackson\Adriana Stuff\AV_Figures\'; 
 
@@ -681,7 +681,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
 %Since its congruent AV, aud and vis should be same number of freq, just at
 %different coherences for A and V lists
      [AVInfo.cohFreq_right_aud, AVInfo.cohFreq_right_vis] = cohFreq_finder_AV(AV_Right_dataout, AVInfo);
-%     [AVInfo.cohFreq_left_aud, AVInfo.cohFreq_left_vis] = cohFreq_finder_AV(AV_Left_dataout, AVInfo);
+     [AVInfo.cohFreq_left_aud, AVInfo.cohFreq_left_vis] = cohFreq_finder_AV(AV_Left_dataout, AVInfo);
 
     AUD_prob_Right = directional_probability(AUD_Right_dataout, audInfo, 'Right', 'AUD');
     AUD_prob_Left = directional_probability(AUD_Left_dataout, audInfo, 'Left','AUD');
@@ -732,10 +732,10 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     coh_vs_trial_fig = plot_coh_vs_trial_modalities(AUD_dataout, VIS_dataout, save_name);
     
     %Save all figures to Figure Directory
-    saveas(fig_3_AUD_VIS_AV, [figure_file_directory save_name '_Psyc_Func_LR_AV_Mixed.png'])
-    saveas(R_fig_AV, [figure_file_directory save_name '_Psyc_Func_R_AV_Mixed.png'])
-    saveas(L_fig_AV, [figure_file_directory save_name '_Psyc_Func_L_AV_Mixed.png'])
-    saveas(coh_vs_trial_fig, [figure_file_directory save_name '_Coh_vs_Trial_AV_Mixed.png'])
+    saveas(fig_3_AUD_VIS_AV, [figure_file_directory save_name '_Psyc_Func_LR_MMAV.png']);
+    saveas(R_fig_AV, [figure_file_directory save_name '_Psyc_Func_R_MMAV.png']);
+    saveas(L_fig_AV, [figure_file_directory save_name '_Psyc_Func_L_MMAV.png']);
+    saveas(coh_vs_trial_fig, [figure_file_directory save_name '_Coh_vs_Trial_MMAV.png']);
     
     
     times = cell2mat(dataout(2:end,7)); %Extract the trial times
