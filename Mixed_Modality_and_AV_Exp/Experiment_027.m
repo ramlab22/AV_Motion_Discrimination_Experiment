@@ -17,8 +17,8 @@ if baron_fixation_training==1
     target_reward='N/A';
 end
 
-addpath('C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\AUD_Only_Experiment\Auditory Stimulus');
-addpath('C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\AUD_Only_Experiment\Eye_Movement_Data'); 
+addpath('C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\Mixed_Modality_and_AV_Exp\Auditory Stimulus');
+addpath('C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\Mixed_Modality_and_AV_Exp\Eye_Movement_Data'); 
 
        
 
