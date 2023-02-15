@@ -7,7 +7,7 @@ close all;
 sca;
 %  Version info
 Version = 'Experiment_027_v.2.0' ; % after code changes, change version
-file_directory='C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\AUD_Only_Experiment';
+file_directory='C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\Mixed_Modality_Experiment';
 data_file_directory = 'C:\Jackson\Adriana Stuff\AV_Behavioral_Data\';
 figure_file_directory = 'C:\Jackson\Adriana Stuff\AV_Figures\'; 
 
@@ -17,8 +17,8 @@ if baron_fixation_training==1
     target_reward='N/A';
 end
 
-addpath('C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\AUD_Only_Experiment\Auditory Stimulus');
-addpath('C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\AUD_Only_Experiment\Eye_Movement_Data'); 
+addpath('C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\Mixed_Modality_Experiment\Auditory Stimulus');
+addpath('C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\Mixed_Modality_Experiment\Eye_Movement_Data'); 
 
        
 
