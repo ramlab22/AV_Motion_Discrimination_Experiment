@@ -421,7 +421,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                         incorrect_counter2 = incorrect_counter2 + 1;
                     end
                     if incorrect_counter2 > target_only_time_frames
-                        incorrect_counter2=0;
+                        
                        
 %                         for frame_2 = 1:TO_time_frames %added 10/13/22-AMS
 %                             Screen('FillRect', window, black);
