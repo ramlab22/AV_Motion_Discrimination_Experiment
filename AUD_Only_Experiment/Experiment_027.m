@@ -190,7 +190,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         %Initilize the auditory coherence and direction for each trial
         if audInfo.random_incorrect_opacity_list(trialcounter) == 0
             catchtrial = 'Yes';
-        %    fix_point_color = [0 255 0]; %Green 
+             target_reward = 'N/A';
              fix_point_color = white;
         elseif audInfo.random_incorrect_opacity_list(trialcounter) == 1
             catchtrial = 'No';
@@ -367,7 +367,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                 aud_timeout = 0;
                 aud_correct_counter = 0;
                 aud_reward = 'Yes';
-                if baron_fixation_training==1
+                if baron_fixation_training==1 || strcmp(catchtrial, 'Yes')
                     TDT.trg(1); %add in if fixation only
                     incorrect_target_fixation='N/A';
                     
@@ -382,7 +382,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         % This Includes a end trial reward for saccade and fixation towards either one of the target
         % points, IN PROGRESS
         targ_timeout = 0;
-        if fix_timeout ~= 1 && aud_timeout ~= 1 && baron_fixation_training ~= 1
+        if fix_timeout ~= 1 && aud_timeout ~= 1 && baron_fixation_training ~= 1 && strcmp(catchtrial, "No")
             %This picks the luminace of the targets based on correct direction response, also outputs correct target string variable, eg 'right'
             [right_target_color,left_target_color,correct_target] = percentage_target_color_selection(audInfo,trialcounter);
             
