@@ -1,4 +1,4 @@
-clc, clear, format long g; 
+clear, format long g; 
 %Run App to get Paramters for test
 app = GUI_Test; 
 while isvalid(app); pause(0.1); end
