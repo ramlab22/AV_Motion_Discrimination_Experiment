@@ -6,6 +6,7 @@ function  [ExpInfo, dstruct, dotInfo]= CreateClassStructure(data, monWidth, view
 ExpInfo.t_angle = data(1,1); % Fixation Dot and Target Dots Visual Angle in Degrees
 ExpInfo.rew_angle = data(2,1);% Reward Window Visual Angle in Degrees
 ExpInfo.num_trials = data(3,1); % Number of Trials for 1 block
+ExpInfo.catch_trials = round((data(61,1)/100)*(ExpInfo.num_trials)); %Number of Catch Trials for 1 block, given in percentage from GUI so translate into # of catch trials
 ExpInfo.stim_time = data(4,1); %Time of stimulus(RDK) presentaiton (ms)
 ExpInfo.iti = data(5,1);%Intertrial Interval (ms)
 ExpInfo.fixation_time = data(6,1);% Time to fixate on fixation point before RDK Starts presenting == time of presenting fixation point 
@@ -43,7 +44,7 @@ ExpInfo.ppd = 30;%pi * xCenter / atan(monWidth/viewDist/2) / 360;
 %% RDK Parameters
 
 dotInfo = struct;
-dotInfo.catchtrials = 0; % # catch trials
+dotInfo.catchtrials = ExpInfo.catch_trials; % # catch trials
 dotInfo.dirSet = dirBin(data); %See function dirBin.m
 dotInfo.random_incorrect_opacity_list = catch_trial_randomizer(ExpInfo,dotInfo);%Gives list of 1 = regular trial, 0 = catch trial, see function 
 dotInfo.rdk_size_pix = angle2pixels(ExpInfo.rdk_angle); %RDK window size in pixels

@@ -7,7 +7,7 @@ close all;
 sca;
 %  Version info
 Version = 'Experiment_027_v.2.0' ; % after code changes, change version
-file_directory='C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\AUD_Only_Experiment';
+file_directory='C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\VIS_Only_Experiment';
 data_file_directory = 'C:\Jackson\Adriana Stuff\AV_Behavioral_Data\'; 
 figure_file_directory = 'C:\Jackson\Adriana Stuff\AV_Figures\'; 
 
@@ -176,8 +176,14 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
 
         %Inititlize the coherence and direction for each trial
 
-        catchtrial = 'No';
-        fix_point_color = white;
+        if dotInfo.random_incorrect_opacity_list(trialcounter) == 0
+             catchtrial = 'Yes';
+             target_reward = 'N/A';
+             fix_point_color = white;
+        elseif audInfo.random_incorrect_opacity_list(trialcounter) == 1
+            catchtrial = 'No';
+            fix_point_color = white;
+        end
         
         if trialcounter == 1
             staircase_index = 1; %Initialize index for first trial 
@@ -196,8 +202,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
             disp(dotInfo.coh)
         end
 
-        
-        
+
         pos = ExpInfo.random_list(trialcounter);  %Gets random pos # from the list evaluated at specific trial #
         [h,k] = xypos(pos,dot_coord);%Outputs fixation center (h,k) in pixels for Psychtoolbox to draw dot
         [h_voltage, k_voltage] = pos_voltage(pos,dot_coord); %Outputs Fixation center in Volts for comparison to eyetracker values 
@@ -287,8 +292,9 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
             [rdk_timeout, eye_data_matrix] = RDK_Draw(ExpInfo, dotInfo, window, xCenter, yCenter, h_voltage, k_voltage, TDT, start_block_time, eye_data_matrix, trialcounter, fix_point_color);
             if rdk_timeout ~= 1
                rdk_reward = 'Yes'; 
-               if baron_fixation_training==1
+               if baron_fixation_training==1 || strcmp(catchtrial, 'Yes')
                     TDT.trg(1); %add in if fixation only
+                    incorrect_target_fixation='N/A';
                end
             else
                rdk_reward = 'No';
@@ -306,7 +312,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         % This Includes a end trial reward for saccade and fixation towards either one of the target
         % points, IN PROGRESS
         targ_timeout = 0;
-        if fix_timeout ~= 1 && rdk_timeout ~= 1 && baron_fixation_training ~= 1
+        if fix_timeout ~= 1 && rdk_timeout ~= 1 && baron_fixation_training ~= 1 && strcmp(catchtrial, "No")
             %This picks the luminace of the targets based on correct direction response, also outputs correct target string variable, eg 'right'
             [right_target_color,left_target_color,correct_target] = percentage_target_color_selection(dotInfo,trialcounter);
             
@@ -459,7 +465,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         end_trial_time = hat; %High Accuracy Timer (hat)
         trial_time = end_trial_time-start_trial_time;
         
-        dataout(output_counter,1:10) = {trialcounter pos fix_reward rdk_reward catchtrial target_reward trial_time dotInfo.coh dotInfo.dir incorrect_target_fixation stim_modality}; 
+        dataout(output_counter,1:11) = {trialcounter pos fix_reward rdk_reward catchtrial target_reward trial_time dotInfo.coh dotInfo.dir incorrect_target_fixation stim_modality}; 
         trialcounter = trialcounter + 1;
         
         if trialcounter <= total_trials
