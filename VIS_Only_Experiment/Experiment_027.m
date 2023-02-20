@@ -180,7 +180,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
              catchtrial = 'Yes';
              target_reward = 'N/A';
              fix_point_color = white;
-        elseif audInfo.random_incorrect_opacity_list(trialcounter) == 1
+        elseif dotInfo.random_incorrect_opacity_list(trialcounter) == 1
             catchtrial = 'No';
             fix_point_color = white;
         end
