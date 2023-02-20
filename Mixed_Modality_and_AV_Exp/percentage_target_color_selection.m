@@ -1,4 +1,4 @@
-function [right_target_color,left_target_color,correct_target] = percentage_target_color_selection(dotInfo, audInfo, AVInfo, trialInfo, trialcounter)
+function [right_target_color,left_target_color,correct_target] = percentage_target_color_selection(dotInfo, audInfo, AVInfo, trialInfo, ExpInfo, trialcounter)
 
  
 %picks luminance of targets based on which direcction of stimulus is occcuring at each trial
@@ -31,10 +31,10 @@ function [right_target_color,left_target_color,correct_target] = percentage_targ
     if strcmp(correct_target,'right')
         
         right_target_color = [255; 255; 255; 1];
-        left_target_color = [255; 255; 255;trialInfo.random_incorrect_opacity_list(trialcounter)];%incorrect target ; RGBA value, a = alpha which is the opacity of the dot value 0-1.0
+        left_target_color = [255; 255; 255;ExpInfo.random_incorrect_opacity_list(trialcounter)];%incorrect target ; RGBA value, a = alpha which is the opacity of the dot value 0-1.0
         
     elseif strcmp(correct_target,'left')
-        right_target_color = [255; 255; 255;trialInfo.random_incorrect_opacity_list(trialcounter)]; %incorrect target
+        right_target_color = [255; 255; 255;ExpInfo.random_incorrect_opacity_list(trialcounter)]; %incorrect target
         left_target_color = [255; 255; 255; 1];
     end
     
