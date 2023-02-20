@@ -177,7 +177,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
      coh_counter = 1;
     disp(['Trial #: ',num2str(trialcounter),'/',num2str(total_trials)])
     output_counter = output_counter + 1;
-    dataout(output_counter,1:10) = {'Trial #' 'Position #' 'Fixation Correct' 'Auditory Reward' 'Catch Trial' 'Target Correct' 'Total Trial Time (sec)' 'Coherence Level' 'Direction of Motion' 'Incorrect Target Fixation'}; %Initialize Columns for data output cell
+    dataout(output_counter,1:11) = {'Trial #' 'Position #' 'Fixation Correct' 'Auditory Reward' 'Catch Trial' 'Target Correct' 'Total Trial Time (sec)' 'Coherence Level' 'Direction of Motion' 'Incorrect Target Fixation' 'Stimulus Modality'}; %Initialize Columns for data output cell
     start_block_time = hat; 
     
     while (trialcounter <= total_trials) && (BreakState ~= 1) % each trial
@@ -534,11 +534,12 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                 trial_status = trial_status;
             end
         end
-  
+        
+        stim_modality = 'AUD';
         end_trial_time = hat;
         trial_time = end_trial_time-start_trial_time;
         
-        dataout(output_counter,1:10) = {trialcounter pos fix_reward aud_reward catchtrial target_reward trial_time audInfo.coh audInfo.dir incorrect_target_fixation}; 
+        dataout(output_counter,1:11) = {trialcounter pos fix_reward aud_reward catchtrial target_reward trial_time audInfo.coh audInfo.dir incorrect_target_fixation stim_modality}; 
         trialcounter = trialcounter + 1;
         
         if trialcounter <= total_trials
