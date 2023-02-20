@@ -7,8 +7,8 @@ function  [ExpInfo, dstruct, audInfo]= CreateClassStructure(data, monWidth, view
 ExpInfo.t_angle = data(1,1); % Fixation Dot and Target Dots Visual Angle in Degrees
 ExpInfo.rew_angle = data(2,1);% Reward Window Visual Angle in Degrees
 ExpInfo.num_trials = data(3,1); % Number of total Trials for 1 block
-ExpInfo.catch_trials =0; %Number of Catch Trials for 1 block, given in percentage from GUI so translate into # of catch trials
-%ExpInfo.catch_trials = round((data(61,1)/100)*(ExpInfo.num_trials)); %Number of Catch Trials for 1 block, given in percentage from GUI so translate into # of catch trials
+%ExpInfo.catch_trials =0; %Number of Catch Trials for 1 block, given in percentage from GUI so translate into # of catch trials
+ExpInfo.catch_trials = round((data(61,1)/100)*(ExpInfo.num_trials)); %Number of Catch Trials for 1 block, given in percentage from GUI so translate into # of catch trials
 
 ExpInfo.stim_time = data(4,1); %Time of stimulus(RDK) presentaiton (ms)
 ExpInfo.iti = data(5,1);%Intertrial Interval (ms)

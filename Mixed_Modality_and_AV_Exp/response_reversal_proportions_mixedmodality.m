@@ -27,7 +27,7 @@ for i_trial = 1:n_completedtrials
                     if motion_directions(i_trial,1) == 180
                         response_direction(i_trial,1) = 0;
                     end
-                    
+
                 case 'No'
                     if motion_directions(i_trial,1) == 0
                         response_direction(i_trial,1) = 0;
@@ -48,15 +48,26 @@ for i_trial = 1:n_completedtrials
                         response_direction(i_trial,1) = 1;
                     end
             end %switch response accuracy
-            
+        case 'AV'
+            switch response_accuracy{i_trial,1}
+                case 'Yes'
+                    response_direction(i_trial,1) = motion_directions(i_trial,1);
+                case 'No'
+                    if motion_directions(i_trial,1) == 1
+                        response_direction(i_trial,1) = 0;
+                    end
+                    if motion_directions(i_trial,1) == 0
+                        response_direction(i_trial,1) = 1;
+                    end
+            end %switch response accuracy
     end % switch modality
-    
+
 end %for each completed trial
 
 for j_trial = 1:(n_completedtrials-1)
     j_trial_response_accuracy=completed_dataout{j_trial,6};
     j_trial_response_direction=response_direction(j_trial,1);
-    
+
     nexttrial_responsedirection=response_direction(j_trial+1,1);
     switch j_trial_response_accuracy
         case 'Yes'
@@ -65,14 +76,14 @@ for j_trial = 1:(n_completedtrials-1)
             else
                 response_reversals_correct=response_reversals_correct+1;
             end
-            
+
         case 'No'
             if j_trial_response_direction == nexttrial_responsedirection
                 response_nonreversals_incorrect=response_nonreversals_incorrect+1;
             else
                 response_reversals_incorrect=response_reversals_incorrect+1;
             end
-            
+
         case 'N/A'
             NaN_trials=NaN_trials+1;
     end

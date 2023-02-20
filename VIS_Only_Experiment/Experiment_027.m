@@ -7,7 +7,7 @@ close all;
 sca;
 %  Version info
 Version = 'Experiment_027_v.2.0' ; % after code changes, change version
-file_directory='C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\AUD_Only_Experiment';
+file_directory='C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\VIS_Only_Experiment';
 data_file_directory = 'C:\Jackson\Adriana Stuff\AV_Behavioral_Data\'; 
 figure_file_directory = 'C:\Jackson\Adriana Stuff\AV_Figures\'; 
 
@@ -165,7 +165,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     coh_counter = 1;
     disp(['Trial #: ',num2str(trialcounter),'/',num2str(total_trials)])
     output_counter = output_counter + 1;
-    dataout(output_counter,1:10) = {'Trial #' 'Position #' 'Fixation Correct' 'Visual Reward' 'Catch Trial' 'Target Correct' 'Total Trial Time (sec)' 'Coherence Level' 'Direction of Motion' 'Incorrect Target Fixation'}; %Initialize Columns for data output cell
+    dataout(output_counter,1:11) = {'Trial #' 'Position #' 'Fixation Correct' 'Visual Reward' 'Catch Trial' 'Target Correct' 'Total Trial Time (sec)' 'Coherence Level' 'Direction of Motion' 'Incorrect Target Fixation' 'Stimulus Modality'}; %Initialize Columns for data output cell
     start_block_time = hat; 
     
     while (trialcounter <= total_trials) && (BreakState ~= 1) % each trial
@@ -176,8 +176,14 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
 
         %Inititlize the coherence and direction for each trial
 
-        catchtrial = 'No';
-        fix_point_color = white;
+        if dotInfo.random_incorrect_opacity_list(trialcounter) == 0
+             catchtrial = 'Yes';
+             target_reward = 'N/A';
+             fix_point_color = white;
+        elseif dotInfo.random_incorrect_opacity_list(trialcounter) == 1
+            catchtrial = 'No';
+            fix_point_color = white;
+        end
         
         if trialcounter == 1
             staircase_index = 1; %Initialize index for first trial 
@@ -196,8 +202,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
             disp(dotInfo.coh)
         end
 
-        
-        
+
         pos = ExpInfo.random_list(trialcounter);  %Gets random pos # from the list evaluated at specific trial #
         [h,k] = xypos(pos,dot_coord);%Outputs fixation center (h,k) in pixels for Psychtoolbox to draw dot
         [h_voltage, k_voltage] = pos_voltage(pos,dot_coord); %Outputs Fixation center in Volts for comparison to eyetracker values 
@@ -287,8 +292,9 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
             [rdk_timeout, eye_data_matrix] = RDK_Draw(ExpInfo, dotInfo, window, xCenter, yCenter, h_voltage, k_voltage, TDT, start_block_time, eye_data_matrix, trialcounter, fix_point_color);
             if rdk_timeout ~= 1
                rdk_reward = 'Yes'; 
-               if baron_fixation_training==1
+               if baron_fixation_training==1 || strcmp(catchtrial, 'Yes')
                     TDT.trg(1); %add in if fixation only
+                    incorrect_target_fixation='N/A';
                end
             else
                rdk_reward = 'No';
@@ -306,7 +312,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         % This Includes a end trial reward for saccade and fixation towards either one of the target
         % points, IN PROGRESS
         targ_timeout = 0;
-        if fix_timeout ~= 1 && rdk_timeout ~= 1 && baron_fixation_training ~= 1
+        if fix_timeout ~= 1 && rdk_timeout ~= 1 && baron_fixation_training ~= 1 && strcmp(catchtrial, "No")
             %This picks the luminace of the targets based on correct direction response, also outputs correct target string variable, eg 'right'
             [right_target_color,left_target_color,correct_target] = percentage_target_color_selection(dotInfo,trialcounter);
             
@@ -455,10 +461,11 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
             end
         end
         
+        stim_modality = 'VIS';
         end_trial_time = hat; %High Accuracy Timer (hat)
         trial_time = end_trial_time-start_trial_time;
         
-        dataout(output_counter,1:10) = {trialcounter pos fix_reward rdk_reward catchtrial target_reward trial_time dotInfo.coh dotInfo.dir incorrect_target_fixation}; 
+        dataout(output_counter,1:11) = {trialcounter pos fix_reward rdk_reward catchtrial target_reward trial_time dotInfo.coh dotInfo.dir incorrect_target_fixation stim_modality}; 
         trialcounter = trialcounter + 1;
         
         if trialcounter <= total_trials
@@ -527,7 +534,7 @@ threshold
 %%
 [n_trials_with_response,n_trials_with_reward,proportion_response_reversals_after_correct_response,proportion_response_reversals_after_incorrect_response] = response_reversal_proportions2_visual(dataout);
 % Save all block info and add to a .mat file for later analysis  
-save([data_file_directory save_name],'save_name','dataout','Fixation_Success_Rate','RDK_Success_Rate','Target_Success_Rate_Regular','Target_Success_Rate_Catch','ExpInfo','dotInfo','Total_Block_Time','eye_data_matrix', "coeff_p_values",'n_trials_with_response','n_trials_with_reward','proportion_response_reversals_after_correct_response','proportion_response_reversals_after_incorrect_response','threshold');
+save([data_file_directory save_name],'save_name','dataout','Fixation_Success_Rate','RDK_Success_Rate','Target_Success_Rate_Regular','Target_Success_Rate_Catch','ExpInfo','dotInfo','Total_Block_Time','eye_data_matrix', "coeff_p_values",'n_trials_with_response','n_trials_with_reward','proportion_response_reversals_after_correct_response','proportion_response_reversals_after_incorrect_response','threshold','prob');
 disp('Experiment Data Exported to Behavioral Data Folder')
 sca; 
 
