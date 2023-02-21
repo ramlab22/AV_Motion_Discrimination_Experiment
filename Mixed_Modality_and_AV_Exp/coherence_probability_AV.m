@@ -42,9 +42,9 @@ coherence_rew_numbers = [AVInfo.coherences_aud;
 
     % All of the Coherence Success Rates in Percentage, 
     % 1:11 is the index for coherence list for both A and V 
-    prob = [1:11;
+    prob = [1:length(coherence_success_rate(1,:));
             coherence_success_rate(3,:)*100;
-            1:11;
+            1:length(coherence_success_rate(1,:));
             AVInfo.cohFreq_aud(2,:)];
 
     prob = prob';

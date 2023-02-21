@@ -110,7 +110,7 @@ viewDist = 53; %Viewing Distance from monitor in cm
 
 %%%%%%%%%%%%%%%%%%%%%%% Main Structures for variable names %%%%%%%%%%%%%%
  
-[ExpInfo, vstruct, dotInfo, audInfo, AVInfo, trialInfo] = CreateClassStructure(data, monWidth, viewDist, xCenter, yCenter);
+[ExpInfo, vstruct, dotInfo, audInfo, AVInfo] = CreateClassStructure(data, monWidth, viewDist, xCenter, yCenter);
     disp(ExpInfo)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%3
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -188,8 +188,14 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         
         %Initilize the auditory coherence and direction for each trial
         
-        catchtrial = 'No'; %All trials will not be catch, new staircase procedure
-        fix_point_color = white;
+        if ExpInfo.random_incorrect_opacity_list(trialcounter) == 0
+             catchtrial = 'Yes';
+             target_reward = 'N/A';
+             fix_point_color = white;
+        elseif ExpInfo.random_incorrect_opacity_list(trialcounter) == 1
+            catchtrial = 'No';
+            fix_point_color = white;
+        end
         
         if trialcounter == 1
             staircase_index_aud = 1; %Initialize index for first trial
@@ -348,7 +354,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         
         
         %% Now we play the stim and the fixation point
-        %% Present either the Visual or the Auditory Stimulus while keeping the fixation point up
+        %% Present either the Visual, Auditory, or AV Stimulus while keeping the fixation point up
         if strcmp(trialInfo.modality,'VIS')
             aud_reward = 'No';
             AV_reward = 'No';
@@ -361,7 +367,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                 [rdk_timeout, eye_data_matrix] = RDK_Draw(ExpInfo, dotInfo, window, xCenter, yCenter, h_voltage, k_voltage, TDT, start_block_time, eye_data_matrix, trialcounter, fix_point_color);
                 if rdk_timeout ~= 1
                     rdk_reward = 'Yes';
-                    if baron_fixation_training==1
+                    if baron_fixation_training==1 || strcmp(catchtrial, 'Yes')
                         TDT.trg(1); %add in if fixation only
                     end
                 else
@@ -425,7 +431,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                     aud_timeout = 0;
                     aud_correct_counter = 0;
                     aud_reward = 'Yes';
-                    if baron_fixation_training==1
+                    if baron_fixation_training==1 || strcmp(catchtrial, 'Yes')
                         TDT.trg(1); %add in if fixation only
                     end
                 elseif aud_correct_counter < fix_time_frames - waitframes - time_wait_frames(1)
@@ -450,6 +456,9 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                 [av_timeout] = AV_Stimulus_Presentation(ExpInfo, dotInfo, AVInfo, window, xCenter, yCenter, h_voltage, k_voltage, TDT);
                 if av_timeout ~= 1
                     av_reward = 'Yes';
+                    if baron_fixation_training==1 || strcmp(catchtrial, 'Yes')
+                        TDT.trg(1); %add in if fixation only
+                    end
                 else
                     av_reward = 'No';
                     %Timeout for Failure to fixate on fixation
@@ -471,9 +480,9 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         % This Includes a end trial reward for saccade and fixation towards either one of the target
         % points, IN PROGRESS
         targ_timeout = 0;
-        if fix_timeout ~= 1 && (aud_timeout ~= 1 && rdk_timeout ~= 1 && av_timeout ~= 1) && baron_fixation_training ~= 1
+        if fix_timeout ~= 1 && (aud_timeout ~= 1 && rdk_timeout ~= 1 && av_timeout ~= 1) && baron_fixation_training ~= 1 && strcmp(catchtrial, 'No')
             %This picks the luminace of the targets based on correct direction response, also outputs correct target string variable, eg 'right'
-            [right_target_color,left_target_color,correct_target] = percentage_target_color_selection(dotInfo, audInfo, AVInfo, trialInfo, trialcounter);
+            [right_target_color,left_target_color,correct_target] = percentage_target_color_selection(dotInfo, audInfo, AVInfo, trialInfo, ExpInfo, trialcounter);
             
             for frame = 1:target_time_frames - waitframes
                 
@@ -658,8 +667,8 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         total_trials = ExpInfo.num_trials;
     end
 
-    num_regular_trials = total_trials - trialInfo.catchtrials;
-    num_catch_trials = trialInfo.catchtrials;
+    num_regular_trials = total_trials - ExpInfo.catch_trials;
+    num_catch_trials = ExpInfo.catch_trials;
     
     [Fixation_Success_Rate, Stim_Success_Rate, Target_Success_Rate_Regular, Target_Success_Rate_Catch] = SR_CALC(dataout,total_trials,num_regular_trials,num_catch_trials)
     
