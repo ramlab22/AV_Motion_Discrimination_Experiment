@@ -44,7 +44,7 @@ elseif strcmp(direction, "Left")
     end
 end
 % All of the Coherence Success Rates in Percentage, regular
-prob = [1:11;
+prob = [1:length(coherence_success_rate(1,:));
     coherence_success_rate(3,:)*100];
 
 prob = prob';

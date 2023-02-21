@@ -3,8 +3,8 @@ function [random_incorrect_opacity_list] = catch_trial_randomizer(ExpInfo)
 %   Detailed explanation goes here
     %Catch Trial Randomizer
     random_incorrect_opacity_list = zeros(1,(ExpInfo.num_trials));
-    if ExpInfo.catchtrials >= 1
-        num_catch = ExpInfo.catchtrials; % number of 0 opacity (Catch Trials)  
+    if ExpInfo.catch_trials >= 1
+        num_catch = ExpInfo.catch_trials; % number of 0 opacity (Catch Trials)  
         
         signal_2 = [ones(1, num_catch), zeros(1, ExpInfo.num_trials - num_catch)];
         signal_2 = signal_2(randperm(length(signal_2)));%For Incorrect Opacity

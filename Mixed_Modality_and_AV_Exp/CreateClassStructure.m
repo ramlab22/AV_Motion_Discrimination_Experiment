@@ -1,4 +1,4 @@
-function  [ExpInfo, dstruct, dotInfo, audInfo, AVInfo,  trialInfo]= CreateClassStructure(data, monWidth, viewDist, xCenter, yCenter) %Puts all data input into structure for neatness
+function  [ExpInfo, dstruct, dotInfo, audInfo, AVInfo]= CreateClassStructure(data, monWidth, viewDist, xCenter, yCenter) %Puts all data input into structure for neatness
 %% Jack Mayfield 4/22/22
 
 
