@@ -433,6 +433,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                     aud_reward = 'Yes';
                     if baron_fixation_training==1 || strcmp(catchtrial, 'Yes')
                         TDT.trg(1); %add in if fixation only
+                        incorrect_target_fixation='N/A';
                     end
                 elseif aud_correct_counter < fix_time_frames - waitframes - time_wait_frames(1)
                     aud_reward = 'No';
