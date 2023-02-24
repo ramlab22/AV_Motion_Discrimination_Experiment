@@ -191,6 +191,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         if ExpInfo.random_incorrect_opacity_list(trialcounter) == 0
              catchtrial = 'Yes';
              target_reward = 'N/A';
+             incorrect_target_fixation = 'N/A';
              fix_point_color = white;
         elseif ExpInfo.random_incorrect_opacity_list(trialcounter) == 1
             catchtrial = 'No';
@@ -357,7 +358,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         %% Present either the Visual, Auditory, or AV Stimulus while keeping the fixation point up
         if strcmp(trialInfo.modality,'VIS')
             aud_reward = 'No';
-            AV_reward = 'No';
+            av_reward = 'No';
             rdk_timeout = 0;
             aud_timeout = 0;
             av_timeout = 0;
@@ -383,7 +384,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
             
         elseif strcmp(trialInfo.modality,'AUD')
             rdk_reward = 'No';
-            AV_reward = 'No';
+            av_reward = 'No';
             rdk_timeout = 0;
             aud_timeout = 0;
             av_timeout = 0;
