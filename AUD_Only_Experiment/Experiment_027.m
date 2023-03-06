@@ -591,7 +591,7 @@ num_catch_trials = audInfo.catchtrials;
     %%Make performance vs Trial graph to track progress 
     interval_val=20;
     condition=2; %set condition to auditory
-    accuracy_vs_trial_fig = plot_unisensory_accuracy_vs_trial(dataout, save_name,interval_val,condition)
+    accuracy_vs_trial_fig = plot_unisensory_accuracy_vs_trial(dataout, save_name,interval_val,condition);
     %Save all figures to Figure Directory
     saveas(fig_both, [figure_file_directory save_name '_AUD_Psyc_Func_LR.png'])
     saveas(R_fig, [figure_file_directory save_name '_AUD_Psyc_Func_R.png'])

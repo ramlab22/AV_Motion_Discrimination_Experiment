@@ -38,7 +38,8 @@ opts = optimset('MaxFunEvals',50000, 'MaxIter',10000);
 fit_par = fminsearch(fun, parms, opts);
 
 %New mdl to account for weights of PCs 
-mdl = fitnlm(xData, yData, fun_1, [fit_par(1), fit_par(2)],'Weights', sizes);
+normalcdf_fun = @(b, x) 0.5 * (1 + erf((x - b(1)) ./ (b(2) * sqrt(2))));
+mdl = fitnlm(xData, yData, normalcdf_fun, parms, 'Weights', sizes);
 
 x = 0:.01:1;
 p = cdf('Normal', x, mdl.Coefficients{1,1}, mdl.Coefficients{2,1});
