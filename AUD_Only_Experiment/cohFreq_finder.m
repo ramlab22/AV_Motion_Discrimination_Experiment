@@ -1,4 +1,8 @@
 function [cohFreq_dir] = cohFreq_finder(dir_dataout, audInfo)
+    % Find the frequency of each coherence presentation throughout the exp. 
+    % Exclude catch trials
+    % Outputs list of coherences and the corresponding frequency of presentation
+    
     
     columnIndex = 5; %Catch Trial Column
     filterCondition = @(x) strcmp(x, 'No'); %Filter to only regular Trials, ie Catch Trial = 'No' 

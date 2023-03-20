@@ -1,6 +1,8 @@
 function [random_incorrect_opacity_list] = catch_trial_randomizer(ExpInfo,audInfo)
 %CATCH_TRIAL_RANDOMIZER Summary of this function goes here
-%   Detailed explanation goes here
+%   Given the number of trials, make a random list of catch trial "locations"
+%   within our total number of trials, Catch trial is where the incorrect opacity = 0
+ 
     %Catch Trial Randomizer
     random_incorrect_opacity_list = zeros(1,(ExpInfo.num_trials));
     if audInfo.catchtrials >= 1

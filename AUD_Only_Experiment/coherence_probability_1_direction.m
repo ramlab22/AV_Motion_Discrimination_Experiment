@@ -1,4 +1,6 @@
 function [prob] = coherence_probability_1_direction(dataout, audInfo) 
+%   Get the probabillity of Righward Response given the amount of rewards given and coherences presented
+%   This is for the 1 directional dataout matrices
 
 coherence_rew_numbers = [audInfo.coherences;
         zeros(1,length(audInfo.coherences));
