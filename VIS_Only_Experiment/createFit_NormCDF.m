@@ -17,6 +17,15 @@ function [fig, p_values,threshold] = createFit_NormCDF(coh_list, pc, dotInfo,cho
 %% Fit: 'untitled fit 1'.
 [xData, yData] = prepareCurveData( coh_list, pc );
 
+%Plot different sizes based on amount of frequency of each coh
+sizes_L = flip(dotInfo.cohFreq_left(2,:)');%Slpit to left and Right 
+sizes_R = dotInfo.cohFreq_right(2,:)';
+all_sizes = nonzeros(vertcat(sizes_L, sizes_R));
+
+if length(xData) ~= length(all_sizes)
+    all_sizes = all_sizes(1:length(xData));
+end
+
 mu = mean(yData);
 sigma =std(yData);
 parms = [mu, sigma];
@@ -26,19 +35,15 @@ fun = @(b)sum((fun_1(b,xData) - yData).^2);
 opts = optimset('MaxFunEvals',50000, 'MaxIter',10000); 
 fit_par = fminsearch(fun, parms, opts);
 
+%New mdl to account for weights of PCs 
+normalcdf_fun = @(b, x) 0.5 * (1 + erf((x - b(1)) ./ (b(2) * sqrt(2))));
+mdl = fitnlm(xData, yData, normalcdf_fun, parms, 'Weights', all_sizes);
 x = -1:.01:1;
-p = cdf('Normal', x, fit_par(1), fit_par(2));
+p = cdf('Normal', x, mdl.Coefficients{1,1}, mdl.Coefficients{2,1});
 
 [p_values, bootstat] = p_value_calc(yData, parms);
 
-%Plot different sizes based on amount of frequency of each coh
-sizes_L = flip(dotInfo.cohFreq_left(2,:)');%Slpit to left and Right 
-sizes_R = dotInfo.cohFreq_right(2,:)';
-all_sizes = nonzeros(vertcat(sizes_L, sizes_R));
 
-if length(xData) ~= length(all_sizes)
-    all_sizes = all_sizes(1:length(xData));
-end
 threshold_location=find(p >= chosen_threshold, 1);
 threshold=x(1,threshold_location);
 % Plot fit with data.
