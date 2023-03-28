@@ -171,7 +171,7 @@ rng('default');
 %% Main Code
 
 pause(2);
-
+catchtrial_counter=0;
 while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     trialcounter = 1;
      coh_counter = 1;
@@ -192,6 +192,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
             catchtrial = 'Yes';
              target_reward = 'N/A';
              fix_point_color = white;
+             catchtrial_counter=catchtrial_counter+1;
         elseif audInfo.random_incorrect_opacity_list(trialcounter) == 1
             catchtrial = 'No';
             fix_point_color = white;
@@ -550,12 +551,14 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
 
 if trialcounter < ExpInfo.num_trials
     total_trials = trialcounter;
+    n_catchtrials=catchtrial_counter;
 else
     total_trials = ExpInfo.num_trials;
+    n_catchtrials=audInfo.catchtrials;  
 end
 
-num_regular_trials = total_trials - audInfo.catchtrials;  
-num_catch_trials = audInfo.catchtrials; 
+num_regular_trials = total_trials - n_catchtrials;  
+num_catch_trials =n_catchtrials; 
 
 [Fixation_Success_Rate, AUD_Success_Rate, Target_Success_Rate_Regular, Target_Success_Rate_Catch] = SR_CALC(dataout,total_trials,num_regular_trials,num_catch_trials)
     
