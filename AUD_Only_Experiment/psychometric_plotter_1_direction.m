@@ -1,5 +1,5 @@
 function [coh, pc, fig] = psychometric_plotter_1_direction (directional_probability, direction, audInfo, save_name)
-
+    % Plotting Pyschometric function for 1 direction only, results given in % Rightward response
     coh = directional_probability(:,1);
     pc = directional_probability(:,2); 
     plot_data = [coh, pc]; 

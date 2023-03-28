@@ -1,5 +1,7 @@
 function [prob] = directional_probability(directional_dataout, audInfo) 
 
+    %Gives an array for the probabilities in 1 direction, i.e. Righ or Left Dataout cell array
+
 coherence_rew_numbers = [audInfo.coherences;
         zeros(1,length(audInfo.coherences));
         zeros(1,length(audInfo.coherences))]; %Initilize top row(coherence lvls) and 2nd row(rew numbers) to zero, 3rd row(N/A trials)

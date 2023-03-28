@@ -1,5 +1,5 @@
 function [] = Eye_Tracker_Plotter(eye_data_matrix)
-
+%Plots the eye movement data coming from the eyetracker ASL system
 figure(2)
 clf
 
