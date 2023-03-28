@@ -32,32 +32,6 @@ AV_aud_parms = [AV_aud_mu, AV_aud_sigma];
 AV_vis_mu = mean(AV_vis_yData);
 AV_vis_sigma =std(AV_vis_yData);
 AV_vis_parms = [AV_vis_mu, AV_vis_sigma];
-
-
-fun_1 = @(b, x)cdf('Normal', x, b(1), b(2));
-AUD_fun = @(b)sum((fun_1(b,AUD_xData) - AUD_yData).^2); 
-VIS_fun = @(b)sum((fun_1(b,VIS_xData) - VIS_yData).^2); 
-AV_aud_fun = @(b)sum((fun_1(b,AV_aud_xData) - AV_aud_yData).^2);
-AV_vis_fun = @(b)sum((fun_1(b,AV_vis_xData) - AV_vis_yData).^2);
-opts = optimset('MaxFunEvals',50000, 'MaxIter',10000); 
-
-AUD_fit_par = fminsearch(AUD_fun, AUD_parms, opts);
-VIS_fit_par = fminsearch(VIS_fun, VIS_parms, opts);
-AV_aud_fit_par = fminsearch(AV_aud_fun, AV_aud_parms, opts);
-AV_vis_fit_par = fminsearch(AV_vis_fun, AV_vis_parms, opts);
-
-x = -1:.01:1;
-AUD_p = cdf('Normal', x, AUD_fit_par(1), AUD_fit_par(2));
-VIS_p = cdf('Normal', x, VIS_fit_par(1), VIS_fit_par(2));
-AV_aud_p = cdf('Normal', x, AV_aud_fit_par(1), AV_aud_fit_par(2));
-AV_vis_p = cdf('Normal', x, AV_vis_fit_par(1), AV_vis_fit_par(2));
-
-[AUD_p_values, bootstat_AUD] = p_value_calc(AUD_yData,AUD_parms);
-[VIS_p_values, bootstat_VIS] = p_value_calc(VIS_yData,VIS_parms);
-[AV_aud_p_values, bootstat_AV_aud] = p_value_calc(AV_aud_yData,AV_aud_parms);
-[AV_vis_p_values, bootstat_AV_vis] = p_value_calc(AV_vis_yData,AV_vis_parms);
-
-
 %Plot different sizes based on amount of frequency of each coh
 sizes_L_AUD = flip(audInfo.cohFreq_left(2,:)');%Slpit to left and Right 
 sizes_R_AUD = audInfo.cohFreq_right(2,:)';
@@ -90,6 +64,42 @@ end
 if length(AV_vis_xData) ~= length(all_sizes_AV_vis)
     all_sizes_AV_vis = all_sizes_AV_vis(1:length(AV_vis_xData));
 end
+
+fun_1 = @(b, x)cdf('Normal', x, b(1), b(2));
+AUD_fun = @(b)sum((fun_1(b,AUD_xData) - AUD_yData).^2); 
+VIS_fun = @(b)sum((fun_1(b,VIS_xData) - VIS_yData).^2); 
+AV_aud_fun = @(b)sum((fun_1(b,AV_aud_xData) - AV_aud_yData).^2);
+AV_vis_fun = @(b)sum((fun_1(b,AV_vis_xData) - AV_vis_yData).^2);
+opts = optimset('MaxFunEvals',50000, 'MaxIter',10000); 
+
+AUD_fit_par = fminsearch(AUD_fun, AUD_parms, opts);
+VIS_fit_par = fminsearch(VIS_fun, VIS_parms, opts);
+AV_aud_fit_par = fminsearch(AV_aud_fun, AV_aud_parms, opts);
+AV_vis_fit_par = fminsearch(AV_vis_fun, AV_vis_parms, opts);
+%New mdl to account for weights of PCs 
+normalcdf_fun = @(b, x) 0.5 * (1 + erf((x - b(1)) ./ (b(2) * sqrt(2))));
+AUD_mdl = fitnlm(AUD_xData, AUD_yData, normalcdf_fun, AUD_fit_par, 'Weights', all_sizes_AUD);
+VIS_mdl = fitnlm(VIS_xData, VIS_yData, normalcdf_fun, VIS_fit_par, 'Weights', all_sizes_VIS);
+AV_aud_mdl = fitnlm(AV_aud_xData, AV_aud_yData, normalcdf_fun,AV_aud_fit_par, 'Weights', all_sizes_AV_aud);
+AV_vis_mdl = fitnlm(AV_vis_xData, AV_vis_yData, normalcdf_fun,AV_vis_fit_par, 'Weights', all_sizes_AV_vis);
+
+x = -1:.01:1;
+% AUD_p = cdf('Normal', x, AUD_fit_par(1), AUD_fit_par(2));
+% VIS_p = cdf('Normal', x, VIS_fit_par(1), VIS_fit_par(2));
+% AV_aud_p = cdf('Normal', x, AV_aud_fit_par(1), AV_aud_fit_par(2));
+% AV_vis_p = cdf('Normal', x, AV_vis_fit_par(1), AV_vis_fit_par(2));
+
+AUD_p = cdf('Normal', x, AUD_mdl.Coefficients{1,1}, AUD_mdl.Coefficients{2,1});
+VIS_p = cdf('Normal', x, VIS_mdl.Coefficients{1,1}, VIS_mdl.Coefficients{2,1});
+AV_aud_p = cdf('Normal', x, AV_aud_mdl.Coefficients{1,1}, AV_aud_mdl.Coefficients{2,1});
+AV_vis_p = cdf('Normal', x, AV_vis_mdl.Coefficients{1,1}, AV_vis_mdl.Coefficients{2,1});
+
+[AUD_p_values, bootstat_AUD] = p_value_calc(AUD_yData,AUD_parms);
+[VIS_p_values, bootstat_VIS] = p_value_calc(VIS_yData,VIS_parms);
+[AV_aud_p_values, bootstat_AV_aud] = p_value_calc(AV_aud_yData,AV_aud_parms);
+[AV_vis_p_values, bootstat_AV_vis] = p_value_calc(AV_vis_yData,AV_vis_parms);
+
+
 
 AUD_threshold_location=find(AUD_p >= chosen_threshold, 1);
 AUD_threshold=x(1,AUD_threshold_location);
