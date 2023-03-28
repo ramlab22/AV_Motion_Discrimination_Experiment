@@ -1,6 +1,6 @@
 function [h_current, k_current] = pos_voltage(pos,dot_coord)
 %POS_VOLTAGE Summary of this function goes here
-%   Detailed explanation goes here
+%   converting the dot coordinates on the screen into voltage values that are readable by the eyetracker software. See Exp_Circuit.rcx for logic
     switch pos
         case 1
             h_current = pixels2volts_X(dot_coord.Xpos_1);

@@ -1,6 +1,8 @@
 function [Figdata, hFig, hAxes, hLine] = InitEyeDisplay
 btnColor=get(0,'DefaultUIControlBackgroundColor');
 
+% Code for the live eye tracker Graph - IN PROGRESS 
+
 % Position the figure on right extended screen at the bottom
 screenUnits=get(0,'Units');
 screenSize=get(0,'ScreenSize');

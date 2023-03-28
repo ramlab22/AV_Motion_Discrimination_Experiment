@@ -1,5 +1,6 @@
 function fig = plot_coh_vs_trial(dataout, save_name)
-
+    
+    % Plotting the Coherence Level vs. Trial count figure
     trial_num = cell2mat(dataout(2:end,1));
     coh_level = cell2mat(dataout(2:end,8)); 
     fig = figure();

@@ -21,6 +21,7 @@ mu = mean(yData);
 sigma =std(yData);
 parms = [mu, sigma];
 
+% Norm CDF Function Fitting
 fun_1 = @(b, x)cdf('Normal', x, b(1), b(2));
 fun = @(b)sum((fun_1(b,xData) - yData).^2); 
 opts = optimset('MaxFunEvals',50000, 'MaxIter',10000); 
@@ -28,6 +29,7 @@ fit_par = fminsearch(fun, parms, opts);
 
 x = -1:.01:1;
 
+% Significance of fits 
 [p_values, bootstat,ci] = p_value_calc(yData, parms);
 
 

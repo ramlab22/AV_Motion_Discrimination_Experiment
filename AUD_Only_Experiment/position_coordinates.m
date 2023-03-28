@@ -1,6 +1,6 @@
 function [dot_coord] = position_coordinates(screenXpixels, screenYpixels, xCenter, yCenter)
 %POSITION_COORDINATES Summary of this function goes here
-%   Detailed explanation goes here
+%  coordinates for each fixation center position on the screen given your screens resolution in screenXpixels , screenYpixels
 % Stimulus Positioning 
 %Original was 150 
         %TopLeft Dot
