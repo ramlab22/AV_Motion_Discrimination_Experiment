@@ -708,16 +708,18 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     
     chosen_threshold = .72; 
 
-    [fig_3_AUD_VIS_AV, AUD_p_values, VIS_p_values,AUD_threshold,VIS_threshold] = ...
+    [fig_3_AUD_VIS_AV, AUD_p_values, VIS_p_values,AUD_threshold,VIS_threshold, AV_threshold] = ...
         psychometric_plotter_modalities(AUD_prob_Right, AUD_prob_Left, ...
                                         VIS_prob_Right, VIS_prob_Left,...
                                         AV_prob_Right, AV_prob_Left,...
                                         audInfo, dotInfo, AVInfo, chosen_threshold, save_name);
 
-    aud_threshold = sprintf('AUD Threshold: %.2f',AUD_threshold);
-    disp(aud_threshold)
-    vis_threshold = sprintf('VIS Threshold: %.2f',VIS_threshold);
-    disp(vis_threshold)
+    display_aud_threshold = sprintf('AUD Threshold: %.2f',AUD_threshold);
+    disp(display_aud_threshold)
+    display_vis_threshold = sprintf('VIS Threshold: %.2f',VIS_threshold);
+    disp(display_vis_threshold)
+    display_av_threshold = sprintf('AV Threshold: %.2f',AV_threshold);
+    disp(display_av_threshold)
 
     Eye_Tracker_Plotter(eye_data_matrix);
     
@@ -762,13 +764,13 @@ end
 %%
 [n_trials_with_response,n_trials_with_reward,proportion_response_reversals_after_correct_response,proportion_response_reversals_after_incorrect_response] = response_reversal_proportions_mixedmodality(dataout)
 % Save all block info and add to a .mat file for later analysis  
-save([data_file_directory save_name],'dataout','Fixation_Success_Rate','Stim_Success_Rate',...
-    'Target_Success_Rate_Regular','Target_Success_Rate_Catch','ExpInfo','audInfo','dotInfo',...
-    'AVInfo','Total_Block_Time','eye_data_matrix', 'AUD_p_values', 'VIS_p_values',...
-    'n_trials_with_response','n_trials_with_reward','proportion_response_reversals_after_correct_response',...
-    'proportion_response_reversals_after_incorrect_response','AUD_threshold','VIS_threshold', 'prob_AUD', 'prob_VIS', 'prob_AV');
+% save([data_file_directory save_name],'dataout','Fixation_Success_Rate','Stim_Success_Rate',...
+%     'Target_Success_Rate_Regular','Target_Success_Rate_Catch','ExpInfo','audInfo','dotInfo',...
+%     'AVInfo','Total_Block_Time','eye_data_matrix', 'AUD_p_values', 'VIS_p_values',...
+%     'n_trials_with_response','n_trials_with_reward','proportion_response_reversals_after_correct_response',...
+%     'proportion_response_reversals_after_incorrect_response','AUD_threshold','VIS_threshold', 'prob_AUD', 'prob_VIS', 'prob_AV');
 
-
+save([data_file_directory save_name]);
 disp('Experiment Data Exported to Behavioral Data Folder')
 sca; 
 

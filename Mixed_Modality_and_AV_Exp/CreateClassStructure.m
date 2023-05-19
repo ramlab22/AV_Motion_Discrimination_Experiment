@@ -57,7 +57,9 @@ dotInfo.coherences = dotInfo.cohSet;
 
 dotInfo.apXYD = [0 90 (ExpInfo.rdk_angle*10)]; % Location x,y pixels (0,0 is center of screen) and diameter of the aperature, currently in visual degrees - MULTPLIED by 10 because of Shadlen dots code, needed to be an integer
 dotInfo.speed = data(20,1); %Degrees per second?
-dotInfo.dotSize = 4; %RDK Field Dots
+%dotInfo.dotSize = 4; %RDK Field Dots
+dotInfo.dotSize = 3; %RDK Field Dots
+
 dotInfo.numDotField = 1; %Do not change 
 dotInfo.dotColor = [255 255 255]; %Dot field Color
 dotInfo.maxDotTime = ExpInfo.stim_time/1000; %Puts this in seconds from ms 

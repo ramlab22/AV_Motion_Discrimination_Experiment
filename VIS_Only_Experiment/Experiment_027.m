@@ -480,11 +480,11 @@ if trialcounter < ExpInfo.num_trials
     n_catchtrials=catchtrial_counter;
 else
     total_trials = ExpInfo.num_trials;
-    n_catchtrials=audInfo.catchtrials;  
+    n_catchtrials=dotInfo.catchtrials;  
 end
 
 num_regular_trials = total_trials - n_catchtrials;  
-num_catch_trials =n_catchtrials; 
+num_catch_trials = n_catchtrials; 
 
 [Fixation_Success_Rate, RDK_Success_Rate, Target_Success_Rate_Regular, Target_Success_Rate_Catch] = SR_CALC(dataout,total_trials,num_regular_trials,num_catch_trials)
 
@@ -537,7 +537,9 @@ threshold
 %%
 [n_trials_with_response,n_trials_with_reward,proportion_response_reversals_after_correct_response,proportion_response_reversals_after_incorrect_response] = response_reversal_proportions2_visual(dataout);
 % Save all block info and add to a .mat file for later analysis  
-save([data_file_directory save_name],'save_name','dataout','Fixation_Success_Rate','RDK_Success_Rate','Target_Success_Rate_Regular','Target_Success_Rate_Catch','ExpInfo','dotInfo','Total_Block_Time','eye_data_matrix', "coeff_p_values",'n_trials_with_response','n_trials_with_reward','proportion_response_reversals_after_correct_response','proportion_response_reversals_after_incorrect_response','threshold','prob');
+%save([data_file_directory save_name],'save_name','dataout','Fixation_Success_Rate','RDK_Success_Rate','Target_Success_Rate_Regular','Target_Success_Rate_Catch','ExpInfo','dotInfo','Total_Block_Time','eye_data_matrix', "coeff_p_values",'n_trials_with_response','n_trials_with_reward','proportion_response_reversals_after_correct_response','proportion_response_reversals_after_incorrect_response','threshold','prob');
+save([data_file_directory save_name]);
+
 disp('Experiment Data Exported to Behavioral Data Folder')
 sca; 
 

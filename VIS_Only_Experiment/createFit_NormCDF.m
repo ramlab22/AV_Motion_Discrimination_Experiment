@@ -21,9 +21,12 @@ function [fig, p_values,threshold] = createFit_NormCDF(coh_list, pc, dotInfo,cho
 sizes_L = flip(dotInfo.cohFreq_left(2,:)');%Slpit to left and Right 
 sizes_R = dotInfo.cohFreq_right(2,:)';
 all_sizes = nonzeros(vertcat(sizes_L, sizes_R));
+%all_sizes = vertcat(sizes_L, sizes_R);
 
 if length(xData) ~= length(all_sizes)
     all_sizes = all_sizes(1:length(xData));
+  %  all_sizes = all_sizes(1:length(all_sizes));
+
 end
 
 mu = mean(yData);

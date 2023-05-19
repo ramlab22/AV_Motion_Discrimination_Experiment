@@ -1,6 +1,6 @@
 function [fig, AUD_p_values, VIS_p_values,...
                AV_aud_p_values, AV_vis_p_values,...
-               AUD_threshold, VIS_threshold] = createFit_NormCDF_modalities(AUD_coh_list, AUD_pc,...
+               AUD_threshold, VIS_threshold, AV_threshold] = createFit_NormCDF_modalities(AUD_coh_list, AUD_pc,...
                                                                               VIS_coh_list, VIS_pc,...
                                                                               AV_coh_list_aud, AV_aud_pc,...
                                                                               AV_coh_list_vis, AV_vis_pc,...
@@ -101,10 +101,14 @@ AV_vis_p = cdf('Normal', x, AV_vis_mdl.Coefficients{1,1}, AV_vis_mdl.Coefficient
 
 
 
-AUD_threshold_location=find(AUD_p >= chosen_threshold, 1);
-AUD_threshold=x(1,AUD_threshold_location);
-VIS_threshold_location=find(VIS_p >= chosen_threshold, 1);
-VIS_threshold=x(1,VIS_threshold_location);
+% AUD_threshold_location=find(AUD_p >= chosen_threshold, 1);
+% AUD_threshold=x(1,AUD_threshold_location);
+% VIS_threshold_location=find(VIS_p >= chosen_threshold, 1);
+% VIS_threshold=x(1,VIS_threshold_location);
+
+AUD_threshold= AUD_mdl.Coefficients{2,1};
+VIS_threshold= VIS_mdl.Coefficients{2,1};
+AV_threshold= AV_vis_mdl.Coefficients{2,1};
 % Plot fit with data.
 fig = figure( 'Name', 'Psychometric Function' );
 scatter(AUD_xData, AUD_yData, all_sizes_AUD, 'red', 'filled')
@@ -112,7 +116,7 @@ hold on
 scatter(VIS_xData, VIS_yData, all_sizes_VIS, 'blue', 'filled')
 scatter(AV_aud_xData, AV_aud_yData, all_sizes_AV_aud, 'green', 'filled')
 scatter(AV_vis_xData, AV_vis_yData, all_sizes_AV_vis, 'black', 'filled')
-
+max_cohval=max([VIS_xData(:); AUD_xData(:); AV_vis_xData(:)]);
 plot(x, AUD_p, "red",...
         x, VIS_p, "blue",...
         x, AV_aud_p, 'green',...
@@ -123,7 +127,7 @@ legend('AUD','VIS','AV_aud','AV_vis', 'AUD - NormCDF', 'VIS - NormCDF','AV_aud -
 title(sprintf('AUD,VIS,AV Psych. Func. L&R\n%s', save_name), 'Interpreter', 'none');
 xlabel( 'Coherence ((+)Rightward, (-)Leftward)', 'Interpreter', 'none' );
 ylabel( '% Rightward Response', 'Interpreter', 'none' );
-xlim([-1 1])
+xlim([(-1*max_cohval) max_cohval])
 ylim([0 1])
 grid on
 
