@@ -708,7 +708,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     
     chosen_threshold = .72; 
 
-    [fig_3_AUD_VIS_AV, AUD_p_values, VIS_p_values,AUD_threshold,VIS_threshold, AV_threshold] = ...
+    [fig_3_AUD_VIS_AV, AUD_p_values, VIS_p_values,AUD_threshold,VIS_threshold, AV_threshold, AUD_std,VIS_std,AV_std] = ...
         psychometric_plotter_modalities(AUD_prob_Right, AUD_prob_Left, ...
                                         VIS_prob_Right, VIS_prob_Left,...
                                         AV_prob_Right, AV_prob_Left,...
@@ -716,11 +716,17 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
 
     display_aud_threshold = sprintf('AUD Threshold: %.2f',AUD_threshold);
     disp(display_aud_threshold)
+    display_aud_std = sprintf('AUD std of cumulative gaussian: %.2f',AUD_std);
+    disp(display_aud_std)
     display_vis_threshold = sprintf('VIS Threshold: %.2f',VIS_threshold);
     disp(display_vis_threshold)
+    display_vis_std = sprintf('VIS std of cumulative gaussian: %.2f',VIS_std);
+    disp(display_vis_std)
     display_av_threshold = sprintf('AV Threshold: %.2f',AV_threshold);
     disp(display_av_threshold)
-
+    display_av_std = sprintf('AV std of cumulative gaussian: %.2f',AV_std);
+    disp(display_av_std)
+   
     Eye_Tracker_Plotter(eye_data_matrix);
     
     

@@ -1,4 +1,4 @@
-function [fig, p_values,threshold] = createFit_NormCDF(coh_list, pc, dotInfo,chosen_threshold, save_name)
+function [fig, p_values,threshold,std_gaussian] = createFit_NormCDF(coh_list, pc, dotInfo,chosen_threshold, save_name)
 %CREATEFIT(COH_LIST,PC_AUD)
 %  Create a fit.
 %
@@ -47,8 +47,11 @@ p = cdf('Normal', x, mdl.Coefficients{1,1}, mdl.Coefficients{2,1});
 [p_values, bootstat] = p_value_calc(yData, parms);
 
 
-threshold_location=find(p >= chosen_threshold, 1);
-threshold=x(1,threshold_location);
+%get threshold
+threshold= mdl.Coefficients{1,1};
+%get std of cumulative gaussian (reflects the inherent variability of the psychophysical data)
+std_gaussian= mdl.Coefficients{1,2};
+
 % Plot fit with data.
 fig = figure( 'Name', 'Psychometric Function' );
 scatter(xData, yData, all_sizes)
