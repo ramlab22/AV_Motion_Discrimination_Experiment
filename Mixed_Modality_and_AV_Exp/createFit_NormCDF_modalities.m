@@ -1,6 +1,6 @@
 function [fig, AUD_p_values, VIS_p_values,...
                AV_aud_p_values, AV_vis_p_values,...
-               AUD_threshold, VIS_threshold, AV_threshold] = createFit_NormCDF_modalities(AUD_coh_list, AUD_pc,...
+               AUD_threshold, VIS_threshold, AV_threshold, AUD_std, VIS_std, AV_std] = createFit_NormCDF_modalities(AUD_coh_list, AUD_pc,...
                                                                               VIS_coh_list, VIS_pc,...
                                                                               AV_coh_list_aud, AV_aud_pc,...
                                                                               AV_coh_list_vis, AV_vis_pc,...
@@ -89,6 +89,10 @@ x = -1:.01:1;
 % AV_aud_p = cdf('Normal', x, AV_aud_fit_par(1), AV_aud_fit_par(2));
 % AV_vis_p = cdf('Normal', x, AV_vis_fit_par(1), AV_vis_fit_par(2));
 
+% AUD_mdl.Coefficients{1,1}=mu, AUD_mdl.Coefficients{1,2}=std of gaussian
+% distribution (reflects the inherent variability of the psychophysical data), 
+% AUD_mdl.Coefficients{2,1}=standard error of the estimated threshold 
+% (reflects the uncertainty/variability of estimated threshold obtained through the model fitting process.)
 AUD_p = cdf('Normal', x, AUD_mdl.Coefficients{1,1}, AUD_mdl.Coefficients{2,1});
 VIS_p = cdf('Normal', x, VIS_mdl.Coefficients{1,1}, VIS_mdl.Coefficients{2,1});
 AV_aud_p = cdf('Normal', x, AV_aud_mdl.Coefficients{1,1}, AV_aud_mdl.Coefficients{2,1});
@@ -106,9 +110,14 @@ AV_vis_p = cdf('Normal', x, AV_vis_mdl.Coefficients{1,1}, AV_vis_mdl.Coefficient
 % VIS_threshold_location=find(VIS_p >= chosen_threshold, 1);
 % VIS_threshold=x(1,VIS_threshold_location);
 
-AUD_threshold= AUD_mdl.Coefficients{2,1};
-VIS_threshold= VIS_mdl.Coefficients{2,1};
-AV_threshold= AV_vis_mdl.Coefficients{2,1};
+AUD_threshold= AUD_mdl.Coefficients{1,1};
+VIS_threshold= VIS_mdl.Coefficients{1,1};
+AV_threshold= AV_vis_mdl.Coefficients{1,1};
+
+AUD_std= AUD_mdl.Coefficients{1,2};
+VIS_std= VIS_mdl.Coefficients{1,2};
+AV_std= AV_vis_mdl.Coefficients{1,2};
+
 % Plot fit with data.
 fig = figure( 'Name', 'Psychometric Function' );
 scatter(AUD_xData, AUD_yData, all_sizes_AUD, 'red', 'filled')
