@@ -8,6 +8,8 @@ for i_file=1:length(totalfiles_names)
     load(horzcat(Path,totalfiles_names{1,i_file}));
     %delete empty rows from data cell
     dataout(all(cellfun(@isempty, dataout),2),:) = [];
+    %delete catch trials from data cell
+    dataout(strcmp(dataout(:,5),'Yes'),:)=[];
     %combine all data in folder into one master_dataout cell
     if i_file==1
         master_dataout=dataout;
