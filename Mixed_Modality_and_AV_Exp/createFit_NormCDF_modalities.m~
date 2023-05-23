@@ -78,7 +78,7 @@ function [fig, BF_AUD_VIS, BF_AUD_AV, BF_VIS_AV, AUD_threshold, VIS_threshold, A
     ylim([0 1]);
     axis equal
     grid on
-        legend('AUD', 'VIS', 'AV', 'AUD - NormCDF', 'VIS - NormCDF', 'AV - NormCDF', 'Location', 'NorthWest', 'Interpreter', 'none');
+    legend('AUD', 'VIS', 'AV', 'AUD - NormCDF', 'VIS - NormCDF', 'AV - NormCDF', 'Location', 'NorthWest', 'Interpreter', 'none');
 
     BF_AUD_VIS=0;
     BF_AUD_AV=0;

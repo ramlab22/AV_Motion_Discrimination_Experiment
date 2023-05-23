@@ -708,21 +708,21 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     
     chosen_threshold = .72; 
 
-    [fig_3_AUD_VIS_AV,BF_AUD_VIS, BF_AUD_AV, BF_VIS_AV,AUD_threshold,VIS_threshold, AV_threshold, AUD_std,VIS_std,AV_std] = ...
+    [fig_3_AUD_VIS_AV,BF_AUD_VIS, BF_AUD_AV, BF_VIS_AV,AUD_threshold,VIS_threshold, AV_threshold, AUD_std,VIS_std,AV_std,Results_MLE] = ...
         psychometric_plotter_modalities(AUD_prob_Right, AUD_prob_Left, ...
                                         VIS_prob_Right, VIS_prob_Left,...
                                         AV_prob_Right, AV_prob_Left,...
                                         audInfo, dotInfo, AVInfo, save_name);
 
-    display_aud_threshold = sprintf('AUD Threshold: %.2f',AUD_threshold);
+    display_aud_threshold = sprintf('AUD Mu: %.2f',AUD_threshold);
     disp(display_aud_threshold)
     display_aud_std = sprintf('AUD std of cumulative gaussian: %.2f',AUD_std);
     disp(display_aud_std)
-    display_vis_threshold = sprintf('VIS Threshold: %.2f',VIS_threshold);
+    display_vis_threshold = sprintf('VIS Mu: %.2f',VIS_threshold);
     disp(display_vis_threshold)
     display_vis_std = sprintf('VIS std of cumulative gaussian: %.2f',VIS_std);
     disp(display_vis_std)
-    display_av_threshold = sprintf('AV Threshold: %.2f',AV_threshold);
+    display_av_threshold = sprintf('AV Mu: %.2f',AV_threshold);
     disp(display_av_threshold)
     display_av_std = sprintf('AV std of cumulative gaussian: %.2f',AV_std);
     disp(display_av_std)

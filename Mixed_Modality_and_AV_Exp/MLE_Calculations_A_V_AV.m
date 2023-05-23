@@ -34,6 +34,7 @@ Results_MLE.AV_Variance = Results_MLE.AV_SD^2;
 Results_MLE.AUD_Westimate= (1/Results_MLE.AUD_Variance)/((1/Results_MLE.AUD_Variance)+(1/Results_MLE.VIS_Variance));
 Results_MLE.VIS_Westimate= (1/Results_MLE.VIS_Variance)/((1/Results_MLE.VIS_Variance)+(1/Results_MLE.AUD_Variance));
 Results_MLE.AV_EstimatedVariance=(Results_MLE.AUD_Variance*Results_MLE.VIS_Variance)/(Results_MLE.AUD_Variance+Results_MLE.VIS_Variance);
+
 Results_MLE.AV_EstimatedSD=sqrt(Results_MLE.AV_EstimatedVariance);
-Results_MLE.AV_EstimatedSD2=(Results_MLE.AUD_SD*Results_MLE.VIS_SD)/(Results_MLE.AUD_SD+Results_MLE.VIS_SD);
+
 
