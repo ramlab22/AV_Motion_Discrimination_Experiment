@@ -67,7 +67,7 @@ function [fig, BF_AUD_VIS, BF_AUD_AV, BF_VIS_AV, AUD_mu, VIS_mu, AV_mu, AUD_std_
     hold on
     scatter(VIS_xData, VIS_yData, all_sizes_VIS, 'blue', 'filled');
     scatter(AV_xData, AV_yData, all_sizes_AV, 'black', 'filled');
-    plot(x, AUD_p, 'red', x, VIS_p, 'blue', x, AV_p, 'black');
+    plot(x, AUD_p, 'red', x, VIS_p, 'blue', x, AV_p, 'black','LineWidth',3);
 
     % Label axes
     title(sprintf('AUD,VIS,AV Psych. Func. L&R\n%s', save_name), 'Interpreter', 'none');
@@ -79,6 +79,8 @@ function [fig, BF_AUD_VIS, BF_AUD_AV, BF_VIS_AV, AUD_mu, VIS_mu, AV_mu, AUD_std_
     axis equal
     grid on
     legend('AUD', 'VIS', 'AV', 'AUD - NormCDF', 'VIS - NormCDF', 'AV - NormCDF', 'Location', 'NorthWest', 'Interpreter', 'none');
+    ax = gca; 
+    ax.FontSize = 16;
 
     BF_AUD_VIS=0;
     BF_AUD_AV=0;

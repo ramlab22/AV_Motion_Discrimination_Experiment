@@ -1,7 +1,7 @@
 
 Path = '/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Ba_av_velocity93_0dBSNR/' ;% wherever you want to search
-[dataout,column_titles,totalfiles_names] = combine_data_acrossblocks(Path)
-save_name='x';
+[dataout,column_titles,totalfiles_names] = combine_data_acrossblocks(Path);
+save_name='Ba_av_velocity93_0dBSNR';
 
 %% End of Block
 [AUD_dataout, VIS_dataout, AV_dataout] = modality_splitter(dataout);
@@ -74,8 +74,6 @@ disp(display_av_mu)
 display_av_std = sprintf('AV std of cumulative gaussian: %.2f',AV_std_cumulative_gaussian);
 disp(display_av_std)
 
-Eye_Tracker_Plotter(eye_data_matrix);
-
 
 AUD_prob_right_only = coherence_probability_1_direction(AUD_Right_dataout, audInfo,'Right','AUD');
 AUD_prob_left_only = coherence_probability_1_direction(AUD_Left_dataout, audInfo,'Left','AUD');
@@ -98,7 +96,7 @@ VIS_prob_left_only = coherence_probability_1_direction(VIS_Left_dataout, dotInfo
     'LEFT ONLY', audInfo, dotInfo, AVInfo, save_name);
 
 %%Make Coh vs Trial graph to track progress
-coh_vs_trial_fig = plot_coh_vs_trial_modalities(AUD_dataout, VIS_dataout, save_name);
+coh_vs_trial_fig = plot_coh_vs_trial_modalities(AUD_dataout, VIS_dataout, AV_dataout,save_name);
 
 %Save all figures to Figure Directory
 saveas(fig_3_AUD_VIS_AV, [figure_file_directory save_name '_Psyc_Func_LR_MMAV.png']);

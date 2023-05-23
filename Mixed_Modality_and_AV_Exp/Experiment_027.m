@@ -751,7 +751,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                                                              'LEFT ONLY', audInfo, dotInfo, AVInfo, save_name);
     
     %%Make Coh vs Trial graph to track progress
-    coh_vs_trial_fig = plot_coh_vs_trial_modalities(AUD_dataout, VIS_dataout, save_name);
+    coh_vs_trial_fig = plot_coh_vs_trial_modalities(AUD_dataout, VIS_dataout, AV_dataout, save_name);
     
     %Save all figures to Figure Directory
     saveas(fig_3_AUD_VIS_AV, [figure_file_directory save_name '_Psyc_Func_LR_MMAV.png']);
