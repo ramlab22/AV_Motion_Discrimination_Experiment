@@ -1,4 +1,4 @@
-function [fig, BF_AUD_VIS, BF_AUD_AV, BF_VIS_AV, AUD_threshold, VIS_threshold, AV_threshold, AUD_std, VIS_std, AV_std,Results_MLE] = createFit_NormCDF_modalities(AUD_coh_list, AUD_pc, VIS_coh_list, VIS_pc, AV_coh_list, AV_pc, audInfo, dotInfo, AVInfo, save_name)
+function [fig, BF_AUD_VIS, BF_AUD_AV, BF_VIS_AV, AUD_mu, VIS_mu, AV_mu, AUD_std_cumulative_gaussian, VIS_std_cumulative_gaussian, AV_std_cumulative_gaussian,Results_MLE] = createFit_NormCDF_modalities(AUD_coh_list, AUD_pc, VIS_coh_list, VIS_pc, AV_coh_list, AV_pc, audInfo, dotInfo, AVInfo, save_name)
     % Fit: 'untitled fit 1'.
     [AUD_xData, AUD_yData] = prepareCurveData(AUD_coh_list, AUD_pc);
     [VIS_xData, VIS_yData] = prepareCurveData(VIS_coh_list, VIS_pc);
@@ -53,13 +53,13 @@ function [fig, BF_AUD_VIS, BF_AUD_AV, BF_VIS_AV, AUD_threshold, VIS_threshold, A
     VIS_p = cdf('Normal', x, VIS_mdl.Coefficients{1, 1}, VIS_mdl.Coefficients{2, 1});
     AV_p = cdf('Normal', x, AV_mdl.Coefficients{1, 1}, AV_mdl.Coefficients{2, 1});
 
-    AUD_threshold = AUD_mdl.Coefficients{1, 1};
-    VIS_threshold = VIS_mdl.Coefficients{1, 1};
-    AV_threshold = AV_mdl.Coefficients{1, 1};
+    AUD_mu = AUD_mdl.Coefficients{1, 1};
+    VIS_mu = VIS_mdl.Coefficients{1, 1};
+    AV_mu = AV_mdl.Coefficients{1, 1};
 
-    AUD_std = AUD_mdl.Coefficients{1, 2};
-    VIS_std = VIS_mdl.Coefficients{1, 2};
-    AV_std = AV_mdl.Coefficients{1, 2};
+    AUD_std_cumulative_gaussian = AUD_mdl.Coefficients{1, 2};
+    VIS_std_cumulative_gaussian = VIS_mdl.Coefficients{1, 2};
+    AV_std_cumulative_gaussian = AV_mdl.Coefficients{1, 2};
 
     % Plot fit with data.
     fig = figure('Name', 'Psychometric Function');
