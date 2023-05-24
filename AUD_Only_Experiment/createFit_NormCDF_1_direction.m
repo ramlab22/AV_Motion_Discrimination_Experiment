@@ -16,29 +16,32 @@ function [fig] = createFit_NormCDF_1_direction(coh_list, pc, direction, audInfo,
 
 %% Fit: 'untitled fit 1'.
 [xData, yData] = prepareCurveData( coh_list, pc );
+mu = mean(yData);
+sigma =std(yData);
+parms = [mu, sigma];
 
 %Size of scatter point absed on frequency
 if strcmp(direction, "RIGHT ONLY")
     sizes = nonzeros(audInfo.cohFreq_right(2,:)');
+    fun_1 = @(b,x) (normcdf(x, b(1), b(2)));  % Objective Function (gaussian/normal)
+    normalcdf_fun = @(b, x) 0.5 * (1 + erf((x - b(1)) ./ (b(2) * sqrt(2))));
+
 elseif strcmp(direction, "LEFT ONLY")
     sizes = nonzeros(audInfo.cohFreq_left(2,:)');
+    fun_1 = @(b,x) 1-(normcdf(x, b(1), b(2)));  % Objective Function (gaussian/normal INVERTED)
+    normalcdf_fun = @(b, x) 0.5 * (1 - erf((x - b(1)) ./ (b(2) * sqrt(2))));
+
 end
 
 if length(xData) ~= length(sizes)
     sizes = sizes(1:length(xData));
 end
 
-mu = mean(yData);
-sigma =std(yData);
-parms = [mu, sigma];
-
-fun_1 = @(b, x)cdf('Normal', x, b(1), b(2));
 fun = @(b)sum((fun_1(b,xData) - yData).^2); 
 opts = optimset('MaxFunEvals',50000, 'MaxIter',10000); 
 fit_par = fminsearch(fun, parms, opts);
 
 %New mdl to account for weights of PCs 
-normalcdf_fun = @(b, x) 0.5 * (1 + erf((x - b(1)) ./ (b(2) * sqrt(2))));
 mdl = fitnlm(xData, yData, normalcdf_fun, parms, 'Weights', sizes);
 
 x = 0:.01:1;
@@ -47,9 +50,13 @@ p = cdf('Normal', x, mdl.Coefficients{1,1}, mdl.Coefficients{2,1});
 
 % Plot fit with data.
 fig = figure( 'Name', sprintf('Psychometric Function %s',direction) );
-scatter(xData, yData, sizes)
+scatter(xData, yData, sizes, "red",'LineWidth',2)
 hold on 
-plot(x, p);
+if strcmp(direction, "RIGHT ONLY")
+    plot(x, p,"red",'LineWidth',2.5);
+elseif strcmp(direction, "LEFT ONLY")
+    plot(x,1-p,"red",'LineWidth',2.5);
+end
 legend('% Rightward Resp. vs. Coherence', 'NormCDF', 'Location', 'NorthEast', 'Interpreter', 'none' );
 % Label axes
 title(sprintf('Auditory Psych. Func. %s\n%s',direction, save_name),'Interpreter','none');

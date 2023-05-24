@@ -1,4 +1,4 @@
-function [fig, p_values,ci,threshold,std_gaussian] = createFit_NormCDF(coh_list, pc, audInfo,chosen_threshold, save_name)
+function [fig, p_values,ci,mu,std_gaussian] = createFit_NormCDF(coh_list, pc, audInfo,chosen_threshold, save_name)
 %CREATEFIT(COH_LIST,PC_AUD)
 %  Create a fit.
 %
@@ -38,7 +38,7 @@ fit_par = fminsearch(fun, parms, opts);
 normalcdf_fun = @(b, x) 0.5 * (1 + erf((x - b(1)) ./ (b(2) * sqrt(2))));
 mdl = fitnlm(xData, yData, normalcdf_fun, parms, 'Weights', all_sizes);
 
-x = -1:.01:1;
+x = min(xData(:)):.01:max(xData(:));
 
 % Significance of fits 
 [p_values, bootstat,ci] = p_value_calc(yData, parms);
@@ -57,7 +57,7 @@ x = -1:.01:1;
 
 p = cdf('Normal', x, mdl.Coefficients{1,1}, mdl.Coefficients{2,1});
 %get threshold
-threshold= mdl.Coefficients{1,1};
+mu= mdl.Coefficients{1,1};
 %get std of cumulative gaussian (reflects the inherent variability of the psychophysical data)
 std_gaussian= mdl.Coefficients{1,2};
 
@@ -65,17 +65,19 @@ std_gaussian= mdl.Coefficients{1,2};
 
 % Plot fit with data.
 fig = figure( 'Name', 'Psychometric Function' );
-scatter(xData, yData, all_sizes)
+scatter(xData, yData, all_sizes,'red','LineWidth',2)
 hold on 
-plot(x, p);
-legend('% Rightward Resp. vs. Coherence', 'NormCDF', 'Location', 'NorthEast', 'Interpreter', 'none' );
+plot(x, p,'red','LineWidth',2.5);
+legend('% Rightward Resp. vs. Coherence', 'NormCDF', 'Location', 'Best', 'Interpreter', 'none' );
 % Label axes
 title(sprintf('Auditory Psych. Func. L&R\n%s',save_name), 'Interpreter','none');
 xlabel( 'Coherence ((+)Rightward, (-)Leftward)', 'Interpreter', 'none' );
 ylabel( '% Rightward Response', 'Interpreter', 'none' );
-xlim([-1 1])
+xlim([-max(xData(:)) max(xData(:))])
 ylim([0 1])
 grid on
-text(0,.2,"p value for CDF coeffs. (mean): " + p_values(1))
-text(0,.1, "p value for CDF coeffs. (std): " + p_values(2))
+ax = gca; 
+ax.FontSize = 16;
+%text(0,.2,"p value for CDF coeffs. (mean): " + p_values(1))
+%text(0,.1, "p value for CDF coeffs. (std): " + p_values(2))
 end

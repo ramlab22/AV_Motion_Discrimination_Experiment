@@ -1,7 +1,7 @@
 
-Path = '/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Ba_av_velocity93_0dBSNR/' ;% wherever you want to search
+Path = '/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Ba_av_velocity50/' ;% wherever you want to search
 [dataout,column_titles,totalfiles_names] = combine_data_acrossblocks(Path);
-save_name='Ba_av_velocity93_0dBSNR';
+save_name='Ba_av_velocity50';
 
 %% End of Block
 [AUD_dataout, VIS_dataout, AV_dataout] = modality_splitter(dataout);
@@ -22,7 +22,7 @@ num_catch_trials=0;
 total_trials=size(dataout,1)-1;
 num_regular_trials=total_trials;
 
-[Fixation_Success_Rate, Stim_Success_Rate, Target_Success_Rate_Regular, Target_Success_Rate_Catch] = SR_CALC(dataout,total_trials,num_regular_trials,num_catch_trials)
+%[Fixation_Success_Rate, Stim_Success_Rate, Target_Success_Rate_Regular, Target_Success_Rate_Catch] = SR_CALC(dataout,total_trials,num_regular_trials,num_catch_trials)
 
 %Break down of each success rate based on coherence level
 %Count how many rew and N/A per coherence
@@ -95,28 +95,14 @@ VIS_prob_left_only = coherence_probability_1_direction(VIS_Left_dataout, dotInfo
     AV_prob_Left, ...
     'LEFT ONLY', audInfo, dotInfo, AVInfo, save_name);
 
-%%Make Coh vs Trial graph to track progress
-coh_vs_trial_fig = plot_coh_vs_trial_modalities(AUD_dataout, VIS_dataout, AV_dataout,save_name);
 
+figure_file_directory=Path;
 %Save all figures to Figure Directory
 saveas(fig_3_AUD_VIS_AV, [figure_file_directory save_name '_Psyc_Func_LR_MMAV.png']);
 saveas(R_fig_AV, [figure_file_directory save_name '_Psyc_Func_R_MMAV.png']);
 saveas(L_fig_AV, [figure_file_directory save_name '_Psyc_Func_L_MMAV.png']);
-saveas(coh_vs_trial_fig, [figure_file_directory save_name '_Coh_vs_Trial_MMAV.png']);
 
 
 
 
-
-%%
-[n_trials_with_response,n_trials_with_reward,proportion_response_reversals_after_correct_response,proportion_response_reversals_after_incorrect_response] = response_reversal_proportions_mixedmodality(dataout)
-% Save all block info and add to a .mat file for later analysis
-% save([data_file_directory save_name],'dataout','Fixation_Success_Rate','Stim_Success_Rate',...
-%     'Target_Success_Rate_Regular','Target_Success_Rate_Catch','ExpInfo','audInfo','dotInfo',...
-%     'AVInfo','Total_Block_Time','eye_data_matrix', 'AUD_p_values', 'VIS_p_values',...
-%     'n_trials_with_response','n_trials_with_reward','proportion_response_reversals_after_correct_response',...
-%     'proportion_response_reversals_after_incorrect_response','AUD_threshold','VIS_threshold', 'prob_AUD', 'prob_VIS', 'prob_AV');
-
-save([data_file_directory save_name]);
-disp('Experiment Data Exported to Behavioral Data Folder')
 

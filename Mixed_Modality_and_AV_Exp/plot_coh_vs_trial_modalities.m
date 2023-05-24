@@ -29,6 +29,9 @@ function fig = plot_coh_vs_trial_modalities(AUD_dataout, VIS_dataout, AV_dataout
     xlabel('Trial Number');
     ylabel('Coherence Level');
     title(sprintf('AV Coherence Level vs. Trial Number\n%s', save_name), 'Interpreter', 'none')
+    
 
+    ax = gca; 
+    ax.FontSize = 16;
     
 end

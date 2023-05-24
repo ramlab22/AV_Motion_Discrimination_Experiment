@@ -10,7 +10,7 @@ function [cohFreq_dir] = cohFreq_finder(dataout, audInfo)
         end
     end
 
-    if length(filteredArray(:,1)) > 1 && length(unique(cell2mat(filteredArray(1:end,8)))) > 1
+    if length(filteredArray(:,1)) > 1 & length(unique(cell2mat(filteredArray(1:end,8)))) > 1
         if  strcmp(filteredArray(1,1), 'Trial #')
             [cnt, uniq] = hist(cell2mat(filteredArray(2:end,8)), unique(cell2mat(filteredArray(2:end,8))));
         else
