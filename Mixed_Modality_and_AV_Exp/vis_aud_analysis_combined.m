@@ -1,7 +1,6 @@
-
-Path = '/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/alv_av_velocity93_6dBSNR/' ;% wherever you want to search
+Path = '/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/alv_aud_vis_velocity93/' ;% wherever you want to search
 [dataout,column_titles,totalfiles_names] = combine_data_acrossblocks(Path);
-save_name='alv_av_velocity93_6dBSNR';
+save_name='alv_aud_vis_velocity93';
 
 %% End of Block
 [AUD_dataout, VIS_dataout, AV_dataout] = modality_splitter(dataout);
@@ -33,7 +32,7 @@ prob_AV = coherence_probability_AV(AV_dataout, AVInfo)
 
 [AUD_Right_dataout, AUD_Left_dataout] = direction_splitter(AUD_dataout, 'AUD');
 [VIS_Right_dataout, VIS_Left_dataout] = direction_splitter(VIS_dataout, 'VIS');
-[AV_Right_dataout, AV_Left_dataout] = direction_splitter(AV_dataout, 'AV');
+%[AV_Right_dataout, AV_Left_dataout] = direction_splitter(AV_dataout, 'AV');
 
 [audInfo.cohFreq_right] = cohFreq_finder(AUD_Right_dataout, audInfo);
 [dotInfo.cohFreq_right] = cohFreq_finder(VIS_Right_dataout, dotInfo);
@@ -41,8 +40,8 @@ prob_AV = coherence_probability_AV(AV_dataout, AVInfo)
 [dotInfo.cohFreq_left] = cohFreq_finder(VIS_Left_dataout, dotInfo);
 %Since its congruent AV, aud and vis should be same number of freq, just at
 %different coherences for A and V lists
-[AVInfo.cohFreq_right_aud, AVInfo.cohFreq_right_vis] = cohFreq_finder_AV(AV_Right_dataout, AVInfo);
-[AVInfo.cohFreq_left_aud, AVInfo.cohFreq_left_vis] = cohFreq_finder_AV(AV_Left_dataout, AVInfo);
+%[AVInfo.cohFreq_right_aud, AVInfo.cohFreq_right_vis] = cohFreq_finder_AV(AV_Right_dataout, AVInfo);
+%[AVInfo.cohFreq_left_aud, AVInfo.cohFreq_left_vis] = cohFreq_finder_AV(AV_Left_dataout, AVInfo);
 
 AUD_prob_Right = directional_probability(AUD_Right_dataout, audInfo, 'Right', 'AUD');
 AUD_prob_Left = directional_probability(AUD_Left_dataout, audInfo, 'Left','AUD');
