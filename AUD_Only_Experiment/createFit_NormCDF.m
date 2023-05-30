@@ -15,7 +15,7 @@ function [fig, p_values,ci,mu,std_gaussian] = createFit_NormCDF(coh_list, pc, au
 %% Fit: 'untitled fit 1'.
 [xData, yData] = prepareCurveData( coh_list, pc );
 
-%Plot different sizes based on amount of frequency of each coh
+%get frequency of trials corresponding to each coherence 
 sizes_L = flip(audInfo.cohFreq_left(2,:)');%Slpit to left and Right 
 sizes_R = audInfo.cohFreq_right(2,:)';
 all_sizes = nonzeros(vertcat(sizes_L, sizes_R));
