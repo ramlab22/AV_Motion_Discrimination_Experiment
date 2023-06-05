@@ -49,10 +49,8 @@ end
 if length(VIS_xData) ~= length(all_sizes_VIS)
     all_sizes_VIS = all_sizes_VIS(1:length(VIS_xData));
 end
-AUD_threshold_location=find(AUD_p >= chosen_threshold, 1);
-AUD_threshold=x(1,AUD_threshold_location);
-VIS_threshold_location=find(VIS_p >= chosen_threshold, 1);
-VIS_threshold=x(1,VIS_threshold_location);
+AUD_threshold=AUD_p;
+VIS_threshold=VIS_p;
 % Plot fit with data.
 fig = figure( 'Name', 'Psychometric Function' );
 scatter(AUD_xData, AUD_yData, all_sizes_AUD, 'red', 'filled')
