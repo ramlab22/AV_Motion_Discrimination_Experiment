@@ -114,9 +114,9 @@ AUD_threshold= AUD_mdl.Coefficients{1,1};
 VIS_threshold= VIS_mdl.Coefficients{1,1};
 AV_threshold= AV_vis_mdl.Coefficients{1,1};
 
-AUD_std= AUD_mdl.Coefficients{1,2};
-VIS_std= VIS_mdl.Coefficients{1,2};
-AV_std= AV_vis_mdl.Coefficients{1,2};
+AUD_std= AUD_mdl.Coefficients{2,1};
+VIS_std= VIS_mdl.Coefficients{2,1};
+AV_std= AV_vis_mdl.Coefficients{2,1};
 
 % Plot fit with data.
 fig = figure( 'Name', 'Psychometric Function' );
