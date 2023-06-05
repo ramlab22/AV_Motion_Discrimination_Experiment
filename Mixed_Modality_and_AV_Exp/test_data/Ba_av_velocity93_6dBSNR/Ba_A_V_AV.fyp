@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="us-ascii" standalone="yes"?>
+<?fyp appVersion="5.0.2" schemaVersion="22"?>
+<figure strokeWidth="0.01in" strokeJoin="miter" loc="0.5in 0.5in" strokePat="solid" psFont="Helvetica" fontStyle="plain" title="Psychometric Function" fillColor="000000" altFont="serif" strokeCap="butt" width="6.5in" fontSize="12" strokeColor="000000" font="Arial" height="9in"
+     xmlns="http://www.keck.ucsf.edu/datanav/namespace/schema22">
+   <graph strokeWidth="0.5pt" loc="0.975in 1.35in" autorange="z" width="4.55in" fontSize="16" title="AUD,VIS,AV Psych. Func. L&amp;RBa_av_velocity93_6dBSNR" height="6.3in">
+      <axis lineHt="0.8" start="-1" spacer="0.1in" end="1" title="Coherence ((+)Rightward, (-)Leftward)">
+         <ticks intv="0.2" perLogIntv="1" start="-1" end="1" dir="in" fmt="f1"></ticks>
+      </axis>
+      <axis lineHt="0.8" start="0" spacer="0.1in" end="1" title="Proportion Rightward Response">
+         <ticks intv="0.1" perLogIntv="1" start="0" end="1" dir="in" fmt="f2"></ticks>
+      </axis>
+      <zaxis cmapnan="ffffff" lineHt="0.8" gap="0.2in" cmap="tropic" start="0.1" spacer="0.1in" end="1.1" title="Z AXIS">
+         <ticks intv="0.2" perLogIntv="1" fmt="f3"></ticks>
+      </zaxis>
+      <gridline hide="false" strokeColor="262626" />
+      <gridline hide="false" strokeColor="262626" />
+      <legend loc="0in 0in" size="0.1in" mid="true" />
+      <scatter fillColor="none" strokeWidth="2pt" mode="sizeBubble" size="10.344pt" src="#src_AUD" strokeColor="ff0000" title="AUD" />
+      <scatter fillColor="none" strokeWidth="2pt" mode="sizeBubble" size="9.327pt" src="#src_VIS" strokeColor="0000ff" title="VIS" />
+      <scatter fillColor="none" strokeWidth="2pt" mode="sizeBubble" size="10pt" src="#src_AV" title="AV" />
+      <trace strokeWidth="2.5pt" src="#src_86" strokeColor="ff0000" title="AUD - NormCDF">
+         <symbol fillColor="none" size="0pt" type="circle" />
+         <ebar hide="true" />
+      </trace>
+      <trace strokeWidth="2.5pt" src="#src_76" strokeColor="0000ff" title="VIS - NormCDF">
+         <symbol fillColor="none" size="0pt" type="circle" />
+         <ebar hide="true" />
+      </trace>
+      <trace strokeWidth="2.5pt" src="#src_13" title="AV - NormCDF">
+         <symbol fillColor="none" size="0pt" type="circle" />
+         <ebar hide="true" />
+      </trace>
+      <label loc="74% 106.5%" fontSize="18" fontStyle="bold" align="center" title="AUD,VIS,AV Psych. Func. L&amp;RBa_av_velocity93_6dBSNR" font="Helvetica" />
+   </graph>
+   <ref>
+      <set id="src_13" fmt="ptset">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</set>
+      <set id="src_76" fmt="ptset">AAAABnNyY183NgAAAAAAAAACAAAAyb+AAAA6uYlNv31wpDrMOq2/euFIOuCfxr94Uew69ttTv3XC
+jzsHiSm/czMzOxS2E79wo9c7IwlVv24UezsymSi/a4UfO0N9Hb9o9cM7Vc4qv2ZmZjtpprm/Y9cK
+O38isr9hR647iy/Dv164UjuXviK/XCj2O6VMy79ZmZo7s+ztv1cKPTvDsJK/VHrhO9Sqpb9R64U7
+5u71v09cKTv6kjy/TMzNPAfVEL9KPXE8EyaZv0euFDwfSXy/RR64PCxJ9b9Cj1w8OjS5v0AAADxJ
+FvS/PXCkPFj+Tr864Ug8afjjvzhR7Dx8FUe/NcKPPIexQL8zMzM8kfgEvzCj1zyc5uC/LhR7PKiF
+/b8rhR88tN21vyj1wzzB9pK/JmZmPM/ZS78j1wo83o7BvyFHrjzuH/q/HrhSPP6WIr8cKPY9B/0/
+vxmZmj0RKzi/Fwo9PRrZt78UeuE9JQ19vxHrhT0vy1K/D1wpPTsX/b8MzM09RvhFvwo9cT1TcOy/
+B64UPWCGq78FHrg9bj4vvwKPXD18nBa/AAAAPYXSdb764Ug9ja6NvvXCjz2V5IC+8KPXPZ52Z77r
+hR89p2ZLvuZmZj2wtiC+4UeuPbpnxb7cKPY9xHz9vtcKPT3O93O+0euFPdnYs77MzM095SIqvseu
+FD3w1SS+wo9cPfzyyb69cKQ+BL4NvrhR7D4LOPm+szMzPhHqgr6uFHs+GNLpvqj1wz4f8lq+o9cK
+PidI6r6euFI+LtaVvpmZmj42mz++lHrhPj6Wr76PXCk+RsiXvoo9cT5PMIu+hR64PlfOA76AAAA+
+YKBfvnXCjz5ppuC+a4UfPnLgrb5hR64+fEzQvlcKPT6C9R2+TMzNPofb3b5Cj1w+jNoGvjhR7D6R
+7uW+LhR7PpcZu74j1wo+nFm8vhmZmj6hrg6+D1wpPqcVzr4FHrg+rJAIvfXCjz6yG8C94UeuPre3
+773MzM0+vWODvbhR7D7DHV69o9cKPsjkXb2PXCk+zrdQvXXCjz7UlQO9TMzNPtp8Or0j1wo+4Gux
+vPXCjz7mYh+8o9cKPuxeOrwj1wo+8l6uAAAAAD74Yio8I9cKPv5nVzyj1wo/AjZwPPXCjz8FOLY9
+I9cKPwg50z1MzM0/CzkdPXXCjz8ONeo9j1wpPxEvkj2j1wo/FCVyPbhR7D8XFuU9zMzNPxoDTD3h
+R64/HOoJPfXCjz8fyoU+BR64PyKkKj4PXCk/JXZnPhmZmj8oQLI+I9cKPysCgj4uFHs/LbtXPjhR
+7D8warU+Qo9cPzMQJz5MzM0/Nas7PlcKPT84O4k+YUeuPzrArz5rhR8/PTpOPnXCjz8/qBI+gAAA
+P0IJrD6FHrg/RF7TPoo9cT9Gp0c+j1wpP0jizj6UeuE/SxE0PpmZmj9NMk0+nrhSP09F9T6j1wo/
+UUwMPqj1wz9TRHs+rhR7P1UvMT6zMzM/VwwjPrhR7D9Y204+vXCkP1qcsj7Cj1w/XFBYPseuFD9d
+9k4+zMzNP1+Opj7R64U/YRl6PtcKPT9iluY+3Cj2P2QHDz7hR64/ZWoZPuZmZj9mwDI+64UfP2gJ
+iD7wo9c/aUZPPvXCjz9qdr4++uFIP2ubDz8AAAA/bLN+PwKPXD9twEw/BR64P27Buz8HrhQ/b7gP
+Pwo9cT9wo48/DMzNP3GEgT8PXCk/clswPxHrhT9zJ+Y/FHrhP3Pq7T8XCj0/dKSTPxmZmj91VSI/
+HCj2P3X86D8euFI/dpwxPyFHrj93M0k/I9cKP3fCfT8mZmY/eEoXPyj1wz94ymM/K4UfP3lDqT8u
+FHs/ebY0PzCj1z96Iko/MzMzP3qIMz81wo8/eugyPzhR7D97Qow/OuFIP3uXhD89cKQ/e+dYP0AA
+AD98Mkg/Qo9cP3x4kj9FHrg/fLpwP0euFD98+Bw/Sj1xP30xzT9MzM0/fWe5P09cKT99mhQ/UeuF
+P33JED9UeuE/ffTdP1cKPT9+Hao/WZmaP35DoT9cKPY/fmbuP164Uj9+h7o/YUeuP36mKz9j1wo/
+fsJmP2ZmZj9+3I4/aPXDP370xT9rhR8/fwsrP24Uez9/H98/cKPXP38y/D9zMzM/f0SeP3XCjz9/
+VN8/eFHsP39j2D964Ug/f3GeP31wpD9/fkg/gAAAP3+J6g==</set>
+      <set id="src_86" fmt="ptset">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</set>
+      <set id="src_AV" fmt="xyzset">AAAABnNyY19BVgAAAAYAAAADAAAAFr+AAAAAAAAAPnrT5780/fQAAAAAPnrT578AAAA9ui6MPria
+r761P309ui6MPxdzn76AAAA+Y445P0L2u741P30+N2cqP2IX1L4AAAA+v0v1P363f722RaI+ngZS
+P21nlr2BBiU+cDKRP21nlr04Uew+paWmP1e1nb0DEm8+3NzdPz3azD0DEm8/CtjzP0ZL+D04Uew/
+IXoYP1YvWj2BBiU/GZmaP0ZL+D22RaI/LIWRP4AAAD4AAAA/LPkVP2OJrD41P30/QAAAP2ZmZj6A
+AAA/UEVsP0zMzT61P30/U9yxPxMPkT8AAAA/gAAAPtk5JD80/fQ/gAAAPmT5Lj+AAAA/gAAAPjFc
+rA==</set>
+      <set id="src_VIS" fmt="xyzset">AAAAB3NyY19WSVMAAAAGAAAAAwAAABa/gAAAPoAAAD5bkZO/NP30PWOOOT7vRPa/AAAAPgAAAD8p
+MGO+tT99PjCNPj9dRwK+gAAAPo445D91fDe+NT99PnuCPz9Z2LW+AAAAPr2hLz99ClW9tkWiPnIJ
+Tz9RBey9gQYlPrin3j9bkZO9OFHsPqqqqz8iX4q9AxJvPuZmZj8x3vU9AxJvPxAAAD8iX4o9OFHs
+PwK5MT9EARU9gQYlPydA2j9w1qA9tkWiPxvTej9loWE+AAAAPyYs6j9RBew+NT99PzUSuz+AAAA+
+gAAAPzWG+z9Z2LU+tT99P1wo9j9NYz4/AAAAP2m9OD8+Jus/NP30P4AAAD7UmLA/gAAAP4AAAD4+
+Jus=</set>
+      <set id="src_AUD" fmt="xyzset">AAAAB3NyY19BVUQAAAAGAAAAAwAAABa/gAAAAAAAAD6C9N6/NP30AAAAAD5dW16/AAAAPg7iPD8p
+qre+tT99PmxOxT862MO+gAAAPlyNyT9PD3i+NT99PrUrUz9QiMC+AAAAPqV+tT958ne9tkWiPp+V
+nD9akou9gQYlPwUeuD78Yr29OFHsPo2d9T8ydrG9AxJvPskkkj8C9N49AxJvPxYRqD8L/5c9OFHs
+Pye5YT8Jyyc9gQYlPxrKaz8n2ik9tkWiPxmZmj9dW14+AAAAPySSST9oKTw+NT99Py37Bz+AAAA+
+gAAAPzToGz9heBo+tT99P0AAAD8+GLM/AAAAP2eeej8mBIY/NP30Pzbbbj6L/5c/gAAAP2AAAD6L
+/5c=</set>
+   </ref>
+</figure>

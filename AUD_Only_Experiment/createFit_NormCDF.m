@@ -59,7 +59,7 @@ p = cdf('Normal', x, mdl.Coefficients{1,1}, mdl.Coefficients{2,1});
 %get threshold
 mu= mdl.Coefficients{1,1};
 %get std of cumulative gaussian (reflects the inherent variability of the psychophysical data)
-std_gaussian= mdl.Coefficients{1,2};
+std_gaussian= mdl.Coefficients{2,1};
 
 
 

@@ -1,8 +1,8 @@
-function [fig, BF_AUD_VIS, BF_AUD_AV, BF_VIS_AV, AUD_mu, VIS_mu, AV_mu, AUD_std_cumulative_gaussian, VIS_std_cumulative_gaussian, AV_std_cumulative_gaussian,Results_MLE] = createFit_NormCDF_modalities(AUD_coh_list, AUD_pc, VIS_coh_list, VIS_pc, AV_coh_list, AV_pc, audInfo, dotInfo, AVInfo, save_name)
+function [fig, BF_AUD_VIS, BF_AUD_AV, BF_VIS_AV, AUD_mu, VIS_mu, AV_mu, AUD_std_cumulative_gaussian, VIS_std_cumulative_gaussian, AV_std_cumulative_gaussian,Results_MLE] = createFit_NormCDF_modalities(AUD_coh_list, AUD_probRresp, VIS_coh_list, VIS_probRresp, AV_coh_list, AV_probRresp, audInfo, dotInfo, AVInfo, save_name)
     % Fit: 'untitled fit 1'.
-    [AUD_xData, AUD_yData] = prepareCurveData(AUD_coh_list, AUD_pc);
-    [VIS_xData, VIS_yData] = prepareCurveData(VIS_coh_list, VIS_pc);
-    [AV_xData, AV_yData] = prepareCurveData(AV_coh_list, AV_pc);
+    [AUD_xData, AUD_yData] = prepareCurveData(AUD_coh_list, AUD_probRresp);
+    [VIS_xData, VIS_yData] = prepareCurveData(VIS_coh_list, VIS_probRresp);
+    [AV_xData, AV_yData] = prepareCurveData(AV_coh_list, AV_probRresp);
 
     % AUD
     AUD_mu = mean(AUD_yData);
@@ -43,9 +43,9 @@ function [fig, BF_AUD_VIS, BF_AUD_AV, BF_VIS_AV, AUD_mu, VIS_mu, AV_mu, AUD_std_
 
     normalcdf_fun = @(b, x) 0.5 * (1 + erf((x - b(1)) ./ (b(2) * sqrt(2))));
 
-    AUD_mdl = fitnlm(AUD_xData, AUD_yData, normalcdf_fun, AUD_fit_par, 'Weights', all_sizes_AUD);
-    VIS_mdl = fitnlm(VIS_xData, VIS_yData, normalcdf_fun, VIS_fit_par, 'Weights', all_sizes_VIS);
-    AV_mdl = fitnlm(AV_xData, AV_yData, normalcdf_fun, AV_fit_par, 'Weights', all_sizes_AV);
+    AUD_mdl = fitnlm(AUD_xData, AUD_yData, normalcdf_fun, AUD_parms, 'Weights', all_sizes_AUD);
+    VIS_mdl = fitnlm(VIS_xData, VIS_yData, normalcdf_fun, VIS_parms, 'Weights', all_sizes_VIS);
+    AV_mdl = fitnlm(AV_xData, AV_yData, normalcdf_fun, AV_parms, 'Weights', all_sizes_AV);
 
     x = min([AUD_xData(:); VIS_xData(:); AV_xData(:)]):0.01:max([AUD_xData(:); VIS_xData(:); AV_xData(:)]);
 
@@ -57,9 +57,9 @@ function [fig, BF_AUD_VIS, BF_AUD_AV, BF_VIS_AV, AUD_mu, VIS_mu, AV_mu, AUD_std_
     VIS_mu = VIS_mdl.Coefficients{1, 1};
     AV_mu = AV_mdl.Coefficients{1, 1};
 
-    AUD_std_cumulative_gaussian = AUD_mdl.Coefficients{1, 2};
-    VIS_std_cumulative_gaussian = VIS_mdl.Coefficients{1, 2};
-    AV_std_cumulative_gaussian = AV_mdl.Coefficients{1, 2};
+    AUD_std_cumulative_gaussian = AUD_mdl.Coefficients{2, 1}
+    VIS_std_cumulative_gaussian = VIS_mdl.Coefficients{2, 1}
+    AV_std_cumulative_gaussian = AV_mdl.Coefficients{2, 1}
 
     % Plot fit with data.
     fig = figure('Name', 'Psychometric Function');

@@ -44,5 +44,6 @@ num_catch_trials =0;
    % saveas(R_fig, [figure_file_directory save_name '_AUD_Psyc_Func_R.png'])
    % saveas(L_fig, [figure_file_directory save_name '_AUD_Psyc_Func_L.png'])
     
-    
+    %save([data_file_directory save_name],'save_name','dataout','Fixation_Success_Rate','RDK_Success_Rate','Target_Success_Rate_Regular','Target_Success_Rate_Catch','ExpInfo','dotInfo','Total_Block_Time','eye_data_matrix', "coeff_p_values",'n_trials_with_response','n_trials_with_reward','proportion_response_reversals_after_correct_response','proportion_response_reversals_after_incorrect_response','threshold','prob');
+
   
