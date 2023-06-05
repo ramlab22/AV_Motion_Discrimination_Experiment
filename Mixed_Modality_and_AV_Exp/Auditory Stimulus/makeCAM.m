@@ -20,7 +20,7 @@ function [CAM] = makeCAM(cLvl, direction, dur, silence, Fs)
 samples = round(dur.*Fs);
 silent = zeros((silence.*Fs),2);
 
-dB_noise_reduction=10;
+dB_noise_reduction=15;
 
 noise_reduction_scalar=10^(-(dB_noise_reduction)/20);
 
