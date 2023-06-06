@@ -1,3 +1,7 @@
+%before running, create a folder with all the auditory only blocks you want
+%to combine, plot, and analyze. this script goes into that folder, combines
+%those files, plots the psychometric function, and gives you mu and the
+%standard deviation of the cumulative gaussian of the function (mu)
 Path = '/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/alv_aud_velocity93_6dBSNR/' ;% wherever you want to search
 [dataout,column_titles,totalfiles_names] = combine_data_acrossblocks(Path);
 save_name='alv_aud_velocity93_6dBSNR';
@@ -26,7 +30,7 @@ num_catch_trials =0;
     prob_Right = directional_probability(Right_dataout, audInfo); 
     prob_Left = directional_probability(Left_dataout, audInfo); 
     chosen_threshold=0.72;
-    [x, y, fig_both, coeff_p_values,CIs_of_LR_fit,mu,std_gaussian] = psychometric_plotter(prob_Right,prob_Left, audInfo, chosen_threshold,save_name);
+    [x, y, fig_both, coeff_p_values,CIs_of_LR_fit,mu,std_gaussian] = psychometric_plotter(prob_Right,prob_Left, audInfo,save_name);
    % Eye_Tracker_Plotter(eye_data_matrix);
     
     %%Make Rightward only graph
