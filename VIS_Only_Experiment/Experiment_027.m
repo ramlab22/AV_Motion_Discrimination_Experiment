@@ -1,21 +1,16 @@
 %% Experiment Script for 027 %%%%%%%%%%%%%%%%%%%%%%%%%%
 % Psychtoolbox RDK Visual Stimulus presentation 
 % written 04/21/22 - Jackson Mayfield 
-clear;
-close all; 
 
-sca;
 %  Version info
 Version = 'Experiment_027_v.2.0' ; % after code changes, change version
 file_directory='C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\VIS_Only_Experiment';
 data_file_directory = 'C:\Jackson\Adriana Stuff\AV_Behavioral_Data\'; 
 figure_file_directory = 'C:\Jackson\Adriana Stuff\AV_Figures\'; 
 
-chosen_threshold=0.72; %what % rightward response you want to set to get threshold
-
-%when running baron on fixation training set to 1
-baron_fixation_training=0;
-if baron_fixation_training==1
+%if you want to reward to monkey for simply fixating on the stimulus set to 1
+reward_fixation_only=0;
+if reward_fixation_only==1
     target_reward='N/A';
 end
 
@@ -293,7 +288,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
             [rdk_timeout, eye_data_matrix] = RDK_Draw(ExpInfo, dotInfo, window, xCenter, yCenter, h_voltage, k_voltage, TDT, start_block_time, eye_data_matrix, trialcounter, fix_point_color);
             if rdk_timeout ~= 1
                rdk_reward = 'Yes'; 
-               if baron_fixation_training==1 || strcmp(catchtrial, 'Yes')
+               if reward_fixation_only==1 || strcmp(catchtrial, 'Yes')
                     TDT.trg(1); %add in if fixation only
                     incorrect_target_fixation='N/A';
                end
@@ -313,7 +308,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         % This Includes a end trial reward for saccade and fixation towards either one of the target
         % points, IN PROGRESS
         targ_timeout = 0;
-        if fix_timeout ~= 1 && rdk_timeout ~= 1 && baron_fixation_training ~= 1 && strcmp(catchtrial, "No")
+        if fix_timeout ~= 1 && rdk_timeout ~= 1 && reward_fixation_only ~= 1 && strcmp(catchtrial, "No")
             %This picks the luminace of the targets based on correct direction response, also outputs correct target string variable, eg 'right'
             [right_target_color,left_target_color,correct_target] = percentage_target_color_selection(dotInfo,trialcounter);
             
@@ -502,8 +497,7 @@ num_catch_trials = n_catchtrials;
     
     prob_Right = directional_probability(Right_dataout, dotInfo); 
     prob_Left = directional_probability(Left_dataout, dotInfo); 
-    chosen_threshold=.72;
-    [x, y, fig_both, coeff_p_values,mu,std_gaussian] = psychometric_plotter(prob_Right,prob_Left, dotInfo, chosen_threshold,save_name);
+    [x, y, fig_both, coeff_p_values,mu,std_gaussian] = psychometric_plotter(prob_Right,prob_Left, dotInfo, 0,save_name);
    % Eye_Tracker_Plotter(eye_data_matrix);
     
     %%Make Rightward only graph

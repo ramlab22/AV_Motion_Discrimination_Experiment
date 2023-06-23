@@ -28,13 +28,14 @@ mu = mean(yData);
 sigma =std(yData);
 parms = [mu, sigma];
 
-% Norm CDF Function Fitting
-fun_1 = @(b, x)cdf('Normal', x, b(1), b(2));
-fun = @(b)sum((fun_1(b,xData) - yData).^2); 
-opts = optimset('MaxFunEvals',50000, 'MaxIter',10000); 
-fit_par = fminsearch(fun, parms, opts);
+%% Norm CDF Function Fitting (for when equal # of trials per coh per
+%% direction)
+% fun_1 = @(b, x)cdf('Normal', x, b(1), b(2));
+% fun = @(b)sum((fun_1(b,xData) - yData).^2); 
+% opts = optimset('MaxFunEvals',50000, 'MaxIter',10000); 
+% fit_par = fminsearch(fun, parms, opts);
 
-%New mdl to account for weights of PCs 
+%non-linear model to add weights to function fit based on # of trials per data point  
 normalcdf_fun = @(b, x) 0.5 * (1 + erf((x - b(1)) ./ (b(2) * sqrt(2))));
 mdl = fitnlm(xData, yData, normalcdf_fun, parms, 'Weights', all_sizes);
 

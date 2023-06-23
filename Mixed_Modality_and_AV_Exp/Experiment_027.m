@@ -26,10 +26,6 @@ addpath('C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\Mixed_Moda
 %In order to change any GUI paramters, go to Experiment_Parameters.mlapp
 %for code on the actual app 
 
-% CHANGE THIS TO GET PARAMETERS FOR RDK
-%   app = Experiment_Parameters; 
-%   while isvalid(app); pause(0.1); end
-%   
 %Gets all of the paramters data from the GUI and puts into a matrix 
 opts = delimitedTextImportOptions;
 opts.EmptyLineRule = 'read';
