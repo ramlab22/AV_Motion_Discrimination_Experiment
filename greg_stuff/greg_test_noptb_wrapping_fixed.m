@@ -1,10 +1,29 @@
-function [rdk_timeout, eye_data_matrix] = RDK_Draw(ExpInfo, dotInfo, curWindow, xCenter, yCenter, h_voltage, k_voltage, TDT, start_block_time, eye_data_matrix, trial, fix_point_color)
-% dotInfo will be a struct with all of the information concerning the RDK stimulus
-%look at CreateClassStructure.m function 
+coherence = 1; %values from 0-1
+%coherence = 0.5; 
+aperture_diameter = 15; %degrees visual angle, given monWidth = 40cm and Viewing Distance from monitor = 53cm
+velocity = 20; %degrees per second
+motion_direction = 45; %0=right, 180=left, 90=up, 270=down
+maxdotsperframe = 50; % by trial and error.  Depends on graphics card
+%maxdotsperframe = 400; 
+%stim_duration = 0.834; %in seconds
+stim_duration = 1; %in seconds  %GCD: shortened to reduce # frames
+n_trials = 5;
+iti = 1.2 ;%in seconds
 
-Screen('Flip', curWindow);
-ifi = Screen('GetFlipInterval', curWindow);
-refresh_rate = 1/ifi; 
+load('variables_for_greg_testing.mat');
+dotInfo.apXYD = [0 90 aperture_diameter*10];
+dotInfo.speed = velocity*10;
+dotInfo.dir = motion_direction;
+dotInfo.maxDotsPerFrame = maxdotsperframe;
+dotInfo.maxDotTime = stim_duration;
+  %(dont ask me why we have 3 separate coherence variables in the structure,i have no idea just havent gotten around to fixing)
+dotInfo.coherences = coherence;
+dotInfo.cohSet = coherence;
+dotInfo.coh = coherence;
+iti_time_frames = round(iti/ifi); 
+
+%ifi = Screen('GetFlipInterval', curWindow);
+%refresh_rate = 1/ifi; 
 
 
     % Seed the random number generator
@@ -41,6 +60,10 @@ for df = 1 : dotInfo.numDotField
     loopi(df) = 1; % loops through the three sets of dots
 end
 
+%figure;
+%plot(ss{1}(:,1),ss{1}(:,2), 'k.');
+%GCD: note, the dots look random here
+
 % Loop length is determined by the field "dotInfo.maxDotTime". If none is given, 
 % loop until "continue_show=0" is set by other means (eg. user response), 
 % otherwise loop until dotInfo.maxDotTime. Always one video frame per loop.
@@ -57,6 +80,8 @@ dontclear = 0; % 0 for clear drawing, 1 for incremental drawing (does not clear 
 
 % The main loop
 frames = 0;
+figure;
+figure('visible', 'off')
 r = round(ExpInfo.fixpoint_size_pix/2); 
 
 
@@ -66,19 +91,19 @@ r = round(ExpInfo.fixpoint_size_pix/2);
 % are replotted according to the speed/direction and coherence. Similarly, the 
 % same is done for the 2nd group, etc.
   %Turn on fixation point Initially
-        Screen('FillOval',curWindow,fix_point_color,[(xCenter-r) (yCenter-r) (xCenter+r) (yCenter+r)]);
+%  Screen('FillOval',curWindow,fix_point_color,[(xCenter-r) (yCenter-r) (xCenter+r) (yCenter+r)]);
 
-        Screen('DrawingFinished',curWindow,dontclear);
+%        Screen('DrawingFinished',curWindow,dontclear);
 
 while continue_show
-            x = TDT.read('x');
-            y = TDT.read('y');
-            [eye_data_matrix] = Send_Eye_Position_Data(TDT, start_block_time, eye_data_matrix, 2, trial); %Collect eye position data with timestamp
+            x = nan(1,1);
+            y = nan(1,1);
+       
             d = sqrt(((x-h_voltage).^2)+((y-k_voltage).^2));
             if d > ExpInfo.rew_radius_volts
                 %Timeout for Failure to fixate on fixation
-                Screen('FillRect', curWindow, [0 0 0]);
-                Screen('Flip', curWindow);
+%                Screen('FillRect', curWindow, [0 0 0]);
+%                Screen('Flip', curWindow);
                 rdk_timeout = 1;
                 break
             else
@@ -97,7 +122,10 @@ while continue_show
         % Moved in the current loop. This is a matrix of random numbers - starting 
         % positions of dots not moving coherently.
         this_s{df} = ss{df}(Lthis{df},:);
-        
+
+        %hold on; plot(this_s{1}(:,1),this_s{1}(:,2), 'r.');
+        %GCD: note, the red dots still look random here
+
         % Update the loop pointer
         loopi(df) = loopi(df)+1;
         
@@ -110,6 +138,11 @@ while continue_show
         % Offset the selected dots
         this_s{df}(L,:) = bsxfun(@plus,this_s{df}(L,:),dxdy{df}(L,:));
     %    this_s{df}(L,:) = this_s{df}(L,:) + dxdy{df}(L,:);
+    
+        %hold on; plot(this_s{1}(:,1),this_s{1}(:,2), 'g.');
+        %GCD: note, the green dots look shifted appropriately relative to
+        %the red ones
+    
         if sum(~L) > 0
             this_s{df}(~L,:) = rand(sum(~L),2);	% get new random locations for the rest
         end
@@ -119,19 +152,37 @@ while continue_show
         % edges opposite from the direction of motion.
         N = sum((this_s{df} > 1 | this_s{df} < 0)')' ~= 0;
         
+        % This code for dot wrapping does not work.  It creates vertical stripes of dots
+        % and also did not work for oblique directions, Greg DeAngelis, 6/23/23 
+%         if sum(N) > 0
+%             xdir = sin(pi*dotInfo.dir(df)/180.0);
+%             ydir = cos(pi*dotInfo.dir(df)/180.0);
+%             % Flip a weighted coin to see which edge to put the replaced dots
+%             if rand < abs(xdir)/(abs(xdir) + abs(ydir))
+%                 this_s{df}(find(N==1),:) = [rand(sum(N),1),(xdir > 0)*ones(sum(N),1)];
+%             else
+%                 this_s{df}(find(N==1),:) = [(ydir < 0)*ones(sum(N),1),rand(sum(N),1)];
+%             end
+%         end
+
+        % NEW code for dot wrapping, Greg DeAngelis, 6/23/23 
         if sum(N) > 0
-            xdir = sin(pi*dotInfo.dir(df)/180.0);
-            ydir = cos(pi*dotInfo.dir(df)/180.0);
-            % Flip a weighted coin to see which edge to put the replaced dots
-            if rand < abs(xdir)/(abs(xdir) + abs(ydir))
-                this_s{df}(find(N==1),:) = [rand(sum(N),1),(xdir > 0)*ones(sum(N),1)];
-            else
-                this_s{df}(find(N==1),:) = [(ydir < 0)*ones(sum(N),1),rand(sum(N),1)];
-            end
-        end
+             dots_outside = this_s{df}(find(N==1),:);
+             dots_outside(dots_outside(:,1) > 1,1) = dots_outside(dots_outside(:,1) > 1,1) - 1; %if horizontal location >1, subtract 1
+             dots_outside(dots_outside(:,1) < 0,1) = dots_outside(dots_outside(:,1) < 0,1) + 1; %if horizontal location <0, add 1
+             dots_outside(dots_outside(:,2) > 1,2) = dots_outside(dots_outside(:,2) > 1,2) - 1; %if vertical location >1, subtract 1
+             dots_outside(dots_outside(:,2) < 0,2) = dots_outside(dots_outside(:,2) < 0,2) + 1; %if vertical location <0, add 1
+             this_s{df}(find(N==1),:) = dots_outside;
+         end
+        
+        %hold on; plot(this_s{1}(:,1),this_s{1}(:,2), 'b.');
+        %GCD: note, still think it looks OK here
         
         % Convert for plot
         this_x{df} = floor(d_ppd(df) * this_s{df});	% pix/ApUnit
+
+        %figure; plot(this_x{1}(:,1),this_x{1}(:,2), 'b.');
+        %GCD: note, don't see a problem here yet
         
         % It assumes that 0 is at the top left, but we want it to be in the 
         % center, so shift the dots up and left, which means adding half of the 
@@ -141,7 +192,7 @@ while continue_show
     
     % After all computations, flip to draws dots from the previous loop. For the
     % first time, this doesn't draw anything.
-    Screen('Flip', curWindow,0,dontclear);
+%    Screen('Flip', curWindow,0,dontclear);
 
   
     
@@ -153,11 +204,11 @@ while continue_show
         dots2Display = dot_show{df};
         dots2Display(:,outCircle) = NaN;
         
-        Screen('DrawDots',curWindow,dots2Display,dotSize,dotInfo.dotColor,center(df,1:2));
+%        Screen('DrawDots',curWindow,dots2Display,dotSize,dotInfo.dotColor,center(df,1:2));
     end
     
-        Screen('FillOval',curWindow,fix_point_color,[(xCenter-r) (yCenter-r) (xCenter+r) (yCenter+r)]);
-        Screen('DrawingFinished',curWindow,dontclear);
+%        Screen('FillOval',curWindow,fix_point_color,[(xCenter-r) (yCenter-r) (xCenter+r) (yCenter+r)]);
+ %       Screen('DrawingFinished',curWindow,dontclear);
  
 
     
@@ -171,17 +222,22 @@ while continue_show
         % Update the dot position array for the next loop
         ss{df}(Lthis{df}, :) = this_s{df};
     end
-    
+
+    %figure;
+    plot(ss{1}(:,1),ss{1}(:,2), 'm.');
+    xlim([0, 1]);
+    M(:,frames) = getframe;
+    %GCD: note, the dots look random here
+
     % Check for the end of loop
     continue_show = continue_show - 1;
-
-
 
 end
 
 % Present the last frame of dots
-Screen('Flip',curWindow,0,dontclear);
+%Screen('Flip',curWindow,0,dontclear);
 
+figure;
+movie(M,3,60);
     
 end_time = GetSecs; 
-end

@@ -73,7 +73,7 @@ r = round(ExpInfo.fixpoint_size_pix/2);
 while continue_show
             x = TDT.read('x');
             y = TDT.read('y');
-            [eye_data_matrix] = Send_Eye_Position_Data(TDT, start_block_time, eye_data_matrix, 2, trial); %Collect eye position data with timestamp
+       
             d = sqrt(((x-h_voltage).^2)+((y-k_voltage).^2));
             if d > ExpInfo.rew_radius_volts
                 %Timeout for Failure to fixate on fixation
