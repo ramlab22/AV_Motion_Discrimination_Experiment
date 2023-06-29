@@ -73,7 +73,7 @@ r = round(ExpInfo.fixpoint_size_pix/2);
 while continue_show
             x = TDT.read('x');
             y = TDT.read('y');
-            [eye_data_matrix] = Send_Eye_Position_Data(TDT, start_block_time, eye_data_matrix, 2, trial); %Collect eye position data with timestamp
+       
             d = sqrt(((x-h_voltage).^2)+((y-k_voltage).^2));
             if d > ExpInfo.rew_radius_volts
                 %Timeout for Failure to fixate on fixation
@@ -119,24 +119,17 @@ while continue_show
         % edges opposite from the direction of motion.
         N = sum((this_s{df} > 1 | this_s{df} < 0)')' ~= 0;
         
-%         if sum(N) > 0
-%             xdir = sin(pi*dotInfo.dir(df)/180.0);
-%             ydir = cos(pi*dotInfo.dir(df)/180.0);
-%             % Flip a weighted coin to see which edge to put the replaced dots
-%             if rand < abs(xdir)/(abs(xdir) + abs(ydir))
-%                 this_s{df}(find(N==1),:) = [rand(sum(N),1),(xdir > 0)*ones(sum(N),1)];
-%             else
-%                 this_s{df}(find(N==1),:) = [(ydir < 0)*ones(sum(N),1),rand(sum(N),1)];
-%             end
-%         end
-          if sum(N) > 0
-             dots_outside = this_s{df}(find(N==1),:);
-             dots_outside(dots_outside(:,1) > 1,1) = dots_outside(dots_outside(:,1) > 1,1) - 1; %if horizontal location >1, subtract 1
-             dots_outside(dots_outside(:,1) < 0,1) = dots_outside(dots_outside(:,1) < 0,1) + 1; %if horizontal location <0, add 1
-             dots_outside(dots_outside(:,2) > 1,2) = dots_outside(dots_outside(:,2) > 1,2) - 1; %if vertical location >1, subtract 1
-             dots_outside(dots_outside(:,2) < 0,2) = dots_outside(dots_outside(:,2) < 0,2) + 1; %if vertical location <0, add 1
-             this_s{df}(find(N==1),:) = dots_outside;
-         end
+        if sum(N) > 0
+            xdir = sin(pi*dotInfo.dir(df)/180.0);
+            ydir = cos(pi*dotInfo.dir(df)/180.0);
+            % Flip a weighted coin to see which edge to put the replaced dots
+            if rand < abs(xdir)/(abs(xdir) + abs(ydir))
+                this_s{df}(find(N==1),:) = [rand(sum(N),1),(xdir > 0)*ones(sum(N),1)];
+            else
+                this_s{df}(find(N==1),:) = [(ydir < 0)*ones(sum(N),1),rand(sum(N),1)];
+            end
+        end
+        
         % Convert for plot
         this_x{df} = floor(d_ppd(df) * this_s{df});	% pix/ApUnit
         

@@ -52,15 +52,18 @@ dotInfo.cohSet = (nonzeros(data(50:60,1)))'./100; %This is the descending list o
 %dotInfo.random_dir_list = randomizer(ExpInfo,dotInfo);
 dotInfo.coherences = dotInfo.cohSet; 
 dotInfo.probs = data(43:46,1)'; %This is the input probablities for the staircase procedure protocol
+%dotInfo.apXYD = [0 90 (ExpInfo.rdk_angle)]; % Location x,y pixels (0,0 is center of screen) and diameter of the aperature, currently in visual degrees - MULTPLIED by 10 because of Shadlen dots code, needed to be an integer
+%dotInfo.apXYD = [0 90 150]; % Location x,y pixels (0,0 is center of screen) and diameter of the aperature, currently in visual degrees - MULTPLIED by 10 because of Shadlen dots code, needed to be an integer
 dotInfo.apXYD = [0 90 (ExpInfo.rdk_angle*10)]; % Location x,y pixels (0,0 is center of screen) and diameter of the aperature, currently in visual degrees - MULTPLIED by 10 because of Shadlen dots code, needed to be an integer
+
 dotInfo.speed = data(20,1); %Degrees per second?
 dotInfo.dotSize = 4; %RDK Field Dots
 dotInfo.numDotField = 1; %Do not change 
 dotInfo.dotColor = [255 255 255]; %Dot field Color
 dotInfo.maxDotTime = ExpInfo.stim_time/1000; %Puts this in seconds from ms 
 dotInfo.Incorrect_Opacity = 1; %OPacity for the incorrect target if there is only 1 direction of motion, this for training purposes - eventually will be the same opacity as correct 
-dotInfo.maxDotsPerFrame = 400; %Maximum number of dots per frame of the RDK aperture drawing, DO NOT CHANGE - Graphics Card Specific
-
+%dotInfo.maxDotsPerFrame = 400; %Maximum number of dots per frame of the RDK aperture drawing, DO NOT CHANGE - Graphics Card Specific
+dotInfo.maxDotsPerFrame = 200; %Maximum number of dots per frame of the RDK aperture drawing, DO NOT CHANGE - Graphics Card Specific
 
     
     
