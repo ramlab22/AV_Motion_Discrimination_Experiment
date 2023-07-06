@@ -1,4 +1,4 @@
-function [adjustment_factor, CAM_1, CAM_2] = Signal_Creator(CAM,velocity)
+function [CAM_1, CAM_2] = Signal_Creator(CAM,velocity)
     %SIGNAL_CREATOR Summary of this function goes here
     
     %Inputs:
@@ -11,6 +11,7 @@ function [adjustment_factor, CAM_1, CAM_2] = Signal_Creator(CAM,velocity)
     
     %% Need to resample because the RX8 has a higher sample rate
     FS_old = 44100; %old FS
+   % FS_old = 24414*2; 
     FS_new = 24414*2; %sampling rate of RZ processor
     
     [p, q] = rat(FS_new/FS_old);
@@ -19,11 +20,11 @@ function [adjustment_factor, CAM_1, CAM_2] = Signal_Creator(CAM,velocity)
     arr2 = resample(CAM(:,2), p, q);
     CAM_1 = arr1; 
     CAM_2 = arr2; 
-    %% New stuff for changing the auditory velocity based on the slope of the CAM signals 
+    %% New stuff for changing the auditory velocity based on the slope of the CAM signals %%not needed, do not use
     
     %Modification of slope
-    standard_velo = 78/2.523 ; %This comes from the 78 degree field for AUD and the set 2.523 seconds for TOTAL stim time
-    adjustment_factor = velocity/standard_velo; %Gives a factor to multpy signal by in order to get desired velocity from GUI 
+   % standard_velo = 78/2.523 ; %This comes from the 78 degree field for AUD and the set 2.523 seconds for TOTAL stim time
+   % adjustment_factor = velocity/standard_velo; %Gives a factor to multpy signal by in order to get desired velocity from GUI 
 
 
     

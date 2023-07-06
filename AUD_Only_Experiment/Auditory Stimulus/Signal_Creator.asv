@@ -19,9 +19,11 @@ function [adjustment_factor, CAM_1, CAM_2] = Signal_Creator(CAM,velocity)
     arr2 = resample(CAM(:,2), p, q);
     CAM_1 = arr1; 
     CAM_2 = arr2; 
-    %% New stuff for changing the auditory velocity based on the slope of the CAM signals 
-    standard_velo = 78/2.523 ; %This comes from the 78 degree field for AUD and the set 2.523 seconds for TOTAL stim time
-    adjustment_factor = 
+    %% New stuff for changing the auditory velocity based on the slope of the CAM signals %%not needed, do not use
+    
+    %Modification of slope
+   % standard_velo = 78/2.523 ; %This comes from the 78 degree field for AUD and the set 2.523 seconds for TOTAL stim time
+   % adjustment_factor = velocity/standard_velo; %Gives a factor to multpy signal by in order to get desired velocity from GUI 
 
 
     

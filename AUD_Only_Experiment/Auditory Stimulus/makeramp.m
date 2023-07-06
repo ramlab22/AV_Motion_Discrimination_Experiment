@@ -1,7 +1,7 @@
-function [CAM_r, rampt] = makeramp(dur,Fs,CAM)
+function [CAM_r] = makeramp(dur,rampt,Fs,CAM)
 
 t = dur;
-rampt = 0.004;
+%rampt = 0.004;
 rampsamples = round(rampt*Fs);
 ramp_t = 1:rampsamples;
 

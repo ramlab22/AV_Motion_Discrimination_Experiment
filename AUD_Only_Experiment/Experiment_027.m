@@ -5,7 +5,7 @@ clear;
 close all; 
 sca;
 sampling_rate = 24414*2; %sampling rate of rx8 processor
-
+dB_noise_reduction=10;
 %  Version info
 Version = 'Experiment_027_v.3.0' ; % after code changes, change version
 file_directory='C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\AUD_Only_Experiment';
@@ -216,9 +216,10 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
             disp(audInfo.coh)
         end
         
-        [audInfo.CAM] = makeCAM(audInfo.coh, audInfo.dir, audInfo.set_dur, 0, 44100);
-        [audInfo.adjustment_factor, CAM_1, CAM_2] = Signal_Creator(audInfo.CAM,audInfo.velocity); %Writes to CAM 1 and 2 for .rcx circuit to read
-        [CAM_1_Cut_Ramped, CAM_2_Cut_Ramped, audInfo.window_duration, audInfo.ramp_dur] = aud_receptive_field_location(CAM_1,CAM_2, audInfo.t_start, audInfo.t_end); 
+        [audInfo.CAM] = makeCAM(audInfo.coh, audInfo.dir, audInfo.set_dur, 0, sampling_rate,dB_noise_reduction);
+       % [ CAM_1, CAM_2] = Signal_Creator(audInfo.CAM,audInfo.velocity); %Writes to CAM 1 and 2 for .rcx circuit to read
+        audInfo.ramp_dur=0.004; %duration of ramping before and after stim in seconds (to prevent clicking)
+       [CAM_1_Cut_Ramped, CAM_2_Cut_Ramped, audInfo.window_duration] = aud_receptive_field_location(audInfo.CAM(:,1),audInfo.CAM(:,2), audInfo.t_start, audInfo.t_end, sampling_rate, audInfo.ramp_dur); 
        
         
         TDT.write('mux_sel',audInfo.mux); %The multiplexer values for each trial, set to all zeros for now to include only LR and RL

@@ -1,5 +1,5 @@
 % function [CAM] = makeCAM(cLvl,speed, direction, dur, Fs)
-function [CAM] = makeCAM(cLvl, direction, dur, silence, Fs)
+function [CAM] = makeCAM(cLvl, direction, dur, silence, Fs,dB_noise_reduction)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CAM =       array of voltages to present to speakers                 %
@@ -20,7 +20,7 @@ function [CAM] = makeCAM(cLvl, direction, dur, silence, Fs)
 samples = round(dur.*Fs);
 silent = zeros((silence.*Fs),2);
 %dB_noise_reduction=6;
-dB_noise_reduction=10;
+%dB_noise_reduction=10;
 %dB_noise_reduction=15;
 
 noise_reduction_scalar=10^(-(dB_noise_reduction)/20);
@@ -67,7 +67,8 @@ else
 end
 
 % Applies an onset and offset ramped "gate"
-CAM = makeramp(dur,Fs,CAM);
+rampt=0.004;
+CAM = makeramp(dur,rampt,Fs,CAM);
 % Scales the signal between -1 and 1
 CAM = normalize(CAM);
 CAM = cat(1, silent, CAM);
