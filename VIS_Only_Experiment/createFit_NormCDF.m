@@ -1,4 +1,4 @@
-function [fig, p_values,threshold,std_gaussian] = createFit_NormCDF(coh_list, pc, dotInfo,chosen_threshold, save_name)
+function [fig, p_values,threshold,std_gaussian] = createFit_NormCDF(coh_list, pc, dotInfo, save_name)
 %CREATEFIT(COH_LIST,PC_AUD)
 %  Create a fit.
 %

@@ -3,15 +3,15 @@
 % written 04/21/22 - Jackson Mayfield 
 clear;
 close all; 
-%Hey
 sca;
+sampling_rate = 24414*2; %sampling rate of rx8 processor
+
 %  Version info
-Version = 'Experiment_027_v.2.0' ; % after code changes, change version
+Version = 'Experiment_027_v.3.0' ; % after code changes, change version
 file_directory='C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\AUD_Only_Experiment';
 data_file_directory = 'C:\Jackson\Adriana Stuff\AV_Behavioral_Data\';
 figure_file_directory = 'C:\Jackson\Adriana Stuff\AV_Figures\'; 
 
-chosen_threshold=0.72; %what % rightward response you want to set to get threshold
 %when running baron on fixation training set to 1
 baron_fixation_training=0;
 if baron_fixation_training==1
@@ -578,7 +578,7 @@ num_catch_trials =n_catchtrials;
     prob_Right = directional_probability(Right_dataout, audInfo); 
     prob_Left = directional_probability(Left_dataout, audInfo); 
     
-    [x, y, fig_both, coeff_p_values,CIs_of_LR_fit,mu,std_gaussian] = psychometric_plotter(prob_Right,prob_Left, audInfo, chosen_threshold,save_name);
+    [x, y, fig_both, coeff_p_values,CIs_of_LR_fit,mu,std_gaussian] = psychometric_plotter(prob_Right,prob_Left, audInfo,save_name);
     Eye_Tracker_Plotter(eye_data_matrix);
     
     %%Make Rightward only graph
