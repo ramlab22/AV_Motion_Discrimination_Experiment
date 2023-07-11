@@ -1,4 +1,4 @@
-function [CAM, speaker2_6_noise, speaker3_7_noise, speaker4_8_noise] = makeCAM_and_NOISE(cLvl, dur, silence, Fs, dB_noise_reduction)
+function [CAM, speaker2_6_noise, speaker3_7_noise, speaker4_8_noise] = makeCAM_and_NOISE(cLvl, direction, dur, silence, Fs, dB_noise_reduction)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CAM =       array of voltages to present to speakers                 %
@@ -50,7 +50,7 @@ diag45_225_n50 = (n100 + diag45_225_n0)./2;
 diag135_315_n50 = (n100 + diag135_315_n0)./2;
 
 % Unused array of all noises together
-Y = [n0 n50 n100];
+%Y = [n0 n50 n100];
 
 % Generate ramp for increasing and decreasing N4 amplitute in speaker
 rampu = (1/samples:1/samples:1)';
@@ -88,10 +88,10 @@ else
 end
 
 % Applies an onset and offset ramped "gate"
-CAM = makeramp(dur,Fs,CAM);
-speaker2_6_noise = makeramp(dur,Fs,speaker2_6_noise);
-speaker3_7_noise = makeramp(dur,Fs,speaker3_7_noise);
-speaker4_8_noise = makeramp(dur,Fs,speaker4_8_noise);
+%CAM = makeramp(dur,Fs,CAM);
+%speaker2_6_noise = makeramp(dur,Fs,speaker2_6_noise);
+%speaker3_7_noise = makeramp(dur,Fs,speaker3_7_noise);
+%speaker4_8_noise = makeramp(dur,Fs,speaker4_8_noise);
 
 % Scales the signal (and noise speakers) between -1 and 1
 CAM = normalize(CAM);

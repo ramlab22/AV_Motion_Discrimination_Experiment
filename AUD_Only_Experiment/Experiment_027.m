@@ -47,7 +47,9 @@ end
 %% Output Settings
 %Creates a directory for storage of block data from experiment 
 % Initilize connection to TDT Hardware
-TDT = TDTRP([file_directory '\Exp_Circuit.rcx'],'RX8'); 
+%TDT = TDTRP([file_directory '\Exp_Circuit.rcx'],'RX8'); 
+TDT = TDTRP([file_directory '\Exp_Circuit_allspeakers.rcx'],'RX8'); 
+
 output_filename = input('Please Input experiment filename as DATE_MONKEY_BLOCK#\nex = 042122_Bravo_2 : ','s');
 if isempty(output_filename)
     return;
@@ -216,27 +218,27 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
             disp(audInfo.coh)
         end
         
-        [audInfo.CAM] = makeCAM(audInfo.coh, audInfo.dir, audInfo.set_dur, 0, sampling_rate,dB_noise_reduction);
-       [audInfo.CAM, speaker2_6_noise, speaker3_7_noise, speaker4_8_noise] = makeCAM_and_NOISE(audInfo.coh, audInfo.set_dur, 0, sampling_rate, noise_reduction_scalar);
+    %    [audInfo.CAM] = makeCAM(audInfo.coh, audInfo.dir, audInfo.set_dur, 0, sampling_rate,dB_noise_reduction);
+       [audInfo.CAM, speaker1_5_noise, speaker4_8_noise, speaker3_7_noise] = makeCAM_and_NOISE(audInfo.coh, audInfo.dir, audInfo.set_dur, 0, sampling_rate, dB_noise_reduction);
         % [ CAM_1, CAM_2] = Signal_Creator(audInfo.CAM,audInfo.velocity); %Writes to CAM 1 and 2 for .rcx circuit to read
        audInfo.ramp_dur=0.004; %duration of ramping before and after stim in seconds (to prevent clicking)
        [CAM_1_Cut_Ramped, CAM_2_Cut_Ramped, audInfo.window_duration] = aud_receptive_field_location(audInfo.CAM(:,1),audInfo.CAM(:,2), audInfo.t_start, audInfo.t_end, sampling_rate, audInfo.ramp_dur); 
-       [NOISE_3_Cut_Ramped, NOISE_3_Cut_Ramped, ~] = aud_receptive_field_location(speaker2_6_noise(:,1),speaker2_6_noise(:,2), audInfo.t_start, audInfo.t_end, sampling_rate, audInfo.ramp_dur); 
-       [NOISE_4_Cut_Ramped, NOISE_5_Cut_Ramped, ~] = aud_receptive_field_location(speaker3_7_noise(:,1),speaker3_7_noise(:,2), audInfo.t_start, audInfo.t_end, sampling_rate, audInfo.ramp_dur); 
-       [NOISE_6_Cut_Ramped, NOISE_7_Cut_Ramped, ~] = aud_receptive_field_location(speaker4_8_noise(:,1),speaker4_8_noise(:,2), audInfo.t_start, audInfo.t_end, sampling_rate, audInfo.ramp_dur); 
+       [NOISE_3_Cut_Ramped, NOISE_4_Cut_Ramped, ~] = aud_receptive_field_location(speaker1_5_noise(:,1),speaker1_5_noise(:,2), audInfo.t_start, audInfo.t_end, sampling_rate, audInfo.ramp_dur); 
+       [NOISE_5_Cut_Ramped, NOISE_6_Cut_Ramped, ~] = aud_receptive_field_location(speaker4_8_noise(:,1),speaker4_8_noise(:,2), audInfo.t_start, audInfo.t_end, sampling_rate, audInfo.ramp_dur); 
+       [NOISE_7_Cut_Ramped, NOISE_8_Cut_Ramped, ~] = aud_receptive_field_location(speaker3_7_noise(:,1),speaker3_7_noise(:,2), audInfo.t_start, audInfo.t_end, sampling_rate, audInfo.ramp_dur); 
        
         
         TDT.write('mux_sel',audInfo.mux); %The multiplexer values for each trial, set to all zeros for now to include only LR and RL
         TDT.write('window',audInfo.window_duration); %duration of the stimulus in ms
         TDT.write('ramp_dur',audInfo.ramp_dur);
-        TDT.write('CAM_1',CAM_1_Cut_Ramped); %Signal 1 
-        TDT.write('CAM_2',CAM_2_Cut_Ramped); %Signal 2
-        TDT.write('NOISE_3',NOISE_3_Cut_Ramped); %noise 3 
-        TDT.write('NOISE_4',NOISE_4_Cut_Ramped); %noise 4 
-        TDT.write('NOISE_5',NOISE_5_Cut_Ramped); %noise 5
-        TDT.write('NOISE_6',NOISE_6_Cut_Ramped); %noise 6
-        TDT.write('NOISE_7',NOISE_7_Cut_Ramped); %noise 7
-        TDT.write('NOISE_8',NOISE_8_Cut_Ramped); %noise 8
+        TDT.write('CAM_1',CAM_1_Cut_Ramped); %Signal 1 left (speaker 2 channel 10 B2)
+        TDT.write('CAM_2',CAM_2_Cut_Ramped); %Signal 2 right (speaker 6 channel 21 C5)
+        TDT.write('NOISE_3',NOISE_3_Cut_Ramped); %noise 3 bottom left (speaker 1 channel 9 B1)
+        TDT.write('NOISE_4',NOISE_4_Cut_Ramped); %noise 4 top right (speaker 5 channel 18 C2)
+        TDT.write('NOISE_5',NOISE_5_Cut_Ramped); %noise 5 top (speaker 4 channel 14 B6)
+        TDT.write('NOISE_6',NOISE_6_Cut_Ramped); %noise 6 bottom (speaker 8 channel 15 B7)
+        TDT.write('NOISE_7',NOISE_7_Cut_Ramped); %noise 7 top left (speaker 3 channel 11 B3)
+        TDT.write('NOISE_8',NOISE_8_Cut_Ramped); %noise 8 bottom right (speaker 7 channel 22 C6)
         
         pos = ExpInfo.random_list(trialcounter);  %Gets random pos # from the list evaluated at specific trial #
         [h,i_trial] = xypos(pos,dot_coord);%Outputs fixation center (h,k) in pixels for Psychtoolbox to draw dot
