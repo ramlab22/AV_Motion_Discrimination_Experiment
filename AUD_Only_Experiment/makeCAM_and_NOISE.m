@@ -96,12 +96,12 @@ end
 % Scales the signal (and noise speakers) between -1 and 1
 CAM = normalize(CAM);
 CAM = cat(1, silent, CAM);
-speaker2_6_noise = normalize(speaker2_6_noise);
-speaker2_6_noise = cat(1, silent, speaker2_6_noise);
-speaker3_7_noise = normalize(speaker3_7_noise);
-speaker3_7_noise = cat(1, silent, speaker3_7_noise);
-speaker4_8_noise = normalize(speaker4_8_noise);
-speaker4_8_noise = cat(1, silent, speaker4_8_noise);
+% speaker2_6_noise = normalize(speaker2_6_noise);
+% speaker2_6_noise = cat(1, silent, speaker2_6_noise);
+% speaker3_7_noise = normalize(speaker3_7_noise);
+% speaker3_7_noise = cat(1, silent, speaker3_7_noise);
+% speaker4_8_noise = normalize(speaker4_8_noise);
+% speaker4_8_noise = cat(1, silent, speaker4_8_noise);
 
  
 
