@@ -1,4 +1,4 @@
-function [CAM_1_Cut_Ramped, CAM_2_Cut_Ramped, window_duration, ramp_dur] = aud_receptive_field_location(CAM_1, CAM_2, t_start, t_end, velocity)
+function [CAM_1_Cut_Ramped, CAM_2_Cut_Ramped, window_duration, ramp_dur] = aud_receptive_field_location(CAM_1, CAM_2, t_start, t_end)
 %AUD_PERECPTIVE_FIELD_LOCATION Summary of this function goes here
 
 %Clips the CAM signals so that they will be presented only at certain times
