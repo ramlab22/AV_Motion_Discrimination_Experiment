@@ -19,9 +19,6 @@ function [CAM] = makeCAM(cLvl, direction, dur, silence, Fs,dB_noise_reduction)
 % even duration (one that doesn't produce a decimal when multiplying by Fs)
 samples = round(dur.*Fs);
 silent = zeros((silence.*Fs),2);
-%dB_noise_reduction=6;
-%dB_noise_reduction=10;
-%dB_noise_reduction=15;
 
 noise_reduction_scalar=10^(-(dB_noise_reduction)/20);
 
@@ -29,7 +26,8 @@ noise_reduction_scalar=10^(-(dB_noise_reduction)/20);
 N1 =(rand(samples,1)-.5)*noise_reduction_scalar;
 N2 = (rand(samples,1)-.5)*noise_reduction_scalar;
 N3 = (rand(samples,1)-.5)*noise_reduction_scalar;
-N4 = rand(samples,1)-.5*noise_reduction_scalar;
+%N4 = rand(samples,1)-.5*noise_reduction_scalar;
+N4 = rand(samples,1)-.5;
 
 % Generate noise signals of 0, 100, and 50% correlation
 n0 = [N1 N2];
