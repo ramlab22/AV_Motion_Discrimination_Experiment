@@ -5,7 +5,7 @@ clear;
 close all; 
 sca;
 sampling_rate = 24414*2; %sampling rate of rx8 processor
-dB_noise_reduction=10;
+dB_noise_reduction=0;
 %  Version info
 Version = 'Experiment_027_v.3.0' ; % after code changes, change version
 file_directory='C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\AUD_Only_Experiment';

@@ -78,13 +78,13 @@ if cLvl <.5
     speaker3_7_noise = updown_n50;
     speaker4_8_noise = diag135_315_n50;
     motion = motion.*cLvl.*2;
-    CAM = speaker1_5_noise + motion;
+    CAM = (speaker1_5_noise/8) + motion;
 else
-    speaker1_5_noise = leftright_n50.*(1-cLvl).*2;
-    speaker2_6_noise = diag45_225_n50.*(1-cLvl).*2;
-    speaker3_7_noise = updown_n50.*(1-cLvl).*2;
-    speaker4_8_noise = diag135_315_n50.*(1-cLvl).*2;
-    CAM = speaker1_5_noise + motion;
+    speaker1_5_noise = (leftright_n50.*(1-cLvl).*2);
+    speaker2_6_noise = (diag45_225_n50.*(1-cLvl).*2);
+    speaker3_7_noise = (updown_n50.*(1-cLvl).*2);
+    speaker4_8_noise = (diag135_315_n50.*(1-cLvl).*2);
+    CAM = (speaker1_5_noise/8) + motion;
 end
 rampt=0.004;
 % Applies an onset and offset ramped "gate"
@@ -96,12 +96,15 @@ speaker4_8_noise = makeramp(dur,rampt,Fs,speaker4_8_noise);
 % Scales the signal (and noise speakers) between -1 and 1
 CAM = normalize(CAM);
 CAM = cat(1, silent, CAM);
-% speaker2_6_noise = normalize(speaker2_6_noise);
-% speaker2_6_noise = cat(1, silent, speaker2_6_noise);
+ %speaker2_6_noise = normalize(speaker2_6_noise);
+ speaker2_6_noise = cat(1, silent, speaker2_6_noise);
+ speaker2_6_noise = speaker2_6_noise/8;
 % speaker3_7_noise = normalize(speaker3_7_noise);
-% speaker3_7_noise = cat(1, silent, speaker3_7_noise);
-% speaker4_8_noise = normalize(speaker4_8_noise);
-% speaker4_8_noise = cat(1, silent, speaker4_8_noise);
+ speaker3_7_noise = cat(1, silent, speaker3_7_noise);
+ speaker3_7_noise = speaker3_7_noise/8;
+ %speaker4_8_noise = normalize(speaker4_8_noise);
+ speaker4_8_noise = cat(1, silent, speaker4_8_noise);
+ speaker4_8_noise = speaker4_8_noise/8;
 
  
 
