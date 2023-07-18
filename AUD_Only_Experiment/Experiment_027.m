@@ -6,6 +6,7 @@ close all;
 sca;
 sampling_rate = 24414*2; %sampling rate of rx8 processor
 dB_noise_reduction=10;
+n_speakers=8;
 %  Version info
 Version = 'Experiment_027_v.3.0' ; % after code changes, change version
 file_directory='C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\AUD_Only_Experiment';
@@ -218,7 +219,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
             disp(audInfo.coh)
         end
         
-       [audInfo.CAM, speaker1_5_noise, speaker4_8_noise, speaker3_7_noise] = makeCAM_and_NOISE(audInfo.coh, audInfo.dir, audInfo.set_dur, 0, sampling_rate, dB_noise_reduction);
+       [audInfo.CAM, speaker1_5_noise, speaker4_8_noise, speaker3_7_noise] = makeCAM_and_NOISE(audInfo.coh, audInfo.dir, audInfo.set_dur, 0, sampling_rate, dB_noise_reduction,n_speakers);
       % [audInfo.CAM] = makeCAM(audInfo.coh, audInfo.dir, audInfo.set_dur, 0, 44100,dB_noise_reduction);
        %[ CAM_1, CAM_2] = Signal_Creator(audInfo.CAM,audInfo.velocity); %Writes to CAM 1 and 2 for .rcx circuit to read
        audInfo.ramp_dur=0.004; %duration of ramping before and after stim in seconds (to prevent clicking)

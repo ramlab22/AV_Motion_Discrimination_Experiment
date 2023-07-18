@@ -1,4 +1,4 @@
-function [CAM, speaker2_6_noise, speaker3_7_noise, speaker4_8_noise] = makeCAM_and_NOISE(cLvl, direction, dur, silence, Fs, dB_noise_reduction)
+function [CAM, speaker2_6_noise, speaker3_7_noise, speaker4_8_noise] = makeCAM_and_NOISE(cLvl, direction, dur, silence, Fs, dB_noise_reduction,n_speakers)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CAM =       array of voltages to present to speakers                 %
@@ -28,13 +28,18 @@ silent = zeros((silence.*Fs),2);
 
 noise_reduction_scalar=10^(-(dB_noise_reduction)/20);
 
+total_speaker_dB = (n_speakers/2)*3;
+speaker_reduction_scalar = 10^(-(total_speaker_dB)/20);
+
+
+
 % Generate the 4 noise signals
-N1 =(rand(samples,1)-.5)*noise_reduction_scalar;
-N2 =(rand(samples,1)-.5)*noise_reduction_scalar;
-N3 =(rand(samples,1)-.5)*noise_reduction_scalar;
+N1 =(rand(samples,1)-.5)*noise_reduction_scalar*speaker_reduction_scalar;
+N2 =(rand(samples,1)-.5)*noise_reduction_scalar*speaker_reduction_scalar;
+N3 =(rand(samples,1)-.5)*noise_reduction_scalar*speaker_reduction_scalar;
 N4 = rand(samples,1)-.5;
-N5 = (rand(samples,1)-.5)*noise_reduction_scalar;
-N6 = (rand(samples,1)-.5)*noise_reduction_scalar;
+N5 = (rand(samples,1)-.5)*noise_reduction_scalar*speaker_reduction_scalar;
+N6 = (rand(samples,1)-.5)*noise_reduction_scalar*speaker_reduction_scalar;
 diag_scalar = sqrt(2)/2;
 
 % Generate noise signals of 0, 100, and 50% correlation
@@ -98,13 +103,18 @@ CAM = normalize(CAM);
 CAM = cat(1, silent, CAM);
  %speaker2_6_noise = normalize(speaker2_6_noise);
  speaker2_6_noise = cat(1, silent, speaker2_6_noise);
- speaker2_6_noise = speaker2_6_noise/8;
+ speaker2_6_noise = speaker2_6_noise;
 % speaker3_7_noise = normalize(speaker3_7_noise);
  speaker3_7_noise = cat(1, silent, speaker3_7_noise);
- speaker3_7_noise = speaker3_7_noise/8;
+ speaker3_7_noise = speaker3_7_noise;
  %speaker4_8_noise = normalize(speaker4_8_noise);
  speaker4_8_noise = cat(1, silent, speaker4_8_noise);
- speaker4_8_noise = speaker4_8_noise/8;
+ speaker4_8_noise = speaker4_8_noise;
+
+ 
+
+
+
 
  
 
