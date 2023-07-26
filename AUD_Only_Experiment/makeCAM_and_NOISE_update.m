@@ -1,5 +1,5 @@
 function [CAM, speaker2_6_noise, speaker3_7_noise, speaker4_8_noise] = makeCAM_and_NOISE_update(cLvl, dur, silence, Fs, noise_reduction_scalar, N1, N2, N3)
-
+%removes correlated noise but doesnt factor in intensity changes
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CAM =       array of voltages to present to speakers                 %
 % cLvl =      coherence level (between 0 and 1)                        %
