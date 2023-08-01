@@ -1,4 +1,4 @@
-function [CAM, speaker2_6_noise, speaker3_7_noise, speaker4_8_noise] = makeCAM_and_NOISE(cLvl, direction, dur, silence, Fs, dB_noise_reduction,n_speakers)
+function [CAM, speaker2_6_noise, speaker3_7_noise, speaker4_8_noise] = makeCAM_and_NOISE_8speaker(cLvl, direction, dur, silence, Fs, dB_noise_reduction,n_speakers)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CAM =       array of voltages to present to speakers                 %
@@ -20,39 +20,33 @@ function [CAM, speaker2_6_noise, speaker3_7_noise, speaker4_8_noise] = makeCAM_a
 %               speakers                                               %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%n_speakers = 8;
+dB_speaker_reduction = 10*log10(n_speakers);
+n_speaker_reduction_scalar = 10^(-(dB_speaker_reduction)/20);
+
+n_noise_reduction_scalar = 10^(-(dB_noise_reduction)/20);
 
 % Calculate duration in samples. Rounding is unnessesary if you have an
 % even duration (one that doesn't produce a decimal when multiplying by Fs)
 samples = round(dur.*Fs);
 silent = zeros((silence.*Fs),2);
 
-noise_reduction_scalar=10^(-(dB_noise_reduction)/20);
-
-total_speaker_dB = (n_speakers/2)*3;
-speaker_reduction_scalar = 10^(-(total_speaker_dB)/20);
-
-
-
 % Generate the 4 noise signals
-N1 =(rand(samples,1)-.5)*noise_reduction_scalar*speaker_reduction_scalar;
-N2 =(rand(samples,1)-.5)*noise_reduction_scalar*speaker_reduction_scalar;
-N3 =(rand(samples,1)-.5)*noise_reduction_scalar*speaker_reduction_scalar;
+N1 = (rand(samples,1)-.5)*n_speaker_reduction_scalar;
+N2 = (rand(samples,1)-.5)*n_speaker_reduction_scalar;
+N3 = (rand(samples,1)-.5)*n_speaker_reduction_scalar;
 N4 = rand(samples,1)-.5;
-N5 = (rand(samples,1)-.5)*noise_reduction_scalar*speaker_reduction_scalar;
-N6 = (rand(samples,1)-.5)*noise_reduction_scalar*speaker_reduction_scalar;
-diag_scalar = sqrt(2)/2;
+N5 = (rand(samples,1)-.5)*n_speaker_reduction_scalar;
+N6 = (rand(samples,1)-.5)*n_speaker_reduction_scalar;
+N7 = (rand(samples,1)-.5)*n_speaker_reduction_scalar;
+N8 = (rand(samples,1)-.5)*n_speaker_reduction_scalar;
+N9 = (rand(samples,1)-.5)*n_speaker_reduction_scalar;
 
 % Generate noise signals of 0, 100, and 50% correlation
 leftright_n0 = [N1 N2];
-updown_n0 = [N5 N6];
-downup_n0 = [N6 N5];
-diag45_225_n0 = ((downup_n0 + leftright_n0)./2)*diag_scalar; 
-diag135_315_n0 = ((updown_n0 + leftright_n0)./2)*diag_scalar;
-n100 = [N3 N3];
-leftright_n50 = (n100 + leftright_n0)./2;
-updown_n50 = (n100 + updown_n0)./2;
-diag45_225_n50 = (n100 + diag45_225_n0)./2;
-diag135_315_n50 = (n100 + diag135_315_n0)./2;
+updown_n0 = [N3 N5];
+diag45_225_n0 = [N6 N7]; 
+diag135_315_n0 = [N8 N9];
 
 % Unused array of all noises together
 %Y = [n0 n50 n100];
@@ -78,45 +72,32 @@ end
 % Titrates the SNR
 % Noise for each speaker
 if cLvl <.5
-    speaker1_5_noise = leftright_n50;
-    speaker2_6_noise = diag45_225_n50;
-    speaker3_7_noise = updown_n50;
-    speaker4_8_noise = diag135_315_n50;
+    speaker2_6_noise = leftright_n0;
+    speaker1_5_noise = diag45_225_n0;
+    speaker4_8_noise = updown_n0;
+    speaker3_7_noise = diag135_315_n0;
     motion = motion.*cLvl.*2;
-    CAM = (speaker1_5_noise) + motion;
+    CAM = speaker2_6_noise + motion;
 else
-    speaker1_5_noise = (leftright_n50.*(1-cLvl).*2);
-    speaker2_6_noise = (diag45_225_n50.*(1-cLvl).*2);
-    speaker3_7_noise = (updown_n50.*(1-cLvl).*2);
-    speaker4_8_noise = (diag135_315_n50.*(1-cLvl).*2);
-    CAM = (speaker1_5_noise) + motion;
+    speaker2_6_noise = leftright_n0.*(1-cLvl).*2;
+    speaker1_5_noise = diag45_225_n0.*(1-cLvl).*2;
+    speaker4_8_noise = updown_n0.*(1-cLvl).*2;
+    speaker3_7_noise = diag135_315_n0.*(1-cLvl).*2;
+    CAM = speaker2_6_noise + motion;
 end
-rampt=0.004;
+
 % Applies an onset and offset ramped "gate"
-CAM = makeramp(dur,rampt,Fs,CAM);
-speaker2_6_noise = makeramp(dur,rampt,Fs,speaker2_6_noise);
-speaker3_7_noise = makeramp(dur,rampt,Fs,speaker3_7_noise);
-speaker4_8_noise = makeramp(dur,rampt,Fs,speaker4_8_noise);
+CAM = makeramp(dur,Fs,CAM);
+speaker2_6_noise = makeramp(dur,Fs,speaker2_6_noise);
+speaker3_7_noise = makeramp(dur,Fs,speaker3_7_noise);
+speaker4_8_noise = makeramp(dur,Fs,speaker4_8_noise);
 
 % Scales the signal (and noise speakers) between -1 and 1
 CAM = normalize(CAM);
 CAM = cat(1, silent, CAM);
- %speaker2_6_noise = normalize(speaker2_6_noise);
- speaker2_6_noise = cat(1, silent, speaker2_6_noise);
- speaker2_6_noise = speaker2_6_noise;
-% speaker3_7_noise = normalize(speaker3_7_noise);
- speaker3_7_noise = cat(1, silent, speaker3_7_noise);
- speaker3_7_noise = speaker3_7_noise;
- %speaker4_8_noise = normalize(speaker4_8_noise);
- speaker4_8_noise = cat(1, silent, speaker4_8_noise);
- speaker4_8_noise = speaker4_8_noise;
-
- 
-
-
-
-
- 
-
-
-
+speaker2_6_noise = normalize(speaker2_6_noise);
+speaker2_6_noise = cat(1, silent, speaker2_6_noise);
+speaker3_7_noise = normalize(speaker3_7_noise);
+speaker3_7_noise = cat(1, silent, speaker3_7_noise);
+speaker4_8_noise = normalize(speaker4_8_noise);
+speaker4_8_noise = cat(1, silent, speaker4_8_noise);
