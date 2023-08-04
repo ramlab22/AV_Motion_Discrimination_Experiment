@@ -3,15 +3,13 @@
 % written 04/21/22 - Jackson Mayfield 
 clear;
 close all; 
-
 sca;
 %  Version info
-Version = 'Experiment_027_v.2.0' ; % after code changes, change version
+Version = 'Experiment_027_v.3.0' ; % after code changes, change version
 file_directory='C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\VIS_Only_Experiment';
 data_file_directory = 'C:\Jackson\Adriana Stuff\AV_Behavioral_Data\'; 
 figure_file_directory = 'C:\Jackson\Adriana Stuff\AV_Figures\'; 
 
-chosen_threshold=0.72; %what % rightward response you want to set to get threshold
 
 %when running baron on fixation training set to 1
 baron_fixation_training=0;
@@ -75,8 +73,6 @@ if ~check_go
 end
 
 
-
-
 %% Psychtoolbox 
 PsychDefaultSetup(2);
 screenNumber = 2;
@@ -128,7 +124,9 @@ target_only_time_frames = round((ExpInfo.target_fixation_time/1000)/ ifi);
 %target_distance_from_fixpoint_pix=350; %+- x distance between fixation point location and target location in pixels
 %target_distance_from_fixpoint_pix=300; %+- x distance between fixation point location and target location in pixels
 target_distance_from_fixpoint_pix=270; %+- x distance between fixation point location and target location in pixels
-target_y_coord_pix = targ_adjust_y(dotInfo.apXYD(:,2)); %Pixel Y coordinate adjustment for the targets with relation to the RDK aperature
+%target_y_coord_pix = targ_adjust_y(dotInfo.apXYD(:,2)); %Pixel Y coordinate adjustment for the targets with relation to the RDK aperature
+target_y_coord_pix = targ_adjust_y(90); %Pixel Y coordinate adjustment for the targets with relation to the RDK aperature
+
 target_y_coord_volts = pixels2volts_Y(target_y_coord_pix);%yCenter+target_y_coord_pix); %Added to yCenter to account for shadlen dots functions using a 0,0 center coordinate
 
 volts_per_pixel=0.0078125; %10 volts/1280 pixels= X volts/1 pixel , This is for the X direction ONLY
@@ -137,6 +135,7 @@ target_distance_from_fixpoint_volts=target_distance_from_fixpoint_pix*volts_per_
 %% Initialize eye display figure
 % [Figdata, hFig, hAxes, hLine] = InitEyeDisplay;
 eye_data_matrix = []; %This is for saving eye position data for entire block
+
 
 %% Initialize Block info
 
@@ -150,6 +149,7 @@ gate_off_time = .1;
 total_blocks = 1; 
 total_trials = ExpInfo.num_trials; 
 dataout = cell(total_trials+1,10);
+rng('default');
  
 %% RDK Initilization Stuff
 
@@ -367,6 +367,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                     end
                     if incorrect_counter2 > target_only_time_frames
                         
+
                         break
                     end
                     

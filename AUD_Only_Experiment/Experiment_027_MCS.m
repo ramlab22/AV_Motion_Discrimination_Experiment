@@ -76,6 +76,17 @@ if ~check_go
 end
 
 
+
+%Make Sure that all values are acceptable, i.e. the wait times aren't longer
+%than the actual presentation of each of the specific stimuli 
+% if ExpInfo.time_wait(1) > (ExpInfo.fixation_time/1000)
+%     disp('Wait time for fixation is Greater than total fixation time, please decrease wait time.')
+%     ExpInfo.time_wait(1) = input('Input New Wait time in Seconds: '); 
+% elseif ExpInfo.time_wait(2) > (ExpInfo.target_fixation_time/1000)
+%     disp('Wait time for target fixation is Greater than total target fixation time, please decrease wait time.')
+%     ExpInfo.time_wait(2) = input('Input New Wait time in Seconds: '); 
+% end
+
 %% Psychtoolbox 
 PsychDefaultSetup(2);
 screenNumber = 2;
@@ -160,7 +171,6 @@ rng('default');
 %% Main Code
 
 pause(2);
-catchtrial_counter=0;
 while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     trialcounter = 1;
      coh_counter = 1;
@@ -176,26 +186,15 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         end_target_waitframes = 0; %variable to end target acquisition wait time once fixation is acquired
          
         %Initilize the auditory coherence and direction for each trial
-        if audInfo.random_incorrect_opacity_list(trialcounter) == 0
-            catchtrial = 'Yes';
-             target_reward = 'N/A';
-             fix_point_color = white;
-             catchtrial_counter=catchtrial_counter+1;
-        elseif audInfo.random_incorrect_opacity_list(trialcounter) == 1
-            catchtrial = 'No';
-            fix_point_color = white;
-        end
+        audInfo.dir = audInfo.random_dir_list(trialcounter); %randomly choose 0 or 1 for dir
+        audInfo.mux = 0; %Set to zero for now, we only need L and R trials 
+        audInfo.coh = audInfo.random_coh_list(trialcounter);% Random Coherence for each trial
 
-        if trialcounter == 1
-            staircase_index = 1; %Initialize index for first trial 
-            audInfo.dir = randi([0,1]); %for first trial, randomly choose 0 or 1 for dir
-            audInfo.mux = 0; %Set to zero for now, we only need L and R trials 
-            audInfo.coh = audInfo.cohSet(staircase_index);% (Value 0.0 - 1.0)
-        elseif trialcounter > 1
-            [audInfo, staircase_index] = staircase_procedure(trial_status, audInfo, staircase_index);
-        end
+        % No catch trials for now
+        catchtrial = 'No';
+        fix_point_color = white;
 
-        
+
         if audInfo.dir == 1 && audInfo.mux == 0
             disp('Left to Right')
             disp(audInfo.coh)
@@ -205,12 +204,12 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         end
         
        % [audInfo.CAM] = makeCAM(audInfo.coh, audInfo.dir, audInfo.set_dur, 0, 44100);
-        [audInfo.CAM] = makeCAM(audInfo.coh, audInfo.dir, audInfo.set_dur, 0, sampling_rate);
+        [audInfo.CAM] = makeCAM(audInfo.coh, audInfo.dir, audInfo.set_dur, 0, 48828);
         
       %  [audInfo.adjustment_factor, CAM_1, CAM_2] = Signal_Creator(audInfo.CAM,audInfo.velocity); %Writes to CAM 1 and 2 for .rcx circuit to read
        CAM_1=audInfo.CAM(:,1);
        CAM_2=audInfo.CAM(:,2);
-      [CAM_1_Cut_Ramped, CAM_2_Cut_Ramped, audInfo.window_duration, audInfo.ramp_dur] = aud_receptive_field_location(CAM_1,CAM_2, audInfo.t_start, audInfo.t_end); 
+        [CAM_1_Cut_Ramped, CAM_2_Cut_Ramped, audInfo.window_duration, audInfo.ramp_dur] = aud_receptive_field_location(CAM_1,CAM_2, audInfo.t_start, audInfo.t_end); 
        
         
         TDT.write('mux_sel',audInfo.mux); %The multiplexer values for each trial, set to all zeros for now to include only LR and RL
@@ -360,7 +359,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                 aud_timeout = 0;
                 aud_correct_counter = 0;
                 aud_reward = 'Yes';
-                if baron_fixation_training==1 || strcmp(catchtrial, 'Yes')
+                if baron_fixation_training==1
                     TDT.trg(1); %add in if fixation only
                     incorrect_target_fixation='N/A';
                     
@@ -375,7 +374,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         % This Includes a end trial reward for saccade and fixation towards either one of the target
         % points, IN PROGRESS
         targ_timeout = 0;
-        if fix_timeout ~= 1 && aud_timeout ~= 1 && baron_fixation_training ~= 1 && strcmp(catchtrial, "No")
+        if fix_timeout ~= 1 && aud_timeout ~= 1 && baron_fixation_training ~= 1
             %This picks the luminace of the targets based on correct direction response, also outputs correct target string variable, eg 'right'
             [right_target_color,left_target_color,correct_target] = percentage_target_color_selection(audInfo,trialcounter);
             
@@ -429,7 +428,12 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                     end
                     if incorrect_counter2 > target_only_time_frames
                         
-
+                       
+%                         for frame_2 = 1:TO_time_frames %added 10/13/22-AMS
+%                             Screen('FillRect', window, black);
+%                             vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
+%                             targ_timeout = 1;
+%                         end
                         break
                     end
                     
@@ -522,7 +526,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                 trial_status = trial_status;
             end
         end
-        
+  
         stim_modality = 'AUD';
         end_trial_time = hat;
         trial_time = end_trial_time-start_trial_time;
@@ -538,14 +542,12 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
 
 if trialcounter < ExpInfo.num_trials
     total_trials = trialcounter;
-    n_catchtrials=catchtrial_counter;
 else
     total_trials = ExpInfo.num_trials;
-    n_catchtrials=audInfo.catchtrials;  
 end
 
-num_regular_trials = total_trials - n_catchtrials;  
-num_catch_trials =n_catchtrials; 
+num_regular_trials = total_trials - audInfo.catchtrials;  
+num_catch_trials = audInfo.catchtrials; 
 
 [Fixation_Success_Rate, AUD_Success_Rate, Target_Success_Rate_Regular, Target_Success_Rate_Catch] = SR_CALC(dataout,total_trials,num_regular_trials,num_catch_trials)
     
@@ -576,18 +578,11 @@ num_catch_trials =n_catchtrials;
     prob_left_only = coherence_probability_1_direction(Left_dataout, audInfo);
     [L_coh, L_pc, L_fig] = psychometric_plotter_1_direction(prob_left_only, 'LEFT ONLY', audInfo, save_name);
 
-    %%Make Coh vs Trial graph to track progress 
-    coh_vs_trial_fig = plot_coh_vs_trial(dataout, save_name);
-    %%Make performance vs Trial graph to track progress 
-    interval_val=20;
-    condition=2; %set condition to auditory
-    accuracy_vs_trial_fig = plot_unisensory_accuracy_vs_trial(dataout, save_name,interval_val,condition);
+
     %Save all figures to Figure Directory
-    saveas(fig_both, [figure_file_directory save_name '_AUD_Psyc_Func_LR.png'])
-    saveas(R_fig, [figure_file_directory save_name '_AUD_Psyc_Func_R.png'])
-    saveas(L_fig, [figure_file_directory save_name '_AUD_Psyc_Func_L.png'])
-    saveas(coh_vs_trial_fig, [figure_file_directory save_name '_AUD_Coh_vs_Trial.png'])
-    saveas(accuracy_vs_trial_fig, [figure_file_directory save_name '_AUD_Acc_vs_Trial.png'])
+    saveas(fig_both, [figure_file_directory save_name '_AUD_MCS_Psyc_Func_LR.png'])
+    saveas(R_fig, [figure_file_directory save_name '_AUD_MCS_Psyc_Func_R.png'])
+    saveas(L_fig, [figure_file_directory save_name '_AUD_MCS_Psyc_Func_L.png'])
     
     
     times = cell2mat(dataout(2:end,7)); %Extract the trial times 

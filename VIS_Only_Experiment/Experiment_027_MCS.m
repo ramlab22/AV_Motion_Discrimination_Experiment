@@ -1,15 +1,16 @@
 %% Experiment Script for 027 %%%%%%%%%%%%%%%%%%%%%%%%%%
-% Psychtoolbox RDK Visual Stimulus presentation 
+% Psychtoolbox RDK Visual Stimulus presentation with method of constant stimuli 
 % written 04/21/22 - Jackson Mayfield 
 clear;
 close all; 
 
 sca;
 %  Version info
-Version = 'Experiment_027_v.2.0' ; % after code changes, change version
-file_directory='C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\Non_Staircase_Exp\VIS_Only_Experiment_NS';
-data_file_directory = 'C:\Jackson\Adriana Stuff\AV_Behavioral_Data\Non_Staircase';
-figure_file_directory = 'C:\Jackson\Adriana Stuff\AV_Figures\Non_Staircase'; 
+Version = 'Experiment_027_v.3.0' ; % after code changes, change version
+file_directory='C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\VIS_Only_Experiment';
+data_file_directory = 'C:\Jackson\Adriana Stuff\AV_Behavioral_Data\'; 
+figure_file_directory = 'C:\Jackson\Adriana Stuff\AV_Figures\'; 
+
 
 %when running baron on fixation training set to 1
 baron_fixation_training=0;
@@ -17,7 +18,7 @@ if baron_fixation_training==1
     target_reward='N/A';
 end
 
-addpath('C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\Non_Staircase_Exp\VIS_Only_Experiment_NS\Eye_Movement_Data') %For the Eye Position vs time file 
+addpath('C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\VIS_Only_Experiment\Eye_Movement_Data') %For the Eye Position vs time file 
 
 %% Run App to get Paramters for test
 %In order to change any GUI paramters, go to Experiment_Parameters.mlapp
@@ -126,7 +127,9 @@ target_only_time_frames = round((ExpInfo.target_fixation_time/1000)/ ifi);
 %target_distance_from_fixpoint_pix=350; %+- x distance between fixation point location and target location in pixels
 %target_distance_from_fixpoint_pix=300; %+- x distance between fixation point location and target location in pixels
 target_distance_from_fixpoint_pix=270; %+- x distance between fixation point location and target location in pixels
-target_y_coord_pix = targ_adjust_y(dotInfo.apXYD(:,2)); %Pixel Y coordinate adjustment for the targets with relation to the RDK aperature
+%target_y_coord_pix = targ_adjust_y(dotInfo.apXYD(:,2)); %Pixel Y coordinate adjustment for the targets with relation to the RDK aperature
+target_y_coord_pix = targ_adjust_y(90); %Pixel Y coordinate adjustment for the targets with relation to the RDK aperature
+
 target_y_coord_volts = pixels2volts_Y(target_y_coord_pix);%yCenter+target_y_coord_pix); %Added to yCenter to account for shadlen dots functions using a 0,0 center coordinate
 
 volts_per_pixel=0.0078125; %10 volts/1280 pixels= X volts/1 pixel , This is for the X direction ONLY
@@ -148,6 +151,7 @@ gate_off_time = .1;
 total_blocks = 1; 
 total_trials = ExpInfo.num_trials; 
 dataout = cell(total_trials+1,10);
+rng('default');
  
 %% RDK Initilization Stuff
 
@@ -163,7 +167,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     coh_counter = 1;
     disp(['Trial #: ',num2str(trialcounter),'/',num2str(total_trials)])
     output_counter = output_counter + 1;
-    dataout(output_counter,1:10) = {'Trial #' 'Position #' 'Fixation Correct' 'Visual Reward' 'Catch Trial' 'Target Correct' 'Total Trial Time (sec)' 'Coherence Level' 'Direction of Motion' 'Incorrect Target Fixation'}; %Initialize Columns for data output cell
+    dataout(output_counter,1:11) = {'Trial #' 'Position #' 'Fixation Correct' 'Visual Reward' 'Catch Trial' 'Target Correct' 'Total Trial Time (sec)' 'Coherence Level' 'Direction of Motion' 'Incorrect Target Fixation' 'Stimulus Modality'}; %Initialize Columns for data output cell
     start_block_time = hat; 
     
     while (trialcounter <= total_trials) && (BreakState ~= 1) % each trial
@@ -281,8 +285,9 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
             [rdk_timeout, eye_data_matrix] = RDK_Draw(ExpInfo, dotInfo, window, xCenter, yCenter, h_voltage, k_voltage, TDT, start_block_time, eye_data_matrix, trialcounter, fix_point_color);
             if rdk_timeout ~= 1
                rdk_reward = 'Yes'; 
-               if baron_fixation_training==1
+               if baron_fixation_training==1 
                     TDT.trg(1); %add in if fixation only
+                    incorrect_target_fixation='N/A';
                end
             else
                rdk_reward = 'No';
@@ -449,10 +454,11 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
             end
         end
         
+        stim_modality = 'VIS';
         end_trial_time = hat; %High Accuracy Timer (hat)
         trial_time = end_trial_time-start_trial_time;
         
-        dataout(output_counter,1:10) = {trialcounter pos fix_reward rdk_reward catchtrial target_reward trial_time dotInfo.coh dotInfo.dir incorrect_target_fixation}; 
+        dataout(output_counter,1:11) = {trialcounter pos fix_reward rdk_reward catchtrial target_reward trial_time dotInfo.coh dotInfo.dir incorrect_target_fixation stim_modality}; 
         trialcounter = trialcounter + 1;
         
         if trialcounter <= total_trials
@@ -486,7 +492,7 @@ num_catch_trials = dotInfo.catchtrials;
     prob_Right = directional_probability(Right_dataout, dotInfo); 
     prob_Left = directional_probability(Left_dataout, dotInfo); 
     
-    [x, y, fig_both, coeff_p_values] = psychometric_plotter(prob_Right,prob_Left, dotInfo, save_name);
+    [x, y, fig_both, coeff_p_values,mu,std_gaussian] = psychometric_plotter(prob_Right,prob_Left, dotInfo,save_name);
     Eye_Tracker_Plotter(eye_data_matrix);
     
     %%Make Rightward only graph
@@ -497,14 +503,10 @@ num_catch_trials = dotInfo.catchtrials;
     prob_left_only = coherence_probability_1_direction(Left_dataout, dotInfo);
     [L_coh, L_pc, L_fig] = psychometric_plotter_1_direction(prob_left_only, 'LEFT ONLY', dotInfo, save_name);
     
-    %%Make Coh vs Trial graph to track progress 
-    coh_vs_trial_fig = plot_coh_vs_trial(dataout, save_name);
-    
     %Save all figures to Figure Directory - NS = Non Staircase
-    saveas(fig_both, [figure_file_directory save_name '_NS_VIS_Psyc_Func_LR.png'])
-    saveas(R_fig, [figure_file_directory save_name '_NS_VIS_Psyc_Func_R.png'])
-    saveas(L_fig, [figure_file_directory save_name '_NS_VIS_Psyc_Func_L.png'])
-    saveas(coh_vs_trial_fig, [figure_file_directory save_name '_NS_VIS_Coh_vs_Trial.png'])
+    saveas(fig_both, [figure_file_directory save_name 'VIS_MCS_Psyc_Func_LR.png'])
+    saveas(R_fig, [figure_file_directory save_name 'VIS_MCS_Psyc_Func_R.png'])
+    saveas(L_fig, [figure_file_directory save_name 'VIS_MCS_Psyc_Func_L.png'])
     
     times = cell2mat(dataout(2:end,7)); %Extract the trial times 
     Total_Block_Time = sum(times);
@@ -515,7 +517,9 @@ end
 %%
 [n_trials_with_response,n_trials_with_reward,proportion_response_reversals_after_correct_response,proportion_response_reversals_after_incorrect_response] = response_reversal_proportions2_visual(dataout);
 % Save all block info and add to a .mat file for later analysis  
-save([data_file_directory save_name],'dataout','Fixation_Success_Rate','RDK_Success_Rate','Target_Success_Rate_Regular','Target_Success_Rate_Catch','ExpInfo','dotInfo','Total_Block_Time','eye_data_matrix', "coeff_p_values",'n_trials_with_response','n_trials_with_reward','proportion_response_reversals_after_correct_response','proportion_response_reversals_after_incorrect_response');
+%save([data_file_directory save_name],'save_name','dataout','Fixation_Success_Rate','RDK_Success_Rate','Target_Success_Rate_Regular','Target_Success_Rate_Catch','ExpInfo','dotInfo','Total_Block_Time','eye_data_matrix', "coeff_p_values",'n_trials_with_response','n_trials_with_reward','proportion_response_reversals_after_correct_response','proportion_response_reversals_after_incorrect_response','threshold','prob');
+save([data_file_directory save_name]);
+
 disp('Experiment Data Exported to Behavioral Data Folder')
 sca; 
 
