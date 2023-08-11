@@ -100,7 +100,7 @@ viewDist = 53; %Viewing Distance from monitor in cm
 
 %%%%%%%%%%%%%%%%%%%%%%% Main Structures for variable names %%%%%%%%%%%%%%
  
-[ExpInfo, vstruct, dotInfo] = CreateClassStructure(data, monWidth, viewDist, xCenter, yCenter);
+[ExpInfo, vstruct, dotInfo] = CreateClassStructure_MCS(data, monWidth, viewDist, xCenter, yCenter);
     disp(ExpInfo)
     
      
