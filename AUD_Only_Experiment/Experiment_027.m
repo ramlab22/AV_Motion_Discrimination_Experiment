@@ -76,17 +76,6 @@ if ~check_go
 end
 
 
-
-%Make Sure that all values are acceptable, i.e. the wait times aren't longer
-%than the actual presentation of each of the specific stimuli 
-% if ExpInfo.time_wait(1) > (ExpInfo.fixation_time/1000)
-%     disp('Wait time for fixation is Greater than total fixation time, please decrease wait time.')
-%     ExpInfo.time_wait(1) = input('Input New Wait time in Seconds: '); 
-% elseif ExpInfo.time_wait(2) > (ExpInfo.target_fixation_time/1000)
-%     disp('Wait time for target fixation is Greater than total target fixation time, please decrease wait time.')
-%     ExpInfo.time_wait(2) = input('Input New Wait time in Seconds: '); 
-% end
-
 %% Psychtoolbox 
 PsychDefaultSetup(2);
 screenNumber = 2;
@@ -139,7 +128,6 @@ target_only_time_frames = round((ExpInfo.target_fixation_time/1000)/ ifi);
 target_distance_from_fixpoint_pix=270; %+- x distance between fixation point location and target location in pixels
 target_y_coord_pix = targ_adjust_y(90); %Pixel Y coordinate adjustment for the targets with relation to the RDK aperature
 target_y_coord_volts = pixels2volts_Y(target_y_coord_pix);%yCenter+target_y_coord_pix); %Added to yCenter to account for shadlen dots functions using a 0,0 center coordinate
-
 volts_per_pixel=0.0078125; %10 volts/1280 pixels= X volts/1 pixel , This is for the X direction ONLY
 target_distance_from_fixpoint_volts=target_distance_from_fixpoint_pix*volts_per_pixel;
 
@@ -160,7 +148,7 @@ block_counter = 1;
 gate_off_time = .1;
 total_blocks = 1; 
 total_trials = ExpInfo.num_trials; 
-dataout = cell(total_trials+1,10);
+dataout = cell(total_trials+1,11);
 rng('default');
  
 %% RDK Initilization Stuff
@@ -186,7 +174,6 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         end_fixation_waitframes = 0; %variable to end fixation acquisition wait time once fixation is acquired
         end_target_waitframes = 0; %variable to end target acquisition wait time once fixation is acquired
          
-        %Initilize the auditory coherence and direction for each trial
         %Initilize the auditory coherence and direction for each trial
         if audInfo.random_incorrect_opacity_list(trialcounter) == 0
             catchtrial = 'Yes';
@@ -217,7 +204,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         end
         
        % [audInfo.CAM] = makeCAM(audInfo.coh, audInfo.dir, audInfo.set_dur, 0, 44100);
-        [audInfo.CAM] = makeCAM(audInfo.coh, audInfo.dir, audInfo.set_dur, 0, 48828);
+        [audInfo.CAM] = makeCAM(audInfo.coh, audInfo.dir, audInfo.set_dur, 0, sampling_rate);
         
       %  [audInfo.adjustment_factor, CAM_1, CAM_2] = Signal_Creator(audInfo.CAM,audInfo.velocity); %Writes to CAM 1 and 2 for .rcx circuit to read
        CAM_1=audInfo.CAM(:,1);
@@ -273,7 +260,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                     if frame>10 %give monkey a buffer in case they were already looking where the fixpoint was 
                         end_fixation_waitframes = 1;
                     end
-                end
+                end %if looking at fix point
                 if d >= ExpInfo.rew_radius_volts && end_fixation_waitframes==1 %AMS-050622
                     correct_counter = 0;
                     %Timeout for Failure to fixate on fixation
@@ -281,19 +268,19 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                         Screen('FillRect', window, black);
                         vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
                         fix_timeout = 1; 
-                    end
+                    end %give timeout
                     break
-                end
+                end%if monkey not looking at fixpoint
                 if correct_counter > fix_only_time_frames
                     break
-                end
-            end
+                end %if fixate for necessary amoutn of time during waiting period
+            end %if frame < fixation waiting period
             if frame > time_wait_frames(1)
                 Screen('DrawDots', window,[h i_trial], ExpInfo.fixpoint_size_pix, fix_point_color, [], 2);
                 vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
                 if correct_counter > fix_only_time_frames %break out of loop if already fixated for required amount of time
                     break %added 10/31/22-AMS
-                end
+                end%if fixated for necessary amoutn of time
                 if d <= ExpInfo.rew_radius_volts
                     correct_counter = correct_counter + 1;
                 else
@@ -305,9 +292,9 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                         fix_timeout = 1; 
                     end
                     break
-                end
-            end
-        end
+                end%if looking within fix window
+            end%if past the fixation waiting period
+        end%for fixation time frames
        
         %Successful Fixation on Single point 
         if correct_counter > fix_time_frames - waitframes - time_wait_frames(1)
@@ -319,7 +306,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         else
             fix_timeout = 1;
             fix_reward = 'No';
-        end
+        end%if they fixated for sufficient amount of time at any point
         
         
          %% Now we play the aud stim and the fixation point
@@ -441,12 +428,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                     end
                     if incorrect_counter2 > target_only_time_frames
                         
-                       
-%                         for frame_2 = 1:TO_time_frames %added 10/13/22-AMS
-%                             Screen('FillRect', window, black);
-%                             vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
-%                             targ_timeout = 1;
-%                         end
+
                         break
                     end
                     
@@ -549,8 +531,8 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         
         if trialcounter <= total_trials
             disp(['Trial #: ',num2str(trialcounter),'/',num2str(total_trials)])
-        end
-    end
+        end %if not on last trial
+    end %while still going through all the trials
 %% End of Block 
 
 if trialcounter < ExpInfo.num_trials

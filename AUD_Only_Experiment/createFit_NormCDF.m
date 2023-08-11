@@ -76,6 +76,11 @@ ylabel( '% Rightward Response', 'Interpreter', 'none' );
 xlim([-1 1])
 ylim([0 1])
 grid on
+<<<<<<< HEAD
 text(0,.2,"mu: " + mu)
 text(0,.1, "std cum gaussian: " + std_gaussian)
+=======
+text(0,.2,"std_cumulative_gaussian: " + std_gaussian)
+text(0,.1, "mu: " + mu)
+>>>>>>> 1000c3bd37a1f67371cce12821f15cf8e08e8a1c
 end

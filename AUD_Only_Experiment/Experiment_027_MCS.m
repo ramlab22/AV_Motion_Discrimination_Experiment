@@ -1,15 +1,16 @@
 %% Experiment Script for 027 %%%%%%%%%%%%%%%%%%%%%%%%%%
-% Psychtoolbox RDK Visual Stimulus presentation 
+% Psychtoolbox  Auditory Motion Stimulus presentation 
 % written 04/21/22 - Jackson Mayfield 
 clear;
 close all; 
 sca;
+sampling_rate = 24414*2; %sampling rate of rx8 processor
+
 %  Version info
 Version = 'Experiment_027_v.3.0' ; % after code changes, change version
-file_directory='C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\VIS_Only_Experiment';
-data_file_directory = 'C:\Jackson\Adriana Stuff\AV_Behavioral_Data\'; 
+file_directory='C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\AUD_Only_Experiment';
+data_file_directory = 'C:\Jackson\Adriana Stuff\AV_Behavioral_Data\';
 figure_file_directory = 'C:\Jackson\Adriana Stuff\AV_Figures\'; 
-
 
 %when running baron on fixation training set to 1
 baron_fixation_training=0;
@@ -17,17 +18,19 @@ if baron_fixation_training==1
     target_reward='N/A';
 end
 
-addpath('C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\VIS_Only_Experiment\Eye_Movement_Data') %For the Eye Position vs time file 
+addpath('C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\AUD_Only_Experiment\Auditory Stimulus');
+addpath('C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\AUD_Only_Experiment\Eye_Movement_Data'); 
+
+       
 
 %% Run App to get Paramters for test
 %In order to change any GUI paramters, go to Experiment_Parameters.mlapp
 %for code on the actual app 
 
 % CHANGE THIS TO GET PARAMETERS FOR RDK
-
-% app = Experiment_Parameters; 
-% while isempty(app.StartExperimentButton.UserData); pause(0.1); end
-  
+%   app = Experiment_Parameters; 
+%   while isvalid(app); pause(0.1); end
+%   
 %Gets all of the paramters data from the GUI and puts into a matrix 
 opts = delimitedTextImportOptions;
 opts.EmptyLineRule = 'read';
@@ -73,6 +76,17 @@ if ~check_go
 end
 
 
+
+%Make Sure that all values are acceptable, i.e. the wait times aren't longer
+%than the actual presentation of each of the specific stimuli 
+% if ExpInfo.time_wait(1) > (ExpInfo.fixation_time/1000)
+%     disp('Wait time for fixation is Greater than total fixation time, please decrease wait time.')
+%     ExpInfo.time_wait(1) = input('Input New Wait time in Seconds: '); 
+% elseif ExpInfo.time_wait(2) > (ExpInfo.target_fixation_time/1000)
+%     disp('Wait time for target fixation is Greater than total target fixation time, please decrease wait time.')
+%     ExpInfo.time_wait(2) = input('Input New Wait time in Seconds: '); 
+% end
+
 %% Psychtoolbox 
 PsychDefaultSetup(2);
 screenNumber = 2;
@@ -97,10 +111,8 @@ viewDist = 53; %Viewing Distance from monitor in cm
 
 %%%%%%%%%%%%%%%%%%%%%%% Main Structures for variable names %%%%%%%%%%%%%%
  
-[ExpInfo, vstruct, dotInfo] = CreateClassStructure(data, monWidth, viewDist, xCenter, yCenter);
+[ExpInfo, vstruct, audInfo] = CreateClassStructure_MCS(data, monWidth, viewDist, xCenter, yCenter);
     disp(ExpInfo)
-    
-     
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%3
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -109,6 +121,7 @@ fix_time_frames = round((ExpInfo.fixation_time/1000)/ifi)+time_wait_frames(1);
 fix_only_time_frames = round((ExpInfo.fixation_time/1000)/ifi); 
 
 stim_time_frames = round((ExpInfo.stim_time/1000)/ ifi);
+aud_time_frames = round(((audInfo.t_end - audInfo.t_start)/1000)/ ifi);
 iti_time_frames = round((ExpInfo.iti/1000)/ifi); 
 TO_time_frames = round((ExpInfo.fail_timeout/1000)/ifi); 
 target_time_frames = round((ExpInfo.target_fixation_time/1000)/ ifi+time_wait_frames(2));
@@ -124,9 +137,7 @@ target_only_time_frames = round((ExpInfo.target_fixation_time/1000)/ ifi);
 %target_distance_from_fixpoint_pix=350; %+- x distance between fixation point location and target location in pixels
 %target_distance_from_fixpoint_pix=300; %+- x distance between fixation point location and target location in pixels
 target_distance_from_fixpoint_pix=270; %+- x distance between fixation point location and target location in pixels
-%target_y_coord_pix = targ_adjust_y(dotInfo.apXYD(:,2)); %Pixel Y coordinate adjustment for the targets with relation to the RDK aperature
 target_y_coord_pix = targ_adjust_y(90); %Pixel Y coordinate adjustment for the targets with relation to the RDK aperature
-
 target_y_coord_volts = pixels2volts_Y(target_y_coord_pix);%yCenter+target_y_coord_pix); %Added to yCenter to account for shadlen dots functions using a 0,0 center coordinate
 
 volts_per_pixel=0.0078125; %10 volts/1280 pixels= X volts/1 pixel , This is for the X direction ONLY
@@ -142,6 +153,7 @@ eye_data_matrix = []; %This is for saving eye position data for entire block
 BreakState = 0;
 output_counter = 0;
 correct_counter = 0;
+aud_correct_counter = 0;
 correct_counter2 = 0;
 incorrect_counter2=0;
 block_counter = 1;
@@ -159,58 +171,63 @@ rng('default');
 %% Main Code
 
 pause(2);
-catchtrial_counter=0;
 while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     trialcounter = 1;
-    coh_counter = 1;
+     coh_counter = 1;
     disp(['Trial #: ',num2str(trialcounter),'/',num2str(total_trials)])
     output_counter = output_counter + 1;
-    dataout(output_counter,1:11) = {'Trial #' 'Position #' 'Fixation Correct' 'Visual Reward' 'Catch Trial' 'Target Correct' 'Total Trial Time (sec)' 'Coherence Level' 'Direction of Motion' 'Incorrect Target Fixation' 'Stimulus Modality'}; %Initialize Columns for data output cell
+    dataout(output_counter,1:11) = {'Trial #' 'Position #' 'Fixation Correct' 'Auditory Reward' 'Catch Trial' 'Target Correct' 'Total Trial Time (sec)' 'Coherence Level' 'Direction of Motion' 'Incorrect Target Fixation' 'Stimulus Modality'}; %Initialize Columns for data output cell
     start_block_time = hat; 
     
     while (trialcounter <= total_trials) && (BreakState ~= 1) % each trial
         output_counter = output_counter + 1;
-        start_trial_time = hat; %Trial Start Time, uses High Accuracy timer function in Eye_Movement_Data folder 
+        start_trial_time = hat; %Trial Start Time
         end_fixation_waitframes = 0; %variable to end fixation acquisition wait time once fixation is acquired
         end_target_waitframes = 0; %variable to end target acquisition wait time once fixation is acquired
+         
+        %Initilize the auditory coherence and direction for each trial
+        audInfo.dir = audInfo.random_dir_list(trialcounter); %randomly choose 0 or 1 for dir
+        audInfo.mux = 0; %Set to zero for now, we only need L and R trials 
+        audInfo.coh = audInfo.random_coh_list(trialcounter);% Random Coherence for each trial
 
-        %Inititlize the coherence and direction for each trial
+        % No catch trials for now
+        catchtrial = 'No';
+        fix_point_color = white;
 
-        if dotInfo.random_incorrect_opacity_list(trialcounter) == 0
-             catchtrial = 'Yes';
-             target_reward = 'N/A';
-             fix_point_color = white;
-             catchtrial_counter=catchtrial_counter+1;
-        elseif dotInfo.random_incorrect_opacity_list(trialcounter) == 1
-            catchtrial = 'No';
-            fix_point_color = white;
-        end
-        
-        if trialcounter == 1
-            staircase_index = 1; %Initialize index for first trial 
-            dir_matrix = [0,180];
-            dotInfo.dir = dir_matrix(randi([1,2])); %for first trial, randomly choose 0(Right) or 180(left) for dir
-            dotInfo.coh = dotInfo.cohSet(staircase_index);% (Value 0.0 - 1.0)
-        elseif trialcounter > 1
-            [dotInfo, staircase_index] = staircase_procedure(trial_status, dotInfo, staircase_index);
-        end
-        
-        if dotInfo.dir == 0 
+
+        if audInfo.dir == 1 && audInfo.mux == 0
             disp('Left to Right')
-            disp(dotInfo.coh)
-        elseif dotInfo.dir == 180
+            disp(audInfo.coh)
+        elseif audInfo.dir == 0 && audInfo.mux == 0
             disp('Right to Left')
-            disp(dotInfo.coh)
+            disp(audInfo.coh)
         end
-
-
+        
+       % [audInfo.CAM] = makeCAM(audInfo.coh, audInfo.dir, audInfo.set_dur, 0, 44100);
+        [audInfo.CAM] = makeCAM(audInfo.coh, audInfo.dir, audInfo.set_dur, 0, 48828);
+        
+      %  [audInfo.adjustment_factor, CAM_1, CAM_2] = Signal_Creator(audInfo.CAM,audInfo.velocity); %Writes to CAM 1 and 2 for .rcx circuit to read
+       CAM_1=audInfo.CAM(:,1);
+       CAM_2=audInfo.CAM(:,2);
+        [CAM_1_Cut_Ramped, CAM_2_Cut_Ramped, audInfo.window_duration, audInfo.ramp_dur] = aud_receptive_field_location(CAM_1,CAM_2, audInfo.t_start, audInfo.t_end); 
+       
+        
+        TDT.write('mux_sel',audInfo.mux); %The multiplexer values for each trial, set to all zeros for now to include only LR and RL
+        TDT.write('window',audInfo.window_duration); %duration of the stimulus in ms
+        TDT.write('ramp_dur',audInfo.ramp_dur);
+        TDT.write('CAM_1',CAM_1_Cut_Ramped); %Signal 1 
+        TDT.write('CAM_2',CAM_2_Cut_Ramped); %Signal 2
+        
+        
+        
         pos = ExpInfo.random_list(trialcounter);  %Gets random pos # from the list evaluated at specific trial #
-        [h,k] = xypos(pos,dot_coord);%Outputs fixation center (h,k) in pixels for Psychtoolbox to draw dot
+        [h,i_trial] = xypos(pos,dot_coord);%Outputs fixation center (h,k) in pixels for Psychtoolbox to draw dot
         [h_voltage, k_voltage] = pos_voltage(pos,dot_coord); %Outputs Fixation center in Volts for comparison to eyetracker values 
 %         [adjust_right, adjust_left] = targ_adjust(pos);%Outputs the adjustments in pixels for dR and dL equations later on 
+      
         %Turn on fixation point Initially
         Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
-        Screen('DrawDots', window,[h k], ExpInfo.fixpoint_size_pix, fix_point_color, [], 2);
+        Screen('DrawDots', window,[h i_trial], ExpInfo.fixpoint_size_pix, fix_point_color, [], 2);
         vbl = Screen('Flip',window);
         
         %% Now we present the fix interval with fixation point minus one frame
@@ -219,14 +236,22 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
 
         %This Includes the reward for fixating for required fixation time
         for frame = 1:fix_time_frames - waitframes
-
+            if baron_fixation_training==1 
+                if mod(frame,2) ~= 0
+                    x = TDT.read('x');
+                    y = TDT.read('y');
+                end
+            else
+                x = TDT.read('x');
+                y = TDT.read('y');
+            end
             x = TDT.read('x');
             y = TDT.read('y');
             [eye_data_matrix] = Send_Eye_Position_Data(TDT, start_block_time, eye_data_matrix, 1, trialcounter); %Collect eye position data with timestamp
             
             d = sqrt(((x-h_voltage).^2)+((y-k_voltage).^2));
             if frame < time_wait_frames(1) 
-                Screen('DrawDots', window,[h k], ExpInfo.fixpoint_size_pix, fix_point_color, [], 2);
+                Screen('DrawDots', window,[h i_trial], ExpInfo.fixpoint_size_pix, fix_point_color, [], 2);
                 %Flip to the screen
                 vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
               
@@ -251,7 +276,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                 end
             end
             if frame > time_wait_frames(1)
-                Screen('DrawDots', window,[h k], ExpInfo.fixpoint_size_pix, fix_point_color, [], 2);
+                Screen('DrawDots', window,[h i_trial], ExpInfo.fixpoint_size_pix, fix_point_color, [], 2);
                 vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
                 if correct_counter > fix_only_time_frames %break out of loop if already fixated for required amount of time
                     break %added 10/31/22-AMS
@@ -284,38 +309,74 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         end
         
         
-        %% Now we draw the RDK and the fixation point
-        
-        rdk_timeout = 0;
+         %% Now we play the aud stim and the fixation point
 
+
+        %% Present the Auditory Stimulus while keeping the fixation point up
+        aud_timeout = 0;
+        TDT.write('aud_off',0); %aud_off - TRUE = 1 , FALSE = 0, Begin with aud_off = 0
+        
         if fix_timeout ~= 1
-            % Draw the RDK
-            [rdk_timeout, eye_data_matrix] = RDK_Draw(ExpInfo, dotInfo, window, xCenter, yCenter, h_voltage, k_voltage, TDT, start_block_time, eye_data_matrix, trialcounter, fix_point_color);
-            if rdk_timeout ~= 1
-               rdk_reward = 'Yes'; 
-               if baron_fixation_training==1 || strcmp(catchtrial, 'Yes')
+
+            TDT.trg(2); %Triggers the Start of the Stimulus
+            
+            for frame = 1:aud_time_frames - waitframes
+                
+                x = TDT.read('x');
+                y = TDT.read('y');
+                [eye_data_matrix] = Send_Eye_Position_Data(TDT, start_block_time, eye_data_matrix, 2, trialcounter); %Collect eye position data with timestamp
+                
+                d = sqrt(((x-h_voltage).^2)+((y-k_voltage).^2));
+
+                Screen('DrawDots', window,[h i_trial], ExpInfo.fixpoint_size_pix, fix_point_color, [], 2);
+                %Flip to the screen
+                vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
+
+                if (d <= ExpInfo.rew_radius_volts)
+                    aud_correct_counter = aud_correct_counter + 1;
+                    if frame>10
+                        end_fixation_waitframes = 1;        
+                    end
+                end
+
+                if d >= ExpInfo.rew_radius_volts && end_fixation_waitframes==1 %AMS-050622
+                    aud_correct_counter = 0;
+                    %Timeout for Failure to fixate on fixation, during
+                    %auditory stim period
+                    for frame_2 = 1:TO_time_frames
+                        Screen('FillRect', window, black);
+                        vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
+                        aud_timeout = 1;
+                        TDT.write('aud_off',1); %Turn off Audio
+                    end
+                    break
+                end
+            end
+            
+            %Successful Fixation on Single point
+            if aud_correct_counter > fix_time_frames - waitframes - time_wait_frames(1)
+                
+                aud_timeout = 0;
+                aud_correct_counter = 0;
+                aud_reward = 'Yes';
+                if baron_fixation_training==1
                     TDT.trg(1); %add in if fixation only
                     incorrect_target_fixation='N/A';
-               end
+                    
+                end
             else
-               rdk_reward = 'No';
-               %Timeout for Failure to fixate on fixation
-               for frame_3 = 1:TO_time_frames
-                   Screen('FillRect', window, black);
-                   vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
-               end
+                aud_reward = 'No';
             end
+            
         end
 
-
-       
         %% Now Draw the descision targets
         % This Includes a end trial reward for saccade and fixation towards either one of the target
         % points, IN PROGRESS
         targ_timeout = 0;
-        if fix_timeout ~= 1 && rdk_timeout ~= 1 && baron_fixation_training ~= 1 && strcmp(catchtrial, "No")
+        if fix_timeout ~= 1 && aud_timeout ~= 1 && baron_fixation_training ~= 1
             %This picks the luminace of the targets based on correct direction response, also outputs correct target string variable, eg 'right'
-            [right_target_color,left_target_color,correct_target] = percentage_target_color_selection(dotInfo,trialcounter);
+            [right_target_color,left_target_color,correct_target] = percentage_target_color_selection(audInfo,trialcounter);
             
             for frame = 1:target_time_frames - waitframes
                 
@@ -349,7 +410,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                         correct_counter2 = correct_counter2 + 1;
                         end_target_waitframes = 1;
                     end
-                    if ~isAnyTargetFixation && end_target_waitframes==1
+                    if ~isAnyTargetFixation && end_target_waitframes==1 
                         correct_counter2 = 0;
                         %Timeout for Failure to fixate on fixation
                         for frame_2 = 1:TO_time_frames
@@ -367,19 +428,19 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                     end
                     if incorrect_counter2 > target_only_time_frames
                         
-
+                       
+%                         for frame_2 = 1:TO_time_frames %added 10/13/22-AMS
+%                             Screen('FillRect', window, black);
+%                             vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
+%                             targ_timeout = 1;
+%                         end
                         break
                     end
                     
-                    
                 end
                 if frame > time_wait_frames(2)
-                   %   Screen('DrawDots', window, [(h + target_distance_from_fixpoint_pix) (target_y_coord_pix)], ExpInfo.targpoint_size_pix, right_target_color, [], 2);%Right target
-                     %Screen('DrawDots', window, [(h - target_distance_from_fixpoint_pix) (target_y_coord_pix)], ExpInfo.targpoint_size_pix, left_target_color, [], 2);%Left Target
-                    %  vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
-                    %commented out 10/10/22-AMS
-                    if correct_counter2 > target_only_time_frames || incorrect_counter2 > target_only_time_frames
-                        break %added 10/10/22-AMS
+                    if correct_counter2 > target_only_time_frames
+                        break %added 10/31/22-AMS
                     end
                     if (isRightTargetFixation && strcmp('right',correct_target)) || (isLeftTargetFixation && strcmp('left',correct_target))
                         correct_counter2 = correct_counter2 + 1;
@@ -396,6 +457,8 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                         end
                         break
                     end
+                    
+                
                 end
             end
             if correct_counter2 > target_time_frames - waitframes - time_wait_frames(2)
@@ -421,19 +484,19 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         
         if fix_timeout == 1
             fix_timeout = 0; %Reset Timeout toggle for each new trial
-            rdk_reward = 'N/A';%If timeout true no chance given for rdk reward so put N/A
+            aud_reward = 'N/A';%If timeout true no chance given for rdk reward so put N/A
             target_reward = 'N/A';%If timeout true no chance given for target reward so put N/A
             incorrect_target_fixation='N/A';
         end
-        if rdk_timeout == 1
-            rdk_timeout = 0;
-            rdk_reward = 'No';
+        if aud_timeout == 1
+            aud_timeout = 0;
+            aud_reward = 'No';
             target_reward = 'N/A';%If timeout true no chance given for target reward so put N/A
             incorrect_target_fixation='N/A';
         end
         if targ_timeout == 1
             targ_timeout = 0;
-            target_reward = 'No'; %If targ timeout is true that means monkey did not fixate on one of the targets, targ_reward is a timeout (TO)
+            target_reward = 'No'; %If targ timeout is true that means monkey did not fixate on one of the targets, targ_reward is a NO
             incorrect_target_fixation='N/A';
         end
         
@@ -441,13 +504,14 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         %% Now Draw the ITI screen
         for frame = 1:iti_time_frames
             [eye_data_matrix] = Send_Eye_Position_Data(TDT, start_block_time, eye_data_matrix, 4, trialcounter); %Collect eye position data with timestamp
+            
             % Draw the 2 target points
             Screen('FillRect', window, black);
             vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
 
         end
 
-        
+
         %% End of trial Stuff , timing and output
             %set trial status for staircase procedure to decide
             %probabilities on subsequent trial
@@ -456,18 +520,18 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         elseif strcmp(target_reward,'No') 
             trial_status = 'Incorrect';
         else %if subject abandons trial early
-            if trialcounter==1 
+            if trialcounter==1
                 trial_status='Incorrect';
             else %use whatever the trial_status from the previous trial was to repeat those probabilities
-                trial_status = trial_status; 
+                trial_status = trial_status;
             end
         end
-        
-        stim_modality = 'VIS';
-        end_trial_time = hat; %High Accuracy Timer (hat)
+  
+        stim_modality = 'AUD';
+        end_trial_time = hat;
         trial_time = end_trial_time-start_trial_time;
         
-        dataout(output_counter,1:11) = {trialcounter pos fix_reward rdk_reward catchtrial target_reward trial_time dotInfo.coh dotInfo.dir incorrect_target_fixation stim_modality}; 
+        dataout(output_counter,1:11) = {trialcounter pos fix_reward aud_reward catchtrial target_reward trial_time audInfo.coh audInfo.dir incorrect_target_fixation stim_modality}; 
         trialcounter = trialcounter + 1;
         
         if trialcounter <= total_trials
@@ -478,69 +542,61 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
 
 if trialcounter < ExpInfo.num_trials
     total_trials = trialcounter;
-    n_catchtrials=catchtrial_counter;
 else
     total_trials = ExpInfo.num_trials;
-    n_catchtrials=dotInfo.catchtrials;  
 end
 
-num_regular_trials = total_trials - n_catchtrials;  
-num_catch_trials = n_catchtrials; 
+num_regular_trials = total_trials - audInfo.catchtrials;  
+num_catch_trials = audInfo.catchtrials; 
 
-[Fixation_Success_Rate, RDK_Success_Rate, Target_Success_Rate_Regular, Target_Success_Rate_Catch] = SR_CALC(dataout,total_trials,num_regular_trials,num_catch_trials)
-
+[Fixation_Success_Rate, AUD_Success_Rate, Target_Success_Rate_Regular, Target_Success_Rate_Catch] = SR_CALC(dataout,total_trials,num_regular_trials,num_catch_trials)
+    
     %Break down of each success rate based on coherence level 
     %Count how many rew and N/A per coherence 
-    dotInfo.cohFreq = cohFreq_finder(dataout, dotInfo);
-    prob = coherence_probability(dataout,dotInfo)
-    prob_zero = prob(1,:); 
+     audInfo.cohFreq = cohFreq_finder(dataout, audInfo);
+     
+     prob = coherence_probability(dataout,audInfo)
+%    prob_zero = prob(1,:); 
     
     [Right_dataout, Left_dataout] = direction_splitter(dataout);
     
-    dotInfo.cohFreq_right = cohFreq_finder(Right_dataout, dotInfo);
-    dotInfo.cohFreq_left = cohFreq_finder(Left_dataout, dotInfo);
+    audInfo.cohFreq_right = cohFreq_finder(Right_dataout, audInfo);
+    audInfo.cohFreq_left = cohFreq_finder(Left_dataout, audInfo);
     
-    prob_Right = directional_probability(Right_dataout, dotInfo); 
-    prob_Left = directional_probability(Left_dataout, dotInfo); 
     
-    [x, y, fig_both, coeff_p_values,mu,std_gaussian] = psychometric_plotter(prob_Right,prob_Left, dotInfo,save_name);
+    prob_Right = directional_probability(Right_dataout, audInfo); 
+    prob_Left = directional_probability(Left_dataout, audInfo); 
+    
+    [x, y, fig_both, coeff_p_values,CIs_of_LR_fit,mu,std_gaussian] = psychometric_plotter(prob_Right,prob_Left, audInfo,save_name);
     Eye_Tracker_Plotter(eye_data_matrix);
     
     %%Make Rightward only graph
-    prob_right_only = coherence_probability_1_direction(Right_dataout, dotInfo);
-    [R_coh, R_pc, R_fig] = psychometric_plotter_1_direction(prob_right_only, 'RIGHT ONLY', dotInfo, save_name);
+    prob_right_only = coherence_probability_1_direction(Right_dataout, audInfo);
+    [R_coh, R_pc, R_fig] = psychometric_plotter_1_direction(prob_right_only, 'RIGHT ONLY', audInfo, save_name);
     
     %%Make Leftward only graph
-    prob_left_only = coherence_probability_1_direction(Left_dataout, dotInfo);
-    [L_coh, L_pc, L_fig] = psychometric_plotter_1_direction(prob_left_only, 'LEFT ONLY', dotInfo, save_name);
-    
-    %%Make Coh vs Trial graph to track progress 
-    coh_vs_trial_fig = plot_coh_vs_trial(dataout, save_name);
-    %%Make performance vs Trial graph to track progress 
-    interval_val=20;
-    condition=1; %set condition to visual
-    accuracy_vs_trial_fig = plot_unisensory_accuracy_vs_trial(dataout, save_name,interval_val,condition)
+    prob_left_only = coherence_probability_1_direction(Left_dataout, audInfo);
+    [L_coh, L_pc, L_fig] = psychometric_plotter_1_direction(prob_left_only, 'LEFT ONLY', audInfo, save_name);
+
 
     %Save all figures to Figure Directory
-    saveas(fig_both, [figure_file_directory save_name '_VIS_Psyc_Func_LR.png'])
-    saveas(R_fig, [figure_file_directory save_name '_VIS_Psyc_Func_R.png'])
-    saveas(L_fig, [figure_file_directory save_name '_VIS_Psyc_Func_L.png'])
-    saveas(coh_vs_trial_fig, [figure_file_directory save_name '_VIS_Coh_vs_Trial.png'])
-    saveas(accuracy_vs_trial_fig, [figure_file_directory save_name '_VIS_Acc_vs_Trial.png'])
+    saveas(fig_both, [figure_file_directory save_name '_AUD_MCS_Psyc_Func_LR.png'])
+    saveas(R_fig, [figure_file_directory save_name '_AUD_MCS_Psyc_Func_R.png'])
+    saveas(L_fig, [figure_file_directory save_name '_AUD_MCS_Psyc_Func_L.png'])
+    
     
     times = cell2mat(dataout(2:end,7)); %Extract the trial times 
     Total_Block_Time = sum(times);
-    
+   
     block_counter = block_counter + 1;
     
 end
-
 mu
 std_gaussian
 %%
-[n_trials_with_response,n_trials_with_reward,proportion_response_reversals_after_correct_response,proportion_response_reversals_after_incorrect_response] = response_reversal_proportions2_visual(dataout);
+[n_trials_with_response,n_trials_with_reward,proportion_response_reversals_after_correct_response,proportion_response_reversals_after_incorrect_response] = response_reversal_proportions2(dataout);
 % Save all block info and add to a .mat file for later analysis  
-%save([data_file_directory save_name],'save_name','dataout','Fixation_Success_Rate','RDK_Success_Rate','Target_Success_Rate_Regular','Target_Success_Rate_Catch','ExpInfo','dotInfo','Total_Block_Time','eye_data_matrix', "coeff_p_values",'n_trials_with_response','n_trials_with_reward','proportion_response_reversals_after_correct_response','proportion_response_reversals_after_incorrect_response','threshold','prob');
+%save([data_file_directory save_name],'save_name','dataout','Fixation_Success_Rate','AUD_Success_Rate','Target_Success_Rate_Regular','Target_Success_Rate_Catch','ExpInfo','audInfo','Total_Block_Time','eye_data_matrix', "coeff_p_values",'CIs_of_LR_fit','n_trials_with_response','n_trials_with_reward','proportion_response_reversals_after_correct_response','proportion_response_reversals_after_incorrect_response','threshold', 'prob');
 save([data_file_directory save_name]);
 
 disp('Experiment Data Exported to Behavioral Data Folder')
