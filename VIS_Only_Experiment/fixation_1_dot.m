@@ -44,7 +44,9 @@ Screen('BlendFunction', window, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 % define our RGB values. The maximum number for each is 1 and the minimum
 % 0. So, "full red" is [1 0 0]. "Full green" [0 1 0] and "full blue" [0 0
 % 1]. Play around with these numbers and see the result.
-white = [1 1 1];
+
+%white = [1 1 1];
+white = [0 1 0]; %white is actually green
 
 
 % Determine a X and Y position for our dots. NOTE also, that if the

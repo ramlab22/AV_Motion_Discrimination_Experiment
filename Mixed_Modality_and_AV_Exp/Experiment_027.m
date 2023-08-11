@@ -3,10 +3,11 @@
 % written 04/21/22 - Jackson Mayfield 
 clear;
 close all; 
-%Hey
 sca;
+sampling_rate = 24414*2; %sampling rate of rx8 processor
+
 %  Version info
-Version = 'Experiment_027_v.2.0' ; % after code changes, change version
+Version = 'Experiment_027_v.3.0' ; % after code changes, change version
 file_directory='C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\Mixed_Modality_and_AV_Exp';
 data_file_directory = 'C:\Jackson\Adriana Stuff\AV_Behavioral_Data\';
 figure_file_directory = 'C:\Jackson\Adriana Stuff\AV_Figures\'; 
@@ -136,7 +137,8 @@ target_only_time_frames = round((ExpInfo.target_fixation_time/1000)/ ifi);
 %target_distance_from_fixpoint_pix=350; %+- x distance between fixation point location and target location in pixels
 %target_distance_from_fixpoint_pix=300; %+- x distance between fixation point location and target location in pixels
 target_distance_from_fixpoint_pix=270; %+- x distance between fixation point location and target location in pixels
-target_y_coord_pix = targ_adjust_y(dotInfo.apXYD(:,2)); %Pixel Y coordinate adjustment for the targets with relation to the RDK aperature
+target_y_coord_pix = targ_adjust_y(90); %Pixel Y coordinate adjustment for the targets with relation to the RDK aperature
+%target_y_coord_pix = targ_adjust_y(dotInfo.apXYD(:,2)); %Pixel Y coordinate adjustment for the targets with relation to the RDK aperature
 target_y_coord_volts = pixels2volts_Y(target_y_coord_pix);%yCenter+target_y_coord_pix); %Added to yCenter to account for shadlen dots functions using a 0,0 center coordinate
 
 volts_per_pixel=0.0078125; %10 volts/1280 pixels= X volts/1 pixel , This is for the X direction ONLY
@@ -257,15 +259,19 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         
         %create CAM files based on auditory or AV trial
         if strcmp(trialInfo.modality,'AUD') 
-            [audInfo.CAM] = makeCAM(audInfo.coh, audInfo.dir, audInfo.set_dur, 0, 44100);
-            [audInfo.adjustment_factor, CAM_1, CAM_2] = Signal_Creator(audInfo.CAM,audInfo.velocity); %Writes to CAM 1 and 2 for .rcx circuit to read
-            [CAM_1_Cut_Ramped, CAM_2_Cut_Ramped, audInfo.window_duration, audInfo.ramp_dur] = aud_receptive_field_location(CAM_1,CAM_2, audInfo.t_start, audInfo.t_end);
-           
+            [audInfo.CAM] = makeCAM(audInfo.coh, audInfo.dir, audInfo.set_dur, 0, sampling_rate);
+           % [audInfo.adjustment_factor, CAM_1, CAM_2] = Signal_Creator(audInfo.CAM,audInfo.velocity); %Writes to CAM 1 and 2 for .rcx circuit to read
+            CAM_1=audInfo.CAM(:,1);
+            CAM_2=audInfo.CAM(:,2);
+            [CAM_1_Cut_Ramped, CAM_2_Cut_Ramped, audInfo.window_duration, audInfo.ramp_dur] = aud_receptive_field_location(CAM_1,CAM_2, audInfo.t_start, audInfo.t_end); 
+                     
         elseif strcmp(trialInfo.modality,'AV') 
-            [audInfo.CAM] = makeCAM(AVInfo.coh_aud, AVInfo.dir, audInfo.set_dur, 0, 44100);
-            [audInfo.adjustment_factor, CAM_1, CAM_2] = Signal_Creator(audInfo.CAM,audInfo.velocity); %Writes to CAM 1 and 2 for .rcx circuit to read
-            [CAM_1_Cut_Ramped, CAM_2_Cut_Ramped, audInfo.window_duration, audInfo.ramp_dur] = aud_receptive_field_location(CAM_1,CAM_2, audInfo.t_start, audInfo.t_end);
-        
+            [audInfo.CAM] = makeCAM(AVInfo.coh, AVInfo.dir, AVInfo.set_dur, 0, sampling_rate);
+           % [audInfo.adjustment_factor, CAM_1, CAM_2] = Signal_Creator(audInfo.CAM,audInfo.velocity); %Writes to CAM 1 and 2 for .rcx circuit to read
+            CAM_1=audInfo.CAM(:,1);
+            CAM_2=audInfo.CAM(:,2);
+            [CAM_1_Cut_Ramped, CAM_2_Cut_Ramped, audInfo.window_duration, audInfo.ramp_dur] = aud_receptive_field_location(CAM_1,CAM_2, audInfo.t_start, audInfo.t_end); 
+                       
         end
 
         TDT.write('mux_sel',audInfo.mux); %The multiplexer values for each trial, set to all zeros for now to include only LR and RL
@@ -273,6 +279,8 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         TDT.write('ramp_dur',audInfo.ramp_dur);
         TDT.write('CAM_1',CAM_1_Cut_Ramped); %Signal 1
         TDT.write('CAM_2',CAM_2_Cut_Ramped); %Signal 2
+        
+        
         
         pos = ExpInfo.random_list(trialcounter);  %Gets random pos # from the list evaluated at specific trial #
         [h,i_trial] = xypos(pos,dot_coord);%Outputs fixation center (h,k) in pixels for Psychtoolbox to draw dot
@@ -403,6 +411,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                     [eye_data_matrix] = Send_Eye_Position_Data(TDT, start_block_time, eye_data_matrix, 2, trialcounter); %Collect eye position data with timestamp
                     
                     d = sqrt(((x-h_voltage).^2)+((y-k_voltage).^2));
+
                     Screen('DrawDots', window,[h i_trial], ExpInfo.fixpoint_size_pix, fix_point_color, [], 2);
                     %Flip to the screen
                     vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
@@ -413,6 +422,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                             end_fixation_waitframes = 1;
                         end
                     end
+
                     if d >= ExpInfo.rew_radius_volts && end_fixation_waitframes==1 %AMS-050622
                         aud_correct_counter = 0;
                         %Timeout for Failure to fixate on fixation, during
@@ -437,10 +447,9 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                         TDT.trg(1); %add in if fixation only
                         incorrect_target_fixation='N/A';
                     end
-                elseif aud_correct_counter < fix_time_frames - waitframes - time_wait_frames(1)
-                    aud_reward = 'No';
+               
                 else
-                    aud_reward = 'N/A';
+                    aud_reward = 'No';
                 end
                 
             end
@@ -537,18 +546,14 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                     end
                     if incorrect_counter2 > target_only_time_frames
                         
-                        %                         for frame_2 = 1:TO_time_frames %added 10/13/22-AMS
-                        %                             Screen('FillRect', window, black);
-                        %                             vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
-                        %                             targ_timeout = 1;
-                        %                         end
-                        break
+
+                         break
                     end
                     
                 end
                 if frame > time_wait_frames(2)
-                    if correct_counter2 > target_only_time_frames || incorrect_counter2 > target_only_time_frames
-                        break %added 10/8/22-AMS
+                    if correct_counter2 > target_only_time_frames 
+                        break %added 10/31/22-AMS
                     end
                     if (isRightTargetFixation && strcmp('right',correct_target)) || (isLeftTargetFixation && strcmp('left',correct_target))
                         correct_counter2 = correct_counter2 + 1;
@@ -707,23 +712,23 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     AV_prob_Left = directional_probability_AV(AV_Left_dataout, AVInfo, 'Left');
     
 
-    [fig_3_AUD_VIS_AV, AUD_p_values, VIS_p_values,AUD_threshold,VIS_threshold, AV_threshold, AUD_std,VIS_std,AV_std] = ...
+    [fig_3_AUD_VIS_AV, AUD_p_values, VIS_p_values,AUD_mu,VIS_mu, AV_mu, AUD_std,VIS_std,AV_std] = ...
         psychometric_plotter_modalities(AUD_prob_Right, AUD_prob_Left, ...
                                         VIS_prob_Right, VIS_prob_Left,...
                                         AV_prob_Right, AV_prob_Left,...
                                         audInfo, dotInfo, AVInfo, save_name);
 
-    display_aud_threshold = sprintf('AUD Threshold: %.2f',AUD_threshold);
-    disp(display_aud_threshold)
-    display_aud_std = sprintf('AUD std of cumulative gaussian: %.2f',AUD_std);
+    display_aud_mu = sprintf('AUD Mu:\n %.2f',AUD_mu);
+    disp(display_aud_mu)
+    display_aud_std = sprintf('AUD std of cumulative gaussian:\n %.2f',AUD_std);
     disp(display_aud_std)
-    display_vis_threshold = sprintf('VIS Threshold: %.2f',VIS_threshold);
-    disp(display_vis_threshold)
-    display_vis_std = sprintf('VIS std of cumulative gaussian: %.2f',VIS_std);
+    display_vis_mu = sprintf('VIS Mu:\n %.2f',VIS_mu);
+    disp(display_vis_mu)
+    display_vis_std = sprintf('VIS std of cumulative gaussian:\n %.2f',VIS_std);
     disp(display_vis_std)
-    display_av_threshold = sprintf('AV Threshold: %.2f',AV_threshold);
-    disp(display_av_threshold)
-    display_av_std = sprintf('AV std of cumulative gaussian: %.2f',AV_std);
+    display_av_mu = sprintf('AV Mu:\n %.2f',AV_mu);
+    disp(display_av_mu)
+    display_av_std = sprintf('AV std of cumulative gaussian:\n %.2f',AV_std);
     disp(display_av_std)
    
     Eye_Tracker_Plotter(eye_data_matrix);
