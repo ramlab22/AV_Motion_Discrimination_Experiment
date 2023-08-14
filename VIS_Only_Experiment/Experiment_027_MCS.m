@@ -150,7 +150,7 @@ block_counter = 1;
 gate_off_time = .1;
 total_blocks = 1; 
 total_trials = ExpInfo.num_trials; 
-dataout = cell(total_trials+1,10);
+dataout = cell(total_trials+1,11);
 rng('default');
  
 %% RDK Initilization Stuff
@@ -235,19 +235,19 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                         Screen('FillRect', window, black);
                         vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
                         fix_timeout = 1; 
-                    end
+                    end %give timeout
                     break
-                end
+                end %if monkey not looking at fixpoint
                 if correct_counter > fix_only_time_frames
                     break
-                end
-            end
+                end %if fixate for necessary amoutn of time during waiting period
+            end %if frame < fixation waiting period
             if frame > time_wait_frames(1)
                 Screen('DrawDots', window,[h k], ExpInfo.fixpoint_size_pix, fix_point_color, [], 2);
                 vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
                 if correct_counter > fix_only_time_frames %break out of loop if already fixated for required amount of time
                     break %added 10/31/22-AMS
-                end
+                end %if fixated for necessary amoutn of time
                 if d <= ExpInfo.rew_radius_volts
                     correct_counter = correct_counter + 1;
                 else
@@ -259,9 +259,9 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                         fix_timeout = 1; 
                     end
                     break
-                end
-            end
-        end
+                end %if looking within fix window
+            end %if past the fixation waiting period
+        end %for fixation time frames
        
         %Successful Fixation on Single point 
         if correct_counter > fix_time_frames - waitframes - time_wait_frames(1)
@@ -273,7 +273,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         else
             fix_timeout = 1;
             fix_reward = 'No';
-        end
+        end %if they fixated for sufficient amount of time at any point
         
         
         %% Now we draw the RDK and the fixation point
@@ -463,8 +463,8 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         
         if trialcounter <= total_trials
             disp(['Trial #: ',num2str(trialcounter),'/',num2str(total_trials)])
-        end
-    end
+        end %if not on last trial
+    end %while still going through all the trials
 %% End of Block 
 
 if trialcounter < ExpInfo.num_trials
@@ -504,9 +504,9 @@ num_catch_trials = dotInfo.catchtrials;
     [L_coh, L_pc, L_fig] = psychometric_plotter_1_direction(prob_left_only, 'LEFT ONLY', dotInfo, save_name);
     
     %Save all figures to Figure Directory - NS = Non Staircase
-    saveas(fig_both, [figure_file_directory save_name 'VIS_MCS_Psyc_Func_LR.png'])
-    saveas(R_fig, [figure_file_directory save_name 'VIS_MCS_Psyc_Func_R.png'])
-    saveas(L_fig, [figure_file_directory save_name 'VIS_MCS_Psyc_Func_L.png'])
+    saveas(fig_both, [figure_file_directory save_name '_VIS_MCS_Psyc_Func_LR.png'])
+    saveas(R_fig, [figure_file_directory save_name '_VIS_MCS_Psyc_Func_R.png'])
+    saveas(L_fig, [figure_file_directory save_name '_VIS_MCS_Psyc_Func_L.png'])
     
     times = cell2mat(dataout(2:end,7)); %Extract the trial times 
     Total_Block_Time = sum(times);
