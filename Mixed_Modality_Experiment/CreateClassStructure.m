@@ -60,7 +60,8 @@ dotInfo.numDotField = 1; %Do not change
 dotInfo.dotColor = [255 255 255]; %Dot field Color
 dotInfo.maxDotTime = ExpInfo.stim_time/1000; %Puts this in seconds from ms 
 dotInfo.Incorrect_Opacity = 1; %OPacity for the incorrect target if there is only 1 direction of motion, this for training purposes - eventually will be the same opacity as correct 
-dotInfo.maxDotsPerFrame = 400; %Maximum number of dots per frame of the RDK aperture drawing, DO NOT CHANGE - Graphics Card Specific
+%dotInfo.maxDotsPerFrame = 400; %Maximum number of dots per frame of the RDK aperture drawing, DO NOT CHANGE - Graphics Card Specific
+dotInfo.maxDotsPerFrame = 200; %Maximum number of dots per frame of the RDK aperture drawing, DO NOT CHANGE - Graphics Card Specific
 
 
 %% Auditory Parameters 

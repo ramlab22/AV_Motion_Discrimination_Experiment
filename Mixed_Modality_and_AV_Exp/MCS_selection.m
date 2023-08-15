@@ -1,5 +1,18 @@
-function [trialInfo, staircase_index_dot, staircase_index_aud, staircase_index_av, dotInfo, audInfo, AVInfo] = MCS_selection(ExpInfo, trial_status, trialInfo, staircase_index_aud, staircase_index_dot, staircase_index_av, audInfo, dotInfo, AVInfo)
+function [trialInfo, staircase_index_dot, staircase_index_aud, staircase_index_av, dotInfo, audInfo, AVInfo] = MCS_selection(ExpInfo, trial_num, trialInfo, audInfo, dotInfo, AVInfo)
+if trial_num==1
+     dotInfo.random_coh_list = cohSet_maker_MCS(dotInfo); %Random list of coherence Values for total trials
+     audInfo.random_coh_list = cohSet_maker_MCS(audInfo); %Random list of coherence Values for total trials
 
+     dotInfo.random_dir_list = dir_randomizer_MCS(ExpInfo, dotInfo); %Random directions, 50% R and L for each coherence
+     trialInfo.modality_list=repmat(trialInfo.modality_list, 1, ExpInfo.num_trials*length(dotInfo.cohSet));
+else
+     % Sample modality without replacement
+     [trialInfo.modality, idx] = datasample(trialInfo.modality_list, 1, 'Replace', false);
+     % Remove the sampled elements from trialInfo.modality_list
+     trialInfo.modality_list(idx) = [];
+     trialInfo.modality = trialInfo.modality_list(randi(numel(trialInfo.modality_list)));%Randomly choose modality of first trial
+     trialInfo.modality = trialInfo.modality{1};
+end
 %We need info from the last trial on weather he got the trial correct
 if strcmp(trial_status, 'Correct')
     x_rand = rand(1); %random num between 0-1

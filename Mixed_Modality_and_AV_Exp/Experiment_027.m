@@ -77,16 +77,6 @@ end
 
 
 
-%Make Sure that all values are acceptable, i.e. the wait times aren't longer
-%than the actual presentation of each of the specific stimuli 
-% if ExpInfo.time_wait(1) > (ExpInfo.fixation_time/1000)
-%     disp('Wait time for fixation is Greater than total fixation time, please decrease wait time.')
-%     ExpInfo.time_wait(1) = input('Input New Wait time in Seconds: '); 
-% elseif ExpInfo.time_wait(2) > (ExpInfo.target_fixation_time/1000)
-%     disp('Wait time for target fixation is Greater than total target fixation time, please decrease wait time.')
-%     ExpInfo.time_wait(2) = input('Input New Wait time in Seconds: '); 
-% end
-
 %% Psychtoolbox 
 PsychDefaultSetup(2);
 screenNumber = 2;

@@ -1,13 +1,8 @@
 function [cohSet] = cohSet_maker(dotInfo)
 %Makes as many coherence values needed for amount of regular trials
 
-cohSet = []; 
+cohSet = cell2mat(arrayfun(@(x,y) repmat(y, 1, x), dotInfo.coh_Freq_Set, dotInfo.coherences, 'UniformOutput', false));
 
-for i = 1:length(dotInfo.cohFreq)
-    for j = 1:dotInfo.cohFreq(i)   
-              cohSet(end+1) = dotInfo.coherences(i);
-    end
-end
 
 cohSet = cohSet(randperm(length(cohSet))); %Randomly Scatter the coherence valuesfor regular trials
 %Now we insert the catch trials to the cohSet list so we have all the
