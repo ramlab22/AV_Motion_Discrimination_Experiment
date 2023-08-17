@@ -79,6 +79,6 @@ ylim([0 1])
 grid on
 ax = gca; 
 ax.FontSize = 16;
-%text(0,.2,"p value for CDF coeffs. (mean): " + p_values(1))
-%text(0,.1, "p value for CDF coeffs. (std): " + p_values(2))
+text(0,.2,"mu: " + mu)
+text(0,.1, "std cummulative gaussian: " + std_gaussian)
 end
