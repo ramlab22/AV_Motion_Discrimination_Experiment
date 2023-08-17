@@ -60,7 +60,7 @@ p = cdf('Normal', x, mdl.Coefficients{1,1}, mdl.Coefficients{2,1});
 mu= mdl.Coefficients{1,1};
 %get std of cumulative gaussian (reflects the inherent variability of the psychophysical data)
 std_gaussian= mdl.Coefficients{2,1};
-
+slope_at_50_percent = 1 / (std_gaussian * sqrt(2 * pi));
 
 
 % Plot fit with data.
@@ -78,6 +78,8 @@ ylim([0 1])
 grid on
 text(0,.2,"mu: " + mu)
 text(0,.1, "std cum gaussian: " + std_gaussian)
+text(0,.3, "slope at 50 percent: " + slope_at_50_percent)
+
 %text(0,.2,"std_cumulative_gaussian: " + std_gaussian)
 %text(0,.1, "mu: " + mu)
 end

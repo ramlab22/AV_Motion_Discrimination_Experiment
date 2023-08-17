@@ -707,19 +707,30 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                                         VIS_prob_Right, VIS_prob_Left,...
                                         AV_prob_Right, AV_prob_Left,...
                                         audInfo, dotInfo, AVInfo, save_name);
+    vis_slope_at_50_percent = 1 / (VIS_std * sqrt(2 * pi));
+    aud_slope_at_50_percent = 1 / (AUD_std * sqrt(2 * pi));
+    av_slope_at_50_percent = 1 / (AV_std * sqrt(2 * pi));
+    
+   
 
     display_aud_mu = sprintf('AUD Mu:\n %.2f',AUD_mu);
     disp(display_aud_mu)
     display_aud_std = sprintf('AUD std of cumulative gaussian:\n %.2f',AUD_std);
     disp(display_aud_std)
+    display_aud_slope_at_50_percent = sprintf('AUD slope at 50 percent:\n %.2f',aud_slope_at_50_percent);
+    disp(display_aud_slope_at_50_percent)
     display_vis_mu = sprintf('VIS Mu:\n %.2f',VIS_mu);
     disp(display_vis_mu)
     display_vis_std = sprintf('VIS std of cumulative gaussian:\n %.2f',VIS_std);
     disp(display_vis_std)
+    display_vis_slope_at_50_percent = sprintf('VIS slope at 50 percent:\n %.2f',vis_slope_at_50_percent);
+    disp(display_vis_slope_at_50_percent)
     display_av_mu = sprintf('AV Mu:\n %.2f',AV_mu);
     disp(display_av_mu)
     display_av_std = sprintf('AV std of cumulative gaussian:\n %.2f',AV_std);
     disp(display_av_std)
+    display_av_slope_at_50_percent = sprintf('AV slope at 50 percent:\n %.2f',av_slope_at_50_percent);
+    disp(display_av_slope_at_50_percent)
    
     Eye_Tracker_Plotter(eye_data_matrix);
     

@@ -626,16 +626,22 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         psychometric_plotter_modalities(AUD_prob_Right, AUD_prob_Left, ...
                                         VIS_prob_Right, VIS_prob_Left,...
                                         audInfo, dotInfo, save_name);
-
+    vis_slope_at_50_percent = 1 / (VIS_std * sqrt(2 * pi));
+    aud_slope_at_50_percent = 1 / (AUD_std * sqrt(2 * pi));
+    
     display_aud_mu = sprintf('AUD Mu:\n %.2f',AUD_mu);
     disp(display_aud_mu)
     display_aud_std = sprintf('AUD std of cumulative gaussian:\n %.2f',AUD_std);
     disp(display_aud_std)
+    display_aud_slope_at_50_percent = sprintf('AUD slope at 50 percent:\n %.2f',aud_slope_at_50_percent);
+    disp(display_aud_slope_at_50_percent)
     display_vis_mu = sprintf('VIS Mu:\n %.2f',VIS_mu);
     disp(display_vis_mu)
     display_vis_std = sprintf('VIS std of cumulative gaussian:\n %.2f',VIS_std);
     disp(display_vis_std)
-    
+    display_vis_slope_at_50_percent = sprintf('VIS slope at 50 percent:\n %.2f',vis_slope_at_50_percent);
+    disp(display_vis_slope_at_50_percent)
+
     Eye_Tracker_Plotter(eye_data_matrix);
     
     

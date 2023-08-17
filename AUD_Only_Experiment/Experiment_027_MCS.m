@@ -592,6 +592,8 @@ num_catch_trials = audInfo.catchtrials;
 end
 mu
 std_gaussian
+slope_at_50_percent = 1 / (std_gaussian * sqrt(2 * pi))
+
 %%
 [n_trials_with_response,n_trials_with_reward,proportion_response_reversals_after_correct_response,proportion_response_reversals_after_incorrect_response] = response_reversal_proportions2(dataout);
 % Save all block info and add to a .mat file for later analysis  
