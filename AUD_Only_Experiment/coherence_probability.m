@@ -1,5 +1,8 @@
 function [prob] = coherence_probability(dataout, audInfo) 
 %   Get the probabillity of Righward Response given the amount of rewards given and coherences presented
+dataout(strcmp(dataout(:,6),'N/A'),:)=[]; %delete rows where subject quit before target presented
+dataout(all(cellfun(@isempty, dataout),2),:) = [];%delete empty rows from data cell
+
 
 coherence_rew_numbers = [audInfo.coherences;
         zeros(1,length(audInfo.coherences));

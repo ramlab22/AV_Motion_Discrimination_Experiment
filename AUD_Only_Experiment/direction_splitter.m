@@ -1,6 +1,9 @@
 function [Right_dataout, Left_dataout] = direction_splitter(dataout)
 % %DIRECTION_SPLITTER 
 
+dataout(strcmp(dataout(:,6),'N/A'),:)=[]; %delete rows where subject quit before target presented
+dataout(all(cellfun(@isempty, dataout),2),:) = [];%delete empty rows from data cell
+
 % Split the data out cell array into Left Only and Right Only trials
 % Will be used for psychometric function calculations 
 

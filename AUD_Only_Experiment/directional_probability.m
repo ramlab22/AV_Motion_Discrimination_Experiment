@@ -1,5 +1,9 @@
 function [prob] = directional_probability(directional_dataout, audInfo) 
 
+directional_dataout(strcmp(directional_dataout(:,6),'N/A'),:)=[]; %delete rows where subject quit before target presented
+directional_dataout(all(cellfun(@isempty, directional_dataout),2),:) = [];%delete empty rows from data cell
+
+
     %Gives an array for the probabilities in 1 direction, i.e. Righ or Left Dataout cell array
 
 coherence_rew_numbers = [audInfo.coherences;

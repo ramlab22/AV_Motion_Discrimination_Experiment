@@ -1,5 +1,9 @@
 function [cohFreq_dir] = cohFreq_finder(dataout, audInfo)
-    
+
+    dir_dataout(strcmp(dir_dataout(:,6),'N/A'),:)=[]; %delete rows where subject quit before target presented
+    dir_dataout(all(cellfun(@isempty, dir_dataout),2),:) = [];%delete empty rows from data cell
+
+
     columnIndex = 5; %Catch Trial Column
     filterCondition = @(x) strcmp(x, 'No'); %Filter to only regular Trials, ie Catch Trial = 'No' 
     filteredArray = {};

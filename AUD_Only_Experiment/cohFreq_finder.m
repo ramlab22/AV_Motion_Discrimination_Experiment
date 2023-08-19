@@ -3,14 +3,27 @@ function [cohFreq_dir] = cohFreq_finder(dir_dataout, audInfo)
     % Exclude catch trials
     % Outputs list of coherences and the corresponding frequency of presentation
     
-    
+    dir_dataout(strcmp(dir_dataout(:,6),'N/A'),:)=[]; %delete rows where subject quit before target presented
+    dir_dataout(all(cellfun(@isempty, dir_dataout),2),:) = [];%delete empty rows from data cell
+
+
     columnIndex = 5; %Catch Trial Column
     filterCondition = @(x) strcmp(x, 'No'); %Filter to only regular Trials, ie Catch Trial = 'No' 
     filteredArray = {};
-    for i = 2:size(dir_dataout, 1)
-        if filterCondition(dir_dataout{i, columnIndex})
-            filteredArray = [filteredArray; dir_dataout(i,:)];
+    if  strcmp(dir_dataout(1,1), 'Trial #')
+
+        for i = 2:size(dir_dataout, 1)
+            if filterCondition(dir_dataout{i, columnIndex})
+                filteredArray = [filteredArray; dir_dataout(i,:)];
+            end
         end
+    else
+        for i = 1:size(dir_dataout, 1)
+            if filterCondition(dir_dataout{i, columnIndex})
+                filteredArray = [filteredArray; dir_dataout(i,:)];
+            end
+        end
+        
     end
 
 

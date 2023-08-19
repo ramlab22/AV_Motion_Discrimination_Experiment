@@ -1,4 +1,4 @@
-function [fig, p_values,ci,mu,std_gaussian] = createFit_NormCDF(coh_list, pc, audInfo, save_name)
+function [fig, p_values,ci,mu,std_gaussian,xData,yData,curve_xvals,curve_yvals] = createFit_NormCDF(coh_list, pc, audInfo, save_name)
 %CREATEFIT(COH_LIST,PC_AUD)
 %  Create a fit.
 %
@@ -39,46 +39,42 @@ parms = [mu, sigma];
 normalcdf_fun = @(b, x) 0.5 * (1 + erf((x - b(1)) ./ (b(2) * sqrt(2))));
 mdl = fitnlm(xData, yData, normalcdf_fun, parms, 'Weights', all_sizes);
 
-x = min(xData(:)):.01:max(xData(:));
+curve_xvals = min(xData(:)):.01:max(xData(:));
 
 % Significance of fits 
 [p_values, bootstat,ci] = p_value_calc(yData, parms);
 
 
-% plot(bootstat(:,1),bootstat(:,2),'o')
-% hold on 
-% plot(mu, sigma, "*")
-% xline(ci(1,1),':')
-% xline(ci(2,1),':')
-% yline(ci(1,2),':')
-% yline(ci(2,2),':')
-% xlabel('Mean')
-% ylabel('Standard Deviation')
-% legend('Bootstrapped Coeff.', 'Chosen Coeff.')
-
-p = cdf('Normal', x, mdl.Coefficients{1,1}, mdl.Coefficients{2,1});
+curve_yvals = cdf('Normal', curve_xvals, mdl.Coefficients{1,1}, mdl.Coefficients{2,1});
 %get threshold
 mu= mdl.Coefficients{1,1};
 %get std of cumulative gaussian (reflects the inherent variability of the psychophysical data)
 std_gaussian= mdl.Coefficients{2,1};
+dy_dx = diff(curve_yvals) ./ diff(curve_xvals); % calculates the slope of the CDF curve by taking the difference between consecutive y-values and dividing by the difference between their corresponding x-values
+slope = mean(dy_dx);
 
-
+slope_at_50_percent = 1 / (std_gaussian * sqrt(2 * pi));
 
 % Plot fit with data.
 fig = figure( 'Name', 'Psychometric Function' );
 scatter(xData, yData, all_sizes,'red','LineWidth',2)
 hold on 
-plot(x, p,'red','LineWidth',2.5);
-legend('% Rightward Resp. vs. Coherence', 'NormCDF', 'Location', 'Best', 'Interpreter', 'none' );
+plot(curve_xvals, curve_yvals,'red','LineWidth',2.5);
 % Label axes
 title(sprintf('Auditory Psych. Func. L&R\n%s',save_name), 'Interpreter','none');
 xlabel( 'Coherence ((+)Rightward, (-)Leftward)', 'Interpreter', 'none' );
-ylabel( '% Rightward Response', 'Interpreter', 'none' );
+ylabel( 'Proportion Rightward Response', 'Interpreter', 'none' );
 xlim([-max(xData(:)) max(xData(:))])
 ylim([0 1])
 grid on
 ax = gca; 
-ax.FontSize = 16;
-text(0,.2,"mu: " + mu)
-text(0,.1, "std cummulative gaussian: " + std_gaussian)
+ax.FontSize = 22;
+text(0,.15,"mu: " + mu,'FontSize',22)
+text(0,.1, "std cummulative gaussian: " + std_gaussian,'FontSize',22)
+text(0,.2, "slope at 50 percent: " + slope_at_50_percent,'FontSize',22)
+text(0,.25, "overall slope: " + slope,'FontSize',22)
+text(0,.3, "n_trials: " + sum(all_sizes),'FontSize',22, 'Interpreter', 'none' )
+
+legend('% Rightward Resp. vs. Coherence', 'NormCDF', 'Location', 'Best', 'Interpreter', 'none' );
+
 end

@@ -18,3 +18,4 @@ for i_file=1:length(totalfiles_names)
         master_dataout=vertcat(master_dataout,dataout(2:end,:));
     end % if first file
 end %for each file 
+close all

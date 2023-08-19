@@ -547,6 +547,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         end
     end
 %% End of Block 
+[n_trials_with_response,n_trials_with_reward,proportion_response_reversals_after_correct_response,proportion_response_reversals_after_incorrect_response] = response_reversal_proportions2(dataout);
 
 if trialcounter < ExpInfo.num_trials
     total_trials = trialcounter;
@@ -577,7 +578,7 @@ num_catch_trials =n_catchtrials;
     prob_Right = directional_probability(Right_dataout, audInfo); 
     prob_Left = directional_probability(Left_dataout, audInfo); 
     
-    [x, y, fig_both, coeff_p_values,CIs_of_LR_fit,mu,std_gaussian] = psychometric_plotter(prob_Right,prob_Left, audInfo,save_name);
+    [x, y, fig_both, coeff_p_values,CIs_of_LR_fit,mu,std_gaussian,LR_xdata,LR_ydata,LR_curve_xvals,LR_curve_yvals] = psychometric_plotter(prob_Right,prob_Left, audInfo,save_name);
    % Eye_Tracker_Plotter(eye_data_matrix);
     
     %%Make Rightward only graph
@@ -613,7 +614,6 @@ std_gaussian
 slope_at_50_percent = 1 / (std_gaussian * sqrt(2 * pi))
 
 %%
-[n_trials_with_response,n_trials_with_reward,proportion_response_reversals_after_correct_response,proportion_response_reversals_after_incorrect_response] = response_reversal_proportions2(dataout);
 % Save all block info and add to a .mat file for later analysis  
 %save([data_file_directory save_name],'save_name','dataout','Fixation_Success_Rate','AUD_Success_Rate','Target_Success_Rate_Regular','Target_Success_Rate_Catch','ExpInfo','audInfo','Total_Block_Time','eye_data_matrix', "coeff_p_values",'CIs_of_LR_fit','n_trials_with_response','n_trials_with_reward','proportion_response_reversals_after_correct_response','proportion_response_reversals_after_incorrect_response','threshold', 'prob');
 save([data_file_directory save_name]);
