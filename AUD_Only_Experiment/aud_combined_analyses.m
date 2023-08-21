@@ -2,9 +2,9 @@
 %to combine, plot, and analyze. this script goes into that folder, combines
 %those files, plots the psychometric function, and gives you mu and the
 %standard deviation of the cumulative gaussian of the function (mu)
-Path = '/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Alv_aud_MCS/' ;% wherever you want to search
+Path = '/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Alv_aud_dbSNR10_fixedspeakers/' ;% wherever you want to search
 [dataout,column_titles,totalfiles_names] = combine_data_acrossblocks(Path);
-save_name='Alv_aud_dbSNR10_MCS';
+save_name='Alv_aud_staircase';
 
 audInfo.coherences=unique(cell2mat(dataout(2:end,8)))';
 [audInfo.cohFreq] = cohFreq_finder(dataout, audInfo);
@@ -15,7 +15,7 @@ num_regular_trials = total_trials;
 num_catch_trials =0; %set catch trials to 0 since the combine_data_acrossblocks function already deleted catch trials
 
 %[Fixation_Success_Rate, AUD_Success_Rate, Target_Success_Rate_Regular, Target_Success_Rate_Catch] = SR_CALC(dataout,total_trials,num_regular_trials,num_catch_trials)
-    
+    format long g
     %Break down of each success rate based on coherence level 
     prob = coherence_probability(dataout,audInfo)
 %    prob_zero = prob(1,:); 

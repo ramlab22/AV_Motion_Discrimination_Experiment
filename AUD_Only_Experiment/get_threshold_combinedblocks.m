@@ -151,9 +151,9 @@ if show_results_and_figs==1
     scatter(xData, yData, all_sizes,'filled','LineWidth',5,'MarkerEdgeColor','k','MarkerFaceColor','k');
     hold on
     plot(curve_xvals, curve_yvals,'LineWidth',5);
-    text(0,.2,"mu: " + mu)
-    text(0,.1, "std cummulative gaussian: " + std_gaussian)
-    text(0,.3, "slope at 50 percent: " + slope_at_50_percent)
+    text(0,.2,"mu: " + mu);
+    text(0,.1, "std cummulative gaussian: " + std_gaussian);
+    text(0,.3, "slope at 50 percent: " + slope_at_50_percent);
 
     legend('% Rightward Resp. vs. Coherence', 'NormCDF','Location', 'Best', 'Interpreter', 'none' );
 
@@ -173,9 +173,9 @@ end
     ylabel( '% Rightward Response', 'Interpreter', 'none' );
     xlim([-1 1]);
     ylim([0 1]);
-    text(0,.2,"mu: " + mu)
-    text(0,.1, "std cummulative gaussian: " + std_gaussian)
-    text(0,.3, "slope at 50 percent: " + slope_at_50_percent)
+    text(0,.2,"mu: " + mu);
+    text(0,.1, "std cummulative gaussian: " + std_gaussian);
+    text(0,.3, "slope at 50 percent: " + slope_at_50_percent);
 
     grid on
 end %if generate_figure 

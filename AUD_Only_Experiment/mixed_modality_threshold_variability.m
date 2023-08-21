@@ -13,11 +13,11 @@
 %folder_name=folder_name;
 %cd test_data
 %n_permutations=1;
-n_permutations=1;
+n_permutations=100;
 %chosen_threshold=0.72;
 max_n_coherences=11;
 %Path = '/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/AUD_Only_Experiment/test_data/' ;% wherever you want to search
-Path = '/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Alv_aud_dbSNR10_fixed and unfixed speakers/' ;% wherever you want to search
+Path = '/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Ba/Ba_all_staircase_10dBSNR/' ;% wherever you want to search
 combine_blocks=0;
 %condition: 1=visual, 2=auditory, 3=AV
 %in AV data files for coherence column (8), first value in double is aud,
@@ -242,6 +242,7 @@ end
 xticks(ax, unique(datenum(sorted_dates)));
 xticklabels(ax, unique(file_date_cells(idx),'stable'));
 xtickangle(ax, 45);
+%ylim([0.2 0.4]);
 
 % Set the title and axis labels
 title(ax, 'Mean Slopes Across 100 Permutations');
@@ -250,12 +251,12 @@ ylabel(ax, 'Mean Slope');
 
 % Adjust the figure properties
 grid(ax, 'on');
-set(ax, 'FontSize', 12);
+set(ax, 'FontSize', 22);
 set(fig, 'Position', [100 100 1000 500]);
 % create the legend with one entry per category
 
-%legend([visual_pts(1) auditory_pts(1) av_pts(1)], {'Visual', 'Auditory', 'AV'},'Location', 'Best');
-legend([auditory_pts(1)], 'Auditory','Location', 'Best');
+legend([visual_pts(1) auditory_pts(1) av_pts(1)], {'Visual', 'Auditory', 'AV'},'Location', 'Best');
+%legend([auditory_pts(1)], 'Auditory','Location', 'Best');
 
 %legend([visual_pts(1) auditory_pts(1) ], {'Visual', 'Auditory'},'Location', 'Best');
 
@@ -294,7 +295,7 @@ end
 xticks(ax, unique(datenum(sorted_dates)));
 xticklabels(ax, unique(file_date_cells(idx),'stable'));
 xtickangle(ax, 45);
-
+ylim([0.4 2]);
 % Set the title and axis labels
 title(ax, 'Mean Thresholds (std of cummulative gaussian)');
 xlabel(ax, 'Date');
@@ -302,9 +303,9 @@ ylabel(ax, 'Mean Threshold');
 
 % Adjust the figure properties
 grid(ax, 'on');
-set(ax, 'FontSize', 12);
+set(ax, 'FontSize', 22);
 set(fig, 'Position', [100 100 1000 500]);
 % create the legend with one entry per category
-%legend([visual_pts(1) auditory_pts(1) av_pts(1)], {'Visual', 'Auditory', 'AV'},'Location', 'Best');
+legend([visual_pts(1) auditory_pts(1) av_pts(1)], {'Visual', 'Auditory', 'AV'},'Location', 'Best');
 %legend([visual_pts(1) auditory_pts(1) ], {'Visual', 'Auditory'},'Location', 'Best');
-legend([auditory_pts(1)], 'Auditory','Location', 'Best');
+%legend([auditory_pts(1)], 'Auditory','Location', 'Best');

@@ -1,6 +1,6 @@
-Path = '/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/alv_vis_velocity93/' ;% wherever you want to search
+Path = '/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Alv_vis_staircase/' ;% wherever you want to search
 [dataout,column_titles,totalfiles_names] = combine_data_acrossblocks(Path);
-save_name='alv_vis_velocity93';
+save_name='alv_vis_staircase';
 [dataout]=convert_vis_directioncode(dataout);
 dotInfo.coherences=unique(cell2mat(dataout(2:end,8)))';
 [dotInfo.cohFreq] = cohFreq_finder(dataout, dotInfo);
@@ -25,8 +25,7 @@ num_catch_trials =0;
     
     prob_Right = directional_probability(Right_dataout, dotInfo); 
     prob_Left = directional_probability(Left_dataout, dotInfo); 
-    chosen_threshold=0.72;
-    [x, y, fig_both, coeff_p_values,CIs_of_LR_fit,mu,std_gaussian,LR_xdata,LR_ydata,LR_curve_xvals,LR_curve_yvals] = psychometric_plotter(prob_Right,prob_Left, audInfo,save_name);
+    [x, y, fig_both, coeff_p_values,CIs_of_LR_fit,mu,std_gaussian,LR_xdata,LR_ydata,LR_curve_xvals,LR_curve_yvals] = psychometric_plotter(prob_Right,prob_Left, dotInfo,save_name);
    % Eye_Tracker_Plotter(eye_data_matrix);
     
     %%Make Rightward only graph
@@ -38,6 +37,11 @@ num_catch_trials =0;
     [L_coh, L_pc, L_fig] = psychometric_plotter_1_direction(prob_left_only, 'LEFT ONLY', dotInfo, save_name);
     mu
     std_gaussian
+    slope_at_50_percent = 1 / (std_gaussian * sqrt(2 * pi))
+    dy_dx = diff(LR_curve_yvals) ./ diff(LR_curve_xvals); % calculates the slope of the CDF curve by taking the difference between consecutive y-values and dividing by the difference between their corresponding x-values
+    slope = mean(dy_dx)
+    figure_file_directory=Path;
+
     figure_file_directory=Path;
     %Save all figures to Figure Directory
    % saveas(fig_both, [figure_file_directory save_name '_AUD_Psyc_Func_LR.png'])

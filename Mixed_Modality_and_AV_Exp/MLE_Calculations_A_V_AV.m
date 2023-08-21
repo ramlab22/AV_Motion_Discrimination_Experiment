@@ -1,4 +1,4 @@
-function [Results_MLE] = MLE_Calculations_A_V_AV(x,AUD_p,VIS_p,AV_p,AUD_mdl, VIS_mdl, AV_mdl,AUD_yData,VIS_yData, AV_yData,AUD_xData,VIS_xData, AV_xData)
+function [Results_MLE] = MLE_Calculations_A_V_AV(AUD_mdl, VIS_mdl, AV_mdl,AUD_yData,VIS_yData, AV_yData,AUD_xData,VIS_xData, AV_xData)
 % get residuals of all models
 AUD_fittedValues = feval(AUD_mdl, AUD_xData);
 AUD_residuals = AUD_yData - AUD_fittedValues;
@@ -18,7 +18,7 @@ Results_MLE.VIS_Mu = VIS_mdl.Coefficients{1, 1};
 Results_MLE.VIS_SD = VIS_mdl.Coefficients{2, 1};
 Results_MLE.VIS_Variance = Results_MLE.VIS_SD^2;
 
-%get measured AV function parameters
+% %get measured AV function parameters
 Results_MLE.AV_R2 = 1-sum(AV_residuals.^2)/sum((AV_yData-mean(AV_yData)).^2); % R2 = 1 – SSresid / SStotal
 Results_MLE.AV_Mu = AV_mdl.Coefficients{1, 1};
 Results_MLE.AV_SD = AV_mdl.Coefficients{2, 1};

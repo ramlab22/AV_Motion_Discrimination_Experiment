@@ -5,11 +5,15 @@ function [master_dataout,column_titles,totalfiles_names] = combine_data_acrossbl
 [totalfiles,totalfiles_names] = get_datafile_info(Path);
 
 for i_file=1:length(totalfiles_names)
-    load(horzcat(Path,totalfiles_names{1,i_file}));
+    load(horzcat(Path,totalfiles_names{1,i_file}),"dataout");
     %delete empty rows from data cell
     dataout(all(cellfun(@isempty, dataout),2),:) = [];
     %delete catch trials from data cell
     dataout(strcmp(dataout(:,5),'Yes'),:)=[];
+    % if length(dataout)>500
+    %     dataout=dataout(1:501,:);
+    % end
+
     %combine all data in folder into one master_dataout cell
     if i_file==1
         master_dataout=dataout;
@@ -18,4 +22,4 @@ for i_file=1:length(totalfiles_names)
         master_dataout=vertcat(master_dataout,dataout(2:end,:));
     end % if first file
 end %for each file 
-close all
+%close all
