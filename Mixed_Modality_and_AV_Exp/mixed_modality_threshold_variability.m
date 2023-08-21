@@ -12,12 +12,12 @@
 % estimates of threshold, so that the variability of the threshold could be determined." -Dylla et al. 2013
 %folder_name=folder_name;
 %cd test_data
-%n_permutations=100;
-n_permutations=1;
-chosen_threshold=0.72;
+%n_permutations=1;
+n_permutations=100;
+%chosen_threshold=0.72;
 max_n_coherences=11;
 %Path = '/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/AUD_Only_Experiment/test_data/' ;% wherever you want to search
-Path = '/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/AUD_Only_Experiment/test_data/ba_data/' ;% wherever you want to search
+Path = '/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Ba/Ba_all_staircase_10dBSNR/' ;% wherever you want to search
 combine_blocks=0;
 %condition: 1=visual, 2=auditory, 3=AV
 %in AV data files for coherence column (8), first value in double is aud,
@@ -120,14 +120,16 @@ for i_newfile=1:n_newfiles
             file_coherences=cell2mat(newfile_dataout(2:end,8));
             [n_per_coherence, coherences] = groupcounts(file_coherences);
             n_coherences=length(coherences);
-            [file_fit_mean_midpoint_VIS,file_slope_VIS,file_std_slope_VIS,file_curve_xvals_VIS,file_curve_yvals_VIS,~,file_threshold_VIS,file_prob_VIS] = get_threshold_combinedblocks(newfile_dataout,coherences',totalfiles_names_separated_conditions(i_newfile),condition,chosen_threshold,0);
+            [permutation_slope_at_50_percent,file_slope_VIS,file_std_slope_VIS,file_mu_VIS,file_curve_xvals_VIS,file_curve_yvals_VIS,file_threshold_VIS,file_prob_VIS] = get_threshold_combinedblocks(newfile_dataout,coherences',totalfiles_names_separated_conditions(i_newfile),condition,0);
+           % [file_fit_mean_midpoint_VIS,file_slope_VIS,file_std_slope_VIS,file_curve_xvals_VIS,file_curve_yvals_VIS,~,file_threshold_VIS,file_prob_VIS] = get_threshold_combinedblocks(newfile_dataout,coherences',totalfiles_names_separated_conditions(i_newfile),condition,chosen_threshold,0);
             
         case 'AU'
             condition=2;
             file_coherences=cell2mat(newfile_dataout(2:end,8));
             [n_per_coherence, coherences] = groupcounts(file_coherences);
             n_coherences=length(coherences);
-            [file_fit_mean_midpoint_AUD,file_slope_AUD,file_std_slope_AUD,file_curve_xvals_AUD,file_curve_yvals_AUD,~,file_threshold_AUD,file_prob_AUD] = get_threshold_combinedblocks(newfile_dataout,coherences',totalfiles_names_separated_conditions(i_newfile),condition,chosen_threshold,0);
+            %[file_fit_mean_midpoint_AUD,file_slope_AUD,file_std_slope_AUD,file_curve_xvals_AUD,file_curve_yvals_AUD,~,file_threshold_AUD,file_prob_AUD] = get_threshold_combinedblocks(newfile_dataout,coherences',totalfiles_names_separated_conditions(i_newfile),condition,chosen_threshold,0);
+            [permutation_slope_at_50_percent,file_slope_AUD,file_std_slope_AUD,file_mu_AUD,file_curve_xvals_AUD,file_curve_yvals_AUD,file_threshold_AUD,file_prob_AUD] = get_threshold_combinedblocks(newfile_dataout,coherences',totalfiles_names_separated_conditions(i_newfile),condition,0);
             
         case 'AV'
             condition=3;
@@ -135,7 +137,8 @@ for i_newfile=1:n_newfiles
             [n_per_coherence, coherences] = groupcounts(file_coherences); %n_per_coherence in this case is n per unique coherence combos (still gives you column vector of these vals), and coherences gives you a cell per coherence column
             coherences=horzcat(coherences{:}); %convert separate coherence columns into array with each row being each unique coherence combo, corresponding to rows in n_per_coherence
             n_coherences=size(coherences,1); %n_coherences is number of unique coherence combos
-            [file_fit_mean_midpoint_AV,file_slope_AV,file_std_slope_AV,file_curve_xvals_AV,file_curve_yvals_AV,~,file_threshold_AV,file_prob_AV] = get_threshold_combinedblocks(newfile_dataout,coherences',totalfiles_names_separated_conditions(i_newfile),condition,chosen_threshold,0);
+            %[file_fit_mean_midpoint_AV,file_slope_AV,file_std_slope_AV,file_curve_xvals_AV,file_curve_yvals_AV,~,file_threshold_AV,file_prob_AV] = get_threshold_combinedblocks(newfile_dataout,coherences',totalfiles_names_separated_conditions(i_newfile),condition,chosen_threshold,0);
+            [permutation_slope_at_50_percent,file_slope_AV,file_std_slope_AV,file_mu_AV,file_curve_xvals_AV,file_curve_yvals_AV,file_threshold_AV,file_prob_AV] = get_threshold_combinedblocks(newfile_dataout,coherences',totalfiles_names_separated_conditions(i_newfile),condition,0);
             
     end
     newfile_dataout=newfile_dataout(2:end,:);
@@ -149,7 +152,8 @@ for i_newfile=1:n_newfiles
             rand_index = randsample(1:n_trials_in_icoherence, n_trials_in_icoherence, true); %get index of randomly sampled trials with replacement
             permutation_dataout=vertcat(permutation_dataout,icoherence_dataout(rand_index,:));
         end %for each coherence
-        [permutation_fit_mean_midpoint,permutation_slope,permutation_standarddeviation_slope,permutation_curve_xvals,permutation_curve_yvals,~,permutation_threshold,permutation_prob] = get_threshold_combinedblocks(permutation_dataout,coherences',totalfiles_names,condition,chosen_threshold,0);
+        [permutation_slope_at_50_percent,permutation_slope,permutation_standarddeviation_slope,mu,curve_xvals,curve_yvals,permutation_threshold,prob] = get_threshold_combinedblocks(permutation_dataout,coherences',totalfiles_names,condition,0);
+    %    [permutation_fit_mean_midpoint,permutation_slope,permutation_standarddeviation_slope,permutation_curve_xvals,permutation_curve_yvals,permutation_threshold,permutation_prob] = get_threshold_combinedblocks(permutation_dataout,coherences',totalfiles_names,condition,chosen_threshold,0);
         slopes_per_permutation(i_permutation,i_newfile)=permutation_slope;
         std_slopes_per_permutation(i_permutation,i_newfile)=permutation_standarddeviation_slope;
         
@@ -237,6 +241,7 @@ end
 xticks(ax, unique(datenum(sorted_dates)));
 xticklabels(ax, unique(file_date_cells(idx),'stable'));
 xtickangle(ax, 45);
+%ylim([0.2 0.4]);
 
 % Set the title and axis labels
 title(ax, 'Mean Slopes Across 100 Permutations');
@@ -245,11 +250,12 @@ ylabel(ax, 'Mean Slope');
 
 % Adjust the figure properties
 grid(ax, 'on');
-set(ax, 'FontSize', 12);
+set(ax, 'FontSize', 22);
 set(fig, 'Position', [100 100 1000 500]);
 % create the legend with one entry per category
 
 legend([visual_pts(1) auditory_pts(1) av_pts(1)], {'Visual', 'Auditory', 'AV'},'Location', 'Best');
+%legend([auditory_pts(1)], 'Auditory','Location', 'Best');
 
 %legend([visual_pts(1) auditory_pts(1) ], {'Visual', 'Auditory'},'Location', 'Best');
 
@@ -288,16 +294,17 @@ end
 xticks(ax, unique(datenum(sorted_dates)));
 xticklabels(ax, unique(file_date_cells(idx),'stable'));
 xtickangle(ax, 45);
-
+%ylim([0.4 2]);
 % Set the title and axis labels
-title(ax, 'Mean Thresholds at 72% Rightward Response');
+title(ax, 'Mean Thresholds (std of cumulative gaussian)');
 xlabel(ax, 'Date');
 ylabel(ax, 'Mean Threshold');
 
 % Adjust the figure properties
 grid(ax, 'on');
-set(ax, 'FontSize', 12);
+set(ax, 'FontSize', 22);
 set(fig, 'Position', [100 100 1000 500]);
 % create the legend with one entry per category
 legend([visual_pts(1) auditory_pts(1) av_pts(1)], {'Visual', 'Auditory', 'AV'},'Location', 'Best');
 %legend([visual_pts(1) auditory_pts(1) ], {'Visual', 'Auditory'},'Location', 'Best');
+%legend([auditory_pts(1)], 'Auditory','Location', 'Best');

@@ -173,9 +173,10 @@ end
     ylabel( '% Rightward Response', 'Interpreter', 'none' );
     xlim([-1 1]);
     ylim([0 1]);
-    text(0,.2,"mu: " + mu);
+    text(0,.15,"mu: " + mu);
     text(0,.1, "std cummulative gaussian: " + std_gaussian);
-    text(0,.3, "slope at 50 percent: " + slope_at_50_percent);
+    text(0,.2, "slope at 50 percent: " + slope_at_50_percent);
+    text(0,.25, "overall slope: " + slope);
 
     grid on
 end %if generate_figure 

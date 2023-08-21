@@ -1,4 +1,4 @@
-function [fit_mean_midpoint,slope,slope_std,curve_xvals,curve_yvals,ci,threshold,prob] = get_threshold_combinedblocks(dataout,coherences,totalfiles_names,condition,chosen_threshold,show_results_and_figs)
+function [slope_at_50_percent,slope,slope_std,mu,curve_xvals,curve_yvals,std_gaussian,prob] = get_threshold_combinedblocks(dataout,coherences,totalfiles_names,condition,show_results_and_figs)
 %condition: 1=visual, 2=auditory, 3=AV
 %show_results_and_figs: 1=generate psychometric function figure and print results of analysis in command window, else: don't generate figure
 total_trials = length(dataout);  
@@ -90,47 +90,58 @@ mu = mean(yData);
 sigma =std(yData);
 parms=[mu, sigma]; %initial parameter estimates
 
-fun_1 = @(b, x)cdf('Normal', x, b(1), b(2)); %normal cumulative distribution function with mean b(1) and standard deviation b(2)
-fun = @(b)sum((fun_1(b,xData) - yData).^2); %calculates the sum of squared residuals between the observed data yData and the model prediction fun_1(b, xData).
-opts = optimset('MaxFunEvals',50000, 'MaxIter',10000); %structure of fminsearch optimization options (maximum number of function evaluations and iterations)
-fit_params = fminsearch(fun, parms, opts); %vector of two parameters estimated by minimizing the sum of squared residuals between the observed data yData and the model prediction fun_1(b, xData).
-fit_mean_midpoint=fit_params(1);
-fit_standarddeviation_slope=fit_params(2); %estimated standard deviation of the CDF that is used as a model to fit the data. controls the spread of the normal distribution and affects the shape of the fitted curve
-%New mdl to account for weights of PCs 
+% fun_1 = @(b, x)cdf('Normal', x, b(1), b(2)); %normal cumulative distribution function with mean b(1) and standard deviation b(2)
+% fun = @(b)sum((fun_1(b,xData) - yData).^2); %calculates the sum of squared residuals between the observed data yData and the model prediction fun_1(b, xData).
+% opts = optimset('MaxFunEvals',50000, 'MaxIter',10000); %structure of fminsearch optimization options (maximum number of function evaluations and iterations)
+% fit_params = fminsearch(fun, parms, opts); %vector of two parameters estimated by minimizing the sum of squared residuals between the observed data yData and the model prediction fun_1(b, xData).
+% fit_mean_midpoint=fit_params(1);
+% fit_standarddeviation_slope=fit_params(2); %estimated standard deviation of the CDF that is used as a model to fit the data. controls the spread of the normal distribution and affects the shape of the fitted curve
+% %New mdl to account for weights of PCs 
+% normalcdf_fun = @(b, x) 0.5 * (1 + erf((x - b(1)) ./ (b(2) * sqrt(2))));
+% mdl = fitnlm(xData, yData, normalcdf_fun, parms, 'Weights', all_sizes);
+% fun_1 = @(b, x)cdf('Normal', x, b(1), b(2));
+% fun = @(b)sum((fun_1(b,xData) - yData).^2); 
+% opts = optimset('MaxFunEvals',50000, 'MaxIter',10000); 
+% fit_par = fminsearch(fun, parms, opts);
+
+%non-linear model to add weights to function fit based on # of trials per data point  
 normalcdf_fun = @(b, x) 0.5 * (1 + erf((x - b(1)) ./ (b(2) * sqrt(2))));
 mdl = fitnlm(xData, yData, normalcdf_fun, parms, 'Weights', all_sizes);
 
-curve_xvals = -1:.01:1;
-if show_results_and_figs==1 
-    [ci,bootstat] = bootci(100,@(curve_xvals)[mean(curve_xvals) std(curve_xvals)],yData);
-else
-    [ci,bootstat] = bootci(100,@(curve_xvals)[mean(curve_xvals) std(curve_xvals)],yData);
+curve_xvals = min(xData(:)):.01:max(xData(:));
 
-end
-SE = (ci(2,:) - ci(1,:))./(2*1.96); %measure of the precision of the estimated mean of the data. reflects variability of the sample mean across different samples
-z = parms./SE; %slope?
-p_values = exp(-0.717.*z - 0.416.*z.^2);
+% Significance of fits 
+[p_values, bootstat,ci] = p_value_calc(yData, parms);
 
-% plot(bootstat(:,1),bootstat(:,2),'o')
-% hold on 
-% plot(mu, sigma, "*")
-% xline(ci(1,1),':')
-% xline(ci(2,1),':')
-% yline(ci(1,2),':')
-% yline(ci(2,2),':')
-% xlabel('Mean')
-% ylabel('Standard Deviation')
-% legend('Bootstrapped Coeff.', 'Chosen Coeff.')
+
+curve_yvals = cdf('Normal', curve_xvals, mdl.Coefficients{1,1}, mdl.Coefficients{2,1});
+%get threshold
+mu= mdl.Coefficients{1,1};
+%get std of cumulative gaussian (reflects the inherent variability of the psychophysical data)
+std_gaussian= mdl.Coefficients{2,1};
+slope_at_50_percent = 1 / (std_gaussian * sqrt(2 * pi));
+
+%curve_xvals = -1:.01:1;
+[ci,bootstat] = bootci(100,@(curve_xvals)[mean(curve_xvals) std(curve_xvals)],yData);
+
+% if show_results_and_figs==1 
+%     [ci,bootstat] = bootci(100,@(curve_xvals)[mean(curve_xvals) std(curve_xvals)],yData)
+% else
+%     [ci,bootstat] = bootci(100,@(curve_xvals)[mean(curve_xvals) std(curve_xvals)],yData);
+% 
+% end
+% SE = (ci(2,:) - ci(1,:))./(2*1.96); %measure of the precision of the estimated mean of the data. reflects variability of the sample mean across different samples
+% z = parms./SE; %slope?
+%p_values = exp(-0.717.*z - 0.416.*z.^2);
 
 %curve_yvals = cdf('Normal', curve_xvals, fit_params(1), fit_params(2));
-curve_yvals = cdf('Normal', curve_xvals, mdl.Coefficients{1,1}, mdl.Coefficients{2,1});
-
+% 
 dy_dx = diff(curve_yvals) ./ diff(curve_xvals); % calculates the slope of the CDF curve by taking the difference between consecutive y-values and dividing by the difference between their corresponding x-values
 slope = mean(dy_dx);
 slope_std = std(bootstat(:,2));
-%get threshold
-threshold_location=find(curve_yvals >= chosen_threshold, 1);
-threshold=curve_xvals(1,threshold_location);
+% %get threshold
+% threshold_location=find(curve_yvals >= chosen_threshold, 1);
+% threshold=curve_xvals(1,threshold_location);
 
 %[x, y, fig_both] = psychometric_plotter(prob_Right,prob_Left, audInfo, save_name);
 if show_results_and_figs==1
@@ -140,10 +151,10 @@ if show_results_and_figs==1
     scatter(xData, yData, all_sizes,'filled','LineWidth',5,'MarkerEdgeColor','k','MarkerFaceColor','k');
     hold on
     plot(curve_xvals, curve_yvals,'LineWidth',5);
-    if size(threshold,2)>0
-        plot(threshold,chosen_threshold,'r^','MarkerSize',7,'LineWidth',5);
-        legend('% Rightward Resp. vs. Coherence', 'NormCDF', sprintf('Threshold (%d%%)=%1.3f',chosen_threshold*100,threshold),'Location', 'Best', 'Interpreter', 'none' );
-    else
+    text(0,.2,"mu: " + mu);
+    text(0,.1, "std cummulative gaussian: " + std_gaussian);
+    text(0,.3, "slope at 50 percent: " + slope_at_50_percent);
+
         legend('% Rightward Resp. vs. Coherence', 'NormCDF','Location', 'Best', 'Interpreter', 'none' );
 
 end
@@ -162,7 +173,11 @@ end
     ylabel( '% Rightward Response', 'Interpreter', 'none' );
     xlim([-1 1]);
     ylim([0 1]);
+    text(0,.15,"mu: " + mu);
+    text(0,.1, "std cummulative gaussian: " + std_gaussian);
+    text(0,.2, "slope at 50 percent: " + slope_at_50_percent);
+    text(0,.25, "overall slope: " + slope);
+
     grid on
 end %if generate_figure 
 
-end

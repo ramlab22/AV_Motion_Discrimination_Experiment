@@ -295,9 +295,9 @@ end
 xticks(ax, unique(datenum(sorted_dates)));
 xticklabels(ax, unique(file_date_cells(idx),'stable'));
 xtickangle(ax, 45);
-ylim([0.4 2]);
+%ylim([0.4 2]);
 % Set the title and axis labels
-title(ax, 'Mean Thresholds (std of cummulative gaussian)');
+title(ax, 'Mean Thresholds (std of cumulative gaussian)');
 xlabel(ax, 'Date');
 ylabel(ax, 'Mean Threshold');
 
