@@ -40,7 +40,6 @@ num_catch_trials =0;
     slope_at_50_percent = 1 / (std_gaussian * sqrt(2 * pi))
     dy_dx = diff(LR_curve_yvals) ./ diff(LR_curve_xvals); % calculates the slope of the CDF curve by taking the difference between consecutive y-values and dividing by the difference between their corresponding x-values
     slope = mean(dy_dx)
-    figure_file_directory=Path;
 
     figure_file_directory=Path;
     %Save all figures to Figure Directory

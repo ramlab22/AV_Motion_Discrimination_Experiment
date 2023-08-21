@@ -1,7 +1,7 @@
 function [cohFreq_dir] = cohFreq_finder(dataout, audInfo)
 
-    dir_dataout(strcmp(dir_dataout(:,6),'N/A'),:)=[]; %delete rows where subject quit before target presented
-    dir_dataout(all(cellfun(@isempty, dir_dataout),2),:) = [];%delete empty rows from data cell
+    dataout(strcmp(dataout(:,6),'N/A'),:)=[]; %delete rows where subject quit before target presented
+    dataout(all(cellfun(@isempty, dataout),2),:) = [];%delete empty rows from data cell
 
 
     columnIndex = 5; %Catch Trial Column

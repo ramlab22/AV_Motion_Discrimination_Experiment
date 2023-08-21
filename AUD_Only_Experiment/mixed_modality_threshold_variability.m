@@ -12,7 +12,7 @@
 % estimates of threshold, so that the variability of the threshold could be determined." -Dylla et al. 2013
 %folder_name=folder_name;
 %cd test_data
-%n_permutations=1;
+%n_permutations=50;
 n_permutations=100;
 %chosen_threshold=0.72;
 max_n_coherences=11;
@@ -245,7 +245,7 @@ xtickangle(ax, 45);
 %ylim([0.2 0.4]);
 
 % Set the title and axis labels
-title(ax, 'Mean Slopes Across 100 Permutations');
+title(ax, sprintf('Mean Slopes Across %d Permutations',n_permutations));
 xlabel(ax, 'Date');
 ylabel(ax, 'Mean Slope');
 
@@ -268,7 +268,7 @@ ax = axes(fig);
 
 % Define a color map for the different file_condition_number values
 
-% Plot mean_slopes with error bars
+% Plot mean_thresh with error bars
 hold(ax, 'on');
 visual_pts = [];
 auditory_pts = [];
@@ -296,6 +296,7 @@ xticks(ax, unique(datenum(sorted_dates)));
 xticklabels(ax, unique(file_date_cells(idx),'stable'));
 xtickangle(ax, 45);
 %ylim([0.4 2]);
+%ylim([0 4]);
 % Set the title and axis labels
 title(ax, 'Mean Thresholds (std of cumulative gaussian)');
 xlabel(ax, 'Date');

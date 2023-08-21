@@ -1,6 +1,6 @@
-Path = '/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/alv_aud_vis_velocity93/' ;% wherever you want to search
+Path = '/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Ba/Ba_A+V+AV_staircase/' ;% wherever you want to search
 [dataout,column_titles,totalfiles_names] = combine_data_acrossblocks(Path);
-save_name='alv_aud_vis_velocity93';
+save_name='Ba_A+V+AV_staircase';
 
 %% End of Block
 [AUD_dataout, VIS_dataout, AV_dataout] = modality_splitter(dataout);
@@ -97,10 +97,10 @@ VIS_prob_left_only = coherence_probability_1_direction(VIS_Left_dataout, dotInfo
 
 figure_file_directory=Path;
 %Save all figures to Figure Directory
-saveas(fig_3_AUD_VIS_AV, [figure_file_directory save_name '_Psyc_Func_LR_MMAV.png']);
-saveas(R_fig_AV, [figure_file_directory save_name '_Psyc_Func_R_MMAV.png']);
-saveas(L_fig_AV, [figure_file_directory save_name '_Psyc_Func_L_MMAV.png']);
-
+% saveas(fig_3_AUD_VIS_AV, [figure_file_directory save_name '_Psyc_Func_LR_MMAV.png']);
+% saveas(R_fig_AV, [figure_file_directory save_name '_Psyc_Func_R_MMAV.png']);
+% saveas(L_fig_AV, [figure_file_directory save_name '_Psyc_Func_L_MMAV.png']);
+% 
 
 
 

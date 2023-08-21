@@ -1,7 +1,7 @@
 
-Path = '/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Ba_av_velocity50/' ;% wherever you want to search
+Path = '/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Ba/Ba_A+V+AV_staircase/' ;% wherever you want to search
 [dataout,column_titles,totalfiles_names] = combine_data_acrossblocks(Path);
-save_name='Ba_av_velocity50';
+save_name='Ba_A_V_AV_staircase';
 
 %% End of Block
 [AUD_dataout, VIS_dataout, AV_dataout] = modality_splitter(dataout);
@@ -53,7 +53,6 @@ VIS_prob_Left = directional_probability(VIS_Left_dataout, dotInfo, 'Left', 'VIS'
 AV_prob_Right = directional_probability_AV(AV_Right_dataout, AVInfo, 'Right');
 AV_prob_Left = directional_probability_AV(AV_Left_dataout, AVInfo, 'Left');
 
-chosen_threshold = .72;
 
 [fig_3_AUD_VIS_AV,BF_AUD_VIS, BF_AUD_AV, BF_VIS_AV,AUD_mu,VIS_mu, AV_mu, AUD_std_cumulative_gaussian,VIS_std_cumulative_gaussian,AV_std_cumulative_gaussian,Results_MLE] = ...
     psychometric_plotter_modalities(AUD_prob_Right, AUD_prob_Left, ...
@@ -61,19 +60,28 @@ chosen_threshold = .72;
     AV_prob_Right, AV_prob_Left,...
     audInfo, dotInfo, AVInfo, save_name);
 
+aud_slope_at_50_percent = 1 / (AUD_std_cumulative_gaussian * sqrt(2 * pi))
+vis_slope_at_50_percent = 1 / (VIS_std_cumulative_gaussian * sqrt(2 * pi))
+AV_slope_at_50_percent = 1 / (AV_std_cumulative_gaussian * sqrt(2 * pi))
+
 display_aud_mu = sprintf('AUD Mu: %.2f',AUD_mu);
 disp(display_aud_mu)
 display_aud_std = sprintf('AUD std of cumulative gaussian: %.2f',AUD_std_cumulative_gaussian);
 disp(display_aud_std)
+display_aud_slope_50_percent = sprintf('AUD slope at 50 percent: %.2f',aud_slope_at_50_percent);
+disp(display_aud_slope_50_percent)
 display_vis_mu = sprintf('VIS Mu: %.2f',VIS_mu);
 disp(display_vis_mu)
 display_vis_std = sprintf('VIS std of cumulative gaussian: %.2f',VIS_std_cumulative_gaussian);
 disp(display_vis_std)
+display_vis_slope_50_percent = sprintf('VIS slope at 50 percent: %.2f',vis_slope_at_50_percent);
+disp(display_vis_slope_50_percent)
 display_av_mu = sprintf('AV Mu: %.2f',AV_mu);
 disp(display_av_mu)
 display_av_std = sprintf('AV std of cumulative gaussian: %.2f',AV_std_cumulative_gaussian);
 disp(display_av_std)
-
+display_AV_slope_50_percent = sprintf('AV slope at 50 percent: %.2f',AV_slope_at_50_percent);
+disp(display_AV_slope_50_percent)
 
 AUD_prob_right_only = coherence_probability_1_direction(AUD_Right_dataout, audInfo,'Right','AUD');
 AUD_prob_left_only = coherence_probability_1_direction(AUD_Left_dataout, audInfo,'Left','AUD');
