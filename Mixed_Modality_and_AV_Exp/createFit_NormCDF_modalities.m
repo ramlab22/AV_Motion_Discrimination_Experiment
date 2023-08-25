@@ -35,11 +35,16 @@ function [fig, BF_AUD_VIS, BF_AUD_AV, BF_VIS_AV, AUD_mu, VIS_mu, AV_mu, AUD_std_
     VIS_fun = @(b) sum((fun_1(b, VIS_xData) - VIS_yData).^2);
     AV_fun = @(b) sum((fun_1(b, AV_xData) - AV_yData).^2);
 
-    opts = optimset('MaxFunEvals', 50000, 'MaxIter', 10000);
+    %opts = optimset('MaxFunEvals', 50000, 'MaxIter', 10000);
 
-    AUD_fit_par = fminsearch(AUD_fun, AUD_parms, opts);
-    VIS_fit_par = fminsearch(VIS_fun, VIS_parms, opts);
-    AV_fit_par = fminsearch(AV_fun, AV_parms, opts);
+    % AUD_fit_par = fminsearch(AUD_fun, AUD_parms, opts);
+    % VIS_fit_par = fminsearch(VIS_fun, VIS_parms, opts);
+    % AV_fit_par = fminsearch(AV_fun, AV_parms, opts);
+    fun_1 = @(b, x)cdf('Normal', x, b(1), b(2));
+ 
+    AUD_fun = @(b) sum((fun_1(b, AUD_xData) - AUD_yData).^2);
+    VIS_fun = @(b) sum((fun_1(b, VIS_xData) - VIS_yData).^2);
+    AV_fun = @(b) sum((fun_1(b, AV_xData) - AV_yData).^2);
 
     normalcdf_fun = @(b, x) 0.5 * (1 + erf((x - b(1)) ./ (b(2) * sqrt(2))));
 

@@ -18,11 +18,11 @@
 % Author: adriana schoenhaut
 % Date: 8/20/23
 
-fig_title='Alv Aud vs Vis Staircase';
-path1='/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Alv_aud_combinedLR_fixedspeakers.fig';
-path2='/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Alv_vis_staircase_psyLRcombined.fig';
+fig_title='Ba Aud (6 dB SNR) vs. Vis staircase';
+path1='/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Ba/Ba_aud_6dBSNR_staircase_combinedpsyLR.fig';
+path2='/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Ba/ba_vis_staircase_psyLR.fig';
 
-fig1label='Aud';
+fig1label='Aud (6 dB SNR)';
 fig2label='Vis';
 
 fig1color='r';
@@ -89,3 +89,13 @@ ax.FontSize = 22;
 % Note: The text annotations are not combined here. If you wish to include them, you can loop through the `data.text` fields and use the `text` function.
 
 hold off;
+
+load('Ba_aud_dbSNR6_staircase.mat');
+aud_mdl=mdl;
+aud_xData=xData;
+aud_yData=yData;
+load('ba_vis_staircase.mat');
+vis_mdl=mdl;
+vis_xData=xData;
+vis_yData=yData;
+[Results_MLE] = MLE_Calculations_A_V(aud_mdl, vis_mdl,aud_yData,vis_yData, aud_xData,vis_xData)

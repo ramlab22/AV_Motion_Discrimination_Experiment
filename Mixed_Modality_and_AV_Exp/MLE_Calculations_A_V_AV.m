@@ -31,4 +31,4 @@ Results_MLE.AV_EstimatedVariance=(Results_MLE.AUD_Variance*Results_MLE.VIS_Varia
 
 Results_MLE.AV_EstimatedSD=sqrt(Results_MLE.AV_EstimatedVariance);
 
-
+Results_MLE

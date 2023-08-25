@@ -1,6 +1,6 @@
-Path = '/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Alv_vis_staircase/' ;% wherever you want to search
+Path = '/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Alv/Alv_vis_MCS/' ;% wherever you want to search
 [dataout,column_titles,totalfiles_names] = combine_data_acrossblocks(Path);
-save_name='alv_vis_staircase';
+save_name='alv_vis_mcs';
 [dataout]=convert_vis_directioncode(dataout);
 dotInfo.coherences=unique(cell2mat(dataout(2:end,8)))';
 [dotInfo.cohFreq] = cohFreq_finder(dataout, dotInfo);
