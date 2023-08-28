@@ -17,7 +17,7 @@ ExpInfo.possible_pos = find(ExpInfo.positions == 1); %Corresponding Number Posit
 ExpInfo.fail_timeout = data(16,1); %Failure of trial timeout in (ms)
 ExpInfo.rdk_angle = data(17,1); %RDK stimulus visual angle
 ExpInfo.target_fixation_time = data(18,1);% Time to fixate inside the target point window in order to get Reward
-ExpInfo.probs = data(43:48,1)'; %This is the input probablities for the staircase procedure protocol
+%ExpInfo.probs = data(43:48,1)'; %This is the input probablities for the staircase procedure protocol
 
 %% This is the random position number generator
 

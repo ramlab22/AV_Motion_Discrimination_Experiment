@@ -1,4 +1,4 @@
-function [trialInfo, staircase_index_dot, staircase_index_aud, staircase_index_av, dotInfo, audInfo, AVInfo] = MCS_selection(ExpInfo, trial_status, trialInfo, staircase_index_aud, staircase_index_dot, staircase_index_av, audInfo, dotInfo, AVInfo)
+function [trialInfo, staircase_index_dot, staircase_index_aud, staircase_index_av, dotInfo, audInfo, AVInfo] = staircase_procedure(ExpInfo, trial_status, trialInfo, staircase_index_aud, staircase_index_dot, staircase_index_av, audInfo, dotInfo, AVInfo)
 
 %We need info from the last trial on weather he got the trial correct
 if strcmp(trial_status, 'Correct')
