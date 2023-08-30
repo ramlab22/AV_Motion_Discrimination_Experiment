@@ -1,6 +1,10 @@
 function  [ExpInfo, dstruct, dotInfo, audInfo, AVInfo]= CreateClassStructure_MCS_AV( monWidth, viewDist, xCenter, yCenter) %Puts all data input into structure for neatness
 %% Jack Mayfield 4/22/22
 %set individual modality parameters to get accurate totals later
+dotInfo = struct;
+AVInfo = struct; 
+audInfo = struct; 
+
 dotInfo.cohSet = [100 70.7 50 35.4 25 17.7 12.5 8.9 6.3 4.5 3.2]./100; %Coh List to choose from
 dotInfo.coh_Freq_Set = [100 100 200 300 300 300 300 200 200 100 100]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 dotInfo.n_vis_trials=sum(dotInfo.coh_Freq_Set);
@@ -45,7 +49,7 @@ ExpInfo.random_list = zeros(1,ExpInfo.num_trials);
 %% Display Settings 
 
 dstruct.res = [1280 1024];    % screen resolution x y
-dstruct.siz = [monWidth 30];        % screen size in cm W,H 
+dstruct.size = [monWidth 30];        % screen size in cm W,H 
 dstruct.dis = viewDist;             % viewing distance in cm
 
 %% Other Parameters
@@ -59,7 +63,6 @@ ExpInfo.ppd = 30;%pi * xCenter / atan(monWidth/viewDist/2) / 360;
 
 %% RDK Parameters
 
-dotInfo = struct;
 dotInfo.dir = 0; %Initilize for main loop purposes 
 dotInfo.catchtrials = 0; % # catch trials
 dotInfo.dirSet = dirBin(data); %See function dirBin.m
@@ -101,7 +104,6 @@ audInfo.Incorrect_Opacity = 1;
 
 %% AV Parameters 
 % AV Right = 1 , AV Left = 0
-AVInfo = struct; 
 AVInfo.dir = 0; %Initilize for main loop purposes 
 AVInfo.dirSet = dirBin(data);
 AVInfo.cohSet_dot = dotInfo.cohSet;

@@ -198,17 +198,17 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         switch ExpInfo.modality
             case 'AUD'
                 audtrial_counter = audtrial_counter+1;
-                audInfo.dir == audInfo.random_dir_list(1,audtrial_counter);
-                audInfo.coh == audInfo.random_coh_list(1,audtrial_counter);
+                audInfo.dir = audInfo.random_dir_list(1,audtrial_counter);
+                audInfo.coh = audInfo.random_coh_list(1,audtrial_counter);
             case 'VIS'
                 vistrial_counter = vistrial_counter+1;
-                dotInfo.dir == dotInfo.random_dir_list(1,vistrial_counter);
-                dotInfo.coh == dotInfo.random_coh_list(1,vistrial_counter);
+                dotInfo.dir = dotInfo.random_dir_list(1,vistrial_counter);
+                dotInfo.coh = dotInfo.random_coh_list(1,vistrial_counter);
             case 'AV'
                 AVtrial_counter = AVtrial_counter+1;        
-                AVInfo.dir == AVInfo.random_dir_list(1,AVtrial_counter);
-                AVInfo.coh_aud == AVInfo.aud_random_coh_list(1,AVtrial_counter);
-                AVInfo.coh_dot == AVInfo.dot_random_coh_list(1,AVtrial_counter);
+                AVInfo.dir = AVInfo.random_dir_list(1,AVtrial_counter);
+                AVInfo.coh_aud = AVInfo.aud_random_coh_list(1,AVtrial_counter);
+                AVInfo.coh_dot = AVInfo.dot_random_coh_list(1,AVtrial_counter);
         end %modality selection switch/case
             
         if  (dotInfo.dir == 0 && strcmp(ExpInfo.modality, 'VIS')) || ...
