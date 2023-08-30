@@ -242,31 +242,37 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                 disp(['AUD Coh - ', num2str(AVInfo.coh_aud)])
                 disp(['VIS Coh - ', num2str(AVInfo.coh_dot)])
             end
-
-        end %if statement : output displays 
+            
+        end %if statement : output displays
         
         %create CAM files based on auditory or AV trial
-        if strcmp(ExpInfo.modality,'AUD') 
+        if strcmp(ExpInfo.modality,'AUD')
             [audInfo.CAM] = makeCAM(audInfo.coh, audInfo.dir, audInfo.set_dur, 0, sampling_rate);
-           % [audInfo.adjustment_factor, CAM_1, CAM_2] = Signal_Creator(audInfo.CAM,audInfo.velocity); %Writes to CAM 1 and 2 for .rcx circuit to read
+            % [audInfo.adjustment_factor, CAM_1, CAM_2] = Signal_Creator(audInfo.CAM,audInfo.velocity); %Writes to CAM 1 and 2 for .rcx circuit to read
             CAM_1=audInfo.CAM(:,1);
             CAM_2=audInfo.CAM(:,2);
-            [CAM_1_Cut_Ramped, CAM_2_Cut_Ramped, audInfo.window_duration, audInfo.ramp_dur] = aud_receptive_field_location(CAM_1,CAM_2, audInfo.t_start, audInfo.t_end); 
-                     
-        elseif strcmp(ExpInfo.modality,'AV') 
+            ramp_dur=0.004;
+            [CAM_1_Cut_Ramped, CAM_2_Cut_Ramped, audInfo.window_duration, audInfo.ramp_dur] = aud_receptive_field_location(CAM_1, CAM_2,audInfo.t_start,audInfo.t_end, sampling_rate, ramp_dur)
+            TDT.write('mux_sel',audInfo.mux); %The multiplexer values for each trial, set to all zeros for now to include only LR and RL
+            TDT.write('window',audInfo.window_duration); %duration of the stimulus in ms
+            TDT.write('ramp_dur',audInfo.ramp_dur);
+            TDT.write('CAM_1',CAM_1_Cut_Ramped); %Signal 1
+            TDT.write('CAM_2',CAM_2_Cut_Ramped); %Signal 2
+        elseif strcmp(ExpInfo.modality,'AV')
             [AVInfo.CAM] = makeCAM(AVInfo.coh_aud, AVInfo.dir, audInfo.set_dur, 0, sampling_rate);
-           % [audInfo.adjustment_factor, CAM_1, CAM_2] = Signal_Creator(audInfo.CAM,audInfo.velocity); %Writes to CAM 1 and 2 for .rcx circuit to read
+            % [audInfo.adjustment_factor, CAM_1, CAM_2] = Signal_Creator(audInfo.CAM,audInfo.velocity); %Writes to CAM 1 and 2 for .rcx circuit to read
             CAM_1=AVInfo.CAM(:,1);
             CAM_2=AVInfo.CAM(:,2);
-            [CAM_1_Cut_Ramped, CAM_2_Cut_Ramped, audInfo.window_duration, audInfo.ramp_dur] = aud_receptive_field_location(CAM_1,CAM_2, audInfo.t_start, audInfo.t_end); 
-                       
+            ramp_dur=0.004;
+            [CAM_1_Cut_Ramped, CAM_2_Cut_Ramped, audInfo.window_duration, audInfo.ramp_dur] = aud_receptive_field_location(CAM_1, CAM_2,audInfo.t_start,audInfo.t_end, sampling_rate, ramp_dur)
+            TDT.write('mux_sel',audInfo.mux); %The multiplexer values for each trial, set to all zeros for now to include only LR and RL
+            TDT.write('window',audInfo.window_duration); %duration of the stimulus in ms
+            TDT.write('ramp_dur',audInfo.ramp_dur);
+            TDT.write('CAM_1',CAM_1_Cut_Ramped); %Signal 1
+            TDT.write('CAM_2',CAM_2_Cut_Ramped); %Signal 2
         end
-
-        TDT.write('mux_sel',audInfo.mux); %The multiplexer values for each trial, set to all zeros for now to include only LR and RL
-        TDT.write('window',audInfo.window_duration); %duration of the stimulus in ms
-        TDT.write('ramp_dur',audInfo.ramp_dur);
-        TDT.write('CAM_1',CAM_1_Cut_Ramped); %Signal 1
-        TDT.write('CAM_2',CAM_2_Cut_Ramped); %Signal 2
+        
+        
         
         
         
@@ -482,7 +488,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         targ_timeout = 0;
         if fix_timeout ~= 1 && (aud_timeout ~= 1 && rdk_timeout ~= 1 && av_timeout ~= 1) && baron_fixation_training ~= 1 && strcmp(catchtrial, 'No')
             %This picks the luminace of the targets based on correct direction response, also outputs correct target string variable, eg 'right'
-            [right_target_color,left_target_color,correct_target] = percentage_target_color_selection(dotInfo, audInfo, AVInfo, ExpInfo, ExpInfo, trialcounter);
+            [right_target_color,left_target_color,correct_target] = percentage_target_color_selection(dotInfo, audInfo, AVInfo,ExpInfo, trialcounter);
             
             for frame = 1:target_time_frames - waitframes
                 
@@ -663,7 +669,9 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     
     prob_AUD = coherence_probability(AUD_dataout, audInfo)
     prob_VIS = coherence_probability(VIS_dataout, dotInfo)
-    prob_AV = coherence_probability_AV(AV_dataout, AVInfo)
+    if AVInfo.n_AV_trials ~= 0
+        prob_AV = coherence_probability_AV(AV_dataout, AVInfo)
+    end
     
     [AUD_Right_dataout, AUD_Left_dataout] = direction_splitter(AUD_dataout, 'AUD');
     [VIS_Right_dataout, VIS_Left_dataout] = direction_splitter(VIS_dataout, 'VIS');
@@ -684,8 +692,14 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     VIS_prob_Left = directional_probability(VIS_Left_dataout, dotInfo, 'Left', 'VIS');
     %These have indeces instead of cohs, 1:11 with probabilities
     %corresponding to the A and V coh lists
-    AV_prob_Right = directional_probability_AV(AV_Right_dataout, AVInfo, 'Right');
-    AV_prob_Left = directional_probability_AV(AV_Left_dataout, AVInfo, 'Left');
+    if AVInfo.n_AV_trials ~= 0
+        AV_prob_Right = directional_probability_AV(AV_Right_dataout, AVInfo, 'Right');
+        AV_prob_Left = directional_probability_AV(AV_Left_dataout, AVInfo, 'Left');
+        
+    else
+        AV_prob_Right = [];
+        AV_prob_Left = [];
+    end
     
 
     [fig_3_AUD_VIS_AV_MCS, AUD_p_values, VIS_p_values,AUD_mu,VIS_mu, AV_mu, AUD_std,VIS_std,AV_std] = ...
@@ -727,25 +741,22 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     VIS_prob_right_only = coherence_probability_1_direction(VIS_Right_dataout, dotInfo,'Right','VIS');
     VIS_prob_left_only = coherence_probability_1_direction(VIS_Left_dataout, dotInfo,'Left','VIS');
 
-
-     
-    %%Make Rightward only graph with AUD and VIS
-    [R_fig_AV_MCS] = psychometric_plotter_1_direction_modalities(AUD_prob_right_only,...
-                                                             VIS_prob_right_only,...
-                                                             AV_prob_Right, ...
-                                                             'RIGHT ONLY', audInfo, dotInfo, AVInfo, save_name);
-    
-    %%Make Leftward only graph with AUD and VIS
-    [L_fig_AV_MCS] = psychometric_plotter_1_direction_modalities(AUD_prob_left_only,...
-                                                             VIS_prob_left_only,...
-                                                             AV_prob_Left, ...
-                                                             'LEFT ONLY', audInfo, dotInfo, AVInfo, save_name);
-    
+    if AVInfo.n_AV_trials ~= 0
+        %%Make Rightward only graph with AUD and VIS
+        [R_fig_AV_MCS] = psychometric_plotter_1_direction_modalities(AUD_prob_right_only,...
+                                                                 VIS_prob_right_only,...
+                                                                 AV_prob_Right, ...
+                                                                 'RIGHT ONLY', audInfo, dotInfo, AVInfo, save_name);
+        %%Make Leftward only graph with AUD and VIS
+        [L_fig_AV_MCS] = psychometric_plotter_1_direction_modalities(AUD_prob_left_only,...
+                                                                 VIS_prob_left_only,...
+                                                                 AV_prob_Left, ...
+                                                                 'LEFT ONLY', audInfo, dotInfo, AVInfo, save_name);
+         saveas(R_fig_AV_MCS, [figure_file_directory save_name '_Psyc_Func_R_MMAV_MCS.png']);
+         saveas(L_fig_AV_MCS, [figure_file_directory save_name '_Psyc_Func_L_MMAV_MCS.png']);                                                            
+    end
       %Save all figures to Figure Directory
     saveas(fig_3_AUD_VIS_AV_MCS, [figure_file_directory save_name '_Psyc_Func_LR_MMAV_MCS.png']);
-    saveas(R_fig_AV_MCS, [figure_file_directory save_name '_Psyc_Func_R_MMAV_MCS.png']);
-    saveas(L_fig_AV_MCS, [figure_file_directory save_name '_Psyc_Func_L_MMAV_MCS.png']);    
-    
     times = cell2mat(dataout(2:end,7)); %Extract the trial times
     Total_Block_Time = sum(times);
     

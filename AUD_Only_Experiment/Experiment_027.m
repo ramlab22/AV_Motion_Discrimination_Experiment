@@ -115,6 +115,7 @@ iti_time_frames = round((ExpInfo.iti/1000)/ifi);
 TO_time_frames = round((ExpInfo.fail_timeout/1000)/ifi); 
 target_time_frames = round((ExpInfo.target_fixation_time/1000)/ ifi+time_wait_frames(2));
 target_only_time_frames = round((ExpInfo.target_fixation_time/1000)/ ifi);
+ramp_dur=0.004; %duration of ramp for aud stim in s
 
 
 %% Fixation Position structure
@@ -209,7 +210,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
       %  [audInfo.adjustment_factor, CAM_1, CAM_2] = Signal_Creator(audInfo.CAM,audInfo.velocity); %Writes to CAM 1 and 2 for .rcx circuit to read
        CAM_1=audInfo.CAM(:,1);
        CAM_2=audInfo.CAM(:,2);
-      [CAM_1_Cut_Ramped, CAM_2_Cut_Ramped, audInfo.window_duration, audInfo.ramp_dur] = aud_receptive_field_location(CAM_1,CAM_2, audInfo.t_start, audInfo.t_end); 
+        [CAM_1_Cut_Ramped, CAM_2_Cut_Ramped, audInfo.window_duration, audInfo.ramp_dur] = aud_receptive_field_location(CAM_1, CAM_2,audInfo.t_start,audInfo.t_end, sampling_rate, ramp_dur)
        
         
         TDT.write('mux_sel',audInfo.mux); %The multiplexer values for each trial, set to all zeros for now to include only LR and RL

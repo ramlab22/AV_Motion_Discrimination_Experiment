@@ -169,7 +169,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     dataout(output_counter,1:11) = {'Trial #' 'Position #' 'Fixation Correct' 'Stimulus Reward' 'Catch Trial' 'Target Correct' 'Total Trial Time (sec)' 'Coherence Level' 'Direction of Motion' 'Incorrect Target Fixation' 'Stimulus Modality'}; %Initialize Columns for data output cell
     start_block_time = hat;
     
-    trialInfo.modality_list = {'VIS', 'AUD', 'AV'};
+    ExpInfo.modality_list = {'VIS', 'AUD', 'AV'};
     audInfo.mux = 0; %Set to zero for now, we only need L and R trials
     
     while (trialcounter <= total_trials) && (BreakState ~= 1) % each trial
@@ -196,8 +196,8 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
             staircase_index_dot = 1;
             staircase_index_av = 1;
 
-            trialInfo.modality = trialInfo.modality_list(randi(numel(trialInfo.modality_list)));%Randomly choose modality
-            trialInfo.modality = trialInfo.modality{1};
+            ExpInfo.modality = ExpInfo.modality_list(randi(numel(ExpInfo.modality_list)));%Randomly choose modality
+            ExpInfo.modality = ExpInfo.modality{1};
             
             audInfo.dir = randi([0,1]); %for first trial, randomly choose 0 (Left) or 1 (Right) for dir
             audInfo.coh = audInfo.cohSet(staircase_index_aud);% (Value 0.0 - 1.0)
@@ -208,70 +208,74 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
             AVInfo.dir = randi([0,1]); %for first trial, randomly choose 0 (Left) or 1 (Right) for dir
             AVInfo.coh_aud = AVInfo.cohSet_aud(staircase_index_av);% (Value 0.0 - 1.0)
             AVInfo.coh_dot = AVInfo.cohSet_dot(staircase_index_av);% (Value 0.0 - 1.0)
-
+            
         elseif trialcounter > 1
-            [trialInfo, staircase_index_dot, staircase_index_aud, staircase_index_av, dotInfo, audInfo, AVInfo] = staircase_procedure(ExpInfo, trial_status, trialInfo, staircase_index_aud, staircase_index_dot, staircase_index_av, audInfo, dotInfo, AVInfo);        
+            [ExpInfo, staircase_index_dot, staircase_index_aud, staircase_index_av, dotInfo, audInfo, AVInfo] = staircase_procedure(ExpInfo, trial_status, staircase_index_aud, staircase_index_dot, staircase_index_av, audInfo, dotInfo, AVInfo);
         end %if first trial
         
-        if  (dotInfo.dir == 0 && strcmp(trialInfo.modality, 'VIS')) || ...
-            (audInfo.dir == 1 && strcmp(trialInfo.modality, 'AUD')) || ...
-            (AVInfo.dir == 1 && strcmp(trialInfo.modality, 'AV'))
+        if  (dotInfo.dir == 0 && strcmp(ExpInfo.modality, 'VIS')) || ...
+                (audInfo.dir == 1 && strcmp(ExpInfo.modality, 'AUD')) || ...
+                (AVInfo.dir == 1 && strcmp(ExpInfo.modality, 'AV'))
             
-            disp(trialInfo.modality)
+            disp(ExpInfo.modality)
             disp('Left to Right')
-
-            if strcmp(trialInfo.modality, 'VIS')
+            
+            if strcmp(ExpInfo.modality, 'VIS')
                 disp(dotInfo.coh)
-            elseif strcmp(trialInfo.modality, 'AUD')
+            elseif strcmp(ExpInfo.modality, 'AUD')
                 disp(audInfo.coh)
-            elseif strcmp(trialInfo.modality, 'AV')
+            elseif strcmp(ExpInfo.modality, 'AV')
                 disp(['AUD Coh - ', num2str(AVInfo.coh_aud)])
                 disp(['VIS Coh - ', num2str(AVInfo.coh_dot)])
             end
-
-        elseif (dotInfo.dir == 180 && strcmp(trialInfo.modality, 'VIS')) || ...
-               (audInfo.dir == 0 && strcmp(trialInfo.modality, 'AUD')) || ...
-               (AVInfo.dir == 0 && strcmp(trialInfo.modality, 'AV'))
-
-            disp(trialInfo.modality)
+            
+        elseif (dotInfo.dir == 180 && strcmp(ExpInfo.modality, 'VIS')) || ...
+                (audInfo.dir == 0 && strcmp(ExpInfo.modality, 'AUD')) || ...
+                (AVInfo.dir == 0 && strcmp(ExpInfo.modality, 'AV'))
+            
+            disp(ExpInfo.modality)
             disp('Right to Left')
             
-            if strcmp(trialInfo.modality, 'VIS')
+            if strcmp(ExpInfo.modality, 'VIS')
                 disp(dotInfo.coh)
-            elseif strcmp(trialInfo.modality, 'AUD')
+            elseif strcmp(ExpInfo.modality, 'AUD')
                 disp(audInfo.coh)
-            elseif strcmp(trialInfo.modality, 'AV')
+            elseif strcmp(ExpInfo.modality, 'AV')
                 disp(['AUD Coh - ', num2str(AVInfo.coh_aud)])
                 disp(['VIS Coh - ', num2str(AVInfo.coh_dot)])
             end
-
-        end %if statement : output displays 
+            
+        end %if statement : output displays
         
         %create CAM files based on auditory or AV trial
-        if strcmp(trialInfo.modality,'AUD') 
+        if strcmp(ExpInfo.modality,'AUD')
             [audInfo.CAM] = makeCAM(audInfo.coh, audInfo.dir, audInfo.set_dur, 0, sampling_rate);
-           % [audInfo.adjustment_factor, CAM_1, CAM_2] = Signal_Creator(audInfo.CAM,audInfo.velocity); %Writes to CAM 1 and 2 for .rcx circuit to read
+            % [audInfo.adjustment_factor, CAM_1, CAM_2] = Signal_Creator(audInfo.CAM,audInfo.velocity); %Writes to CAM 1 and 2 for .rcx circuit to read
             CAM_1=audInfo.CAM(:,1);
             CAM_2=audInfo.CAM(:,2);
-            [CAM_1_Cut_Ramped, CAM_2_Cut_Ramped, audInfo.window_duration, audInfo.ramp_dur] = aud_receptive_field_location(CAM_1,CAM_2, audInfo.t_start, audInfo.t_end); 
-                     
-        elseif strcmp(trialInfo.modality,'AV') 
-            [audInfo.CAM] = makeCAM(AVInfo.coh, AVInfo.dir, AVInfo.set_dur, 0, sampling_rate);
-           % [audInfo.adjustment_factor, CAM_1, CAM_2] = Signal_Creator(audInfo.CAM,audInfo.velocity); %Writes to CAM 1 and 2 for .rcx circuit to read
-            CAM_1=audInfo.CAM(:,1);
-            CAM_2=audInfo.CAM(:,2);
-            [CAM_1_Cut_Ramped, CAM_2_Cut_Ramped, audInfo.window_duration, audInfo.ramp_dur] = aud_receptive_field_location(CAM_1,CAM_2, audInfo.t_start, audInfo.t_end); 
-                       
+            ramp_dur=0.004;
+            [CAM_1_Cut_Ramped, CAM_2_Cut_Ramped, audInfo.window_duration, audInfo.ramp_dur] = aud_receptive_field_location(CAM_1, CAM_2,audInfo.t_start,audInfo.t_end, sampling_rate, ramp_dur)
+            TDT.write('mux_sel',audInfo.mux); %The multiplexer values for each trial, set to all zeros for now to include only LR and RL
+            TDT.write('window',audInfo.window_duration); %duration of the stimulus in ms
+            TDT.write('ramp_dur',audInfo.ramp_dur);
+            TDT.write('CAM_1',CAM_1_Cut_Ramped); %Signal 1
+            TDT.write('CAM_2',CAM_2_Cut_Ramped); %Signal 2
+            
+        elseif strcmp(ExpInfo.modality,'AV')
+            [AVInfo.CAM] = makeCAM(AVInfo.coh_aud, AVInfo.dir, audInfo.set_dur, 0, sampling_rate);
+            % [audInfo.adjustment_factor, CAM_1, CAM_2] = Signal_Creator(audInfo.CAM,audInfo.velocity); %Writes to CAM 1 and 2 for .rcx circuit to read
+            CAM_1=AVInfo.CAM(:,1);
+            CAM_2=AVInfo.CAM(:,2);
+            ramp_dur=0.004;
+            [CAM_1_Cut_Ramped, CAM_2_Cut_Ramped, audInfo.window_duration, audInfo.ramp_dur] = aud_receptive_field_location(CAM_1, CAM_2,audInfo.t_start,audInfo.t_end, sampling_rate, ramp_dur)
+            TDT.write('mux_sel',audInfo.mux); %The multiplexer values for each trial, set to all zeros for now to include only LR and RL
+            TDT.write('window',audInfo.window_duration); %duration of the stimulus in ms
+            TDT.write('ramp_dur',audInfo.ramp_dur);
+            TDT.write('CAM_1',CAM_1_Cut_Ramped); %Signal 1
+            TDT.write('CAM_2',CAM_2_Cut_Ramped); %Signal 2
+            
         end
 
-        TDT.write('mux_sel',audInfo.mux); %The multiplexer values for each trial, set to all zeros for now to include only LR and RL
-        TDT.write('window',audInfo.window_duration); %duration of the stimulus in ms
-        TDT.write('ramp_dur',audInfo.ramp_dur);
-        TDT.write('CAM_1',CAM_1_Cut_Ramped); %Signal 1
-        TDT.write('CAM_2',CAM_2_Cut_Ramped); %Signal 2
-        
-        
-        
         pos = ExpInfo.random_list(trialcounter);  %Gets random pos # from the list evaluated at specific trial #
         [h,i_trial] = xypos(pos,dot_coord);%Outputs fixation center (h,k) in pixels for Psychtoolbox to draw dot
         [h_voltage, k_voltage] = pos_voltage(pos,dot_coord); %Outputs Fixation center in Volts for comparison to eyetracker values
@@ -355,7 +359,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         
         %% Now we play the stim and the fixation point
         %% Present either the Visual, Auditory, or AV Stimulus while keeping the fixation point up
-        if strcmp(trialInfo.modality,'VIS')
+        if strcmp(ExpInfo.modality,'VIS')
             aud_reward = 'No';
             av_reward = 'No';
             rdk_timeout = 0;
@@ -381,7 +385,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
             end
             
             
-        elseif strcmp(trialInfo.modality,'AUD')
+        elseif strcmp(ExpInfo.modality,'AUD')
             rdk_reward = 'No';
             av_reward = 'No';
             rdk_timeout = 0;
@@ -444,7 +448,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                 
             end
 
-        elseif strcmp(trialInfo.modality,'AV')
+        elseif strcmp(ExpInfo.modality,'AV')
             rdk_reward = 'No';
             aud_reward = 'No';
             rdk_timeout = 0;
@@ -484,7 +488,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         targ_timeout = 0;
         if fix_timeout ~= 1 && (aud_timeout ~= 1 && rdk_timeout ~= 1 && av_timeout ~= 1) && baron_fixation_training ~= 1 && strcmp(catchtrial, 'No')
             %This picks the luminace of the targets based on correct direction response, also outputs correct target string variable, eg 'right'
-            [right_target_color,left_target_color,correct_target] = percentage_target_color_selection(dotInfo, audInfo, AVInfo, trialInfo, ExpInfo, trialcounter);
+            [right_target_color,left_target_color,correct_target] = percentage_target_color_selection(dotInfo, audInfo, AVInfo, ExpInfo, trialcounter);
             
             for frame = 1:target_time_frames - waitframes
                 
@@ -635,12 +639,12 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         end_trial_time = hat;
         trial_time = end_trial_time-start_trial_time;
         
-        if strcmp(trialInfo.modality, 'AUD')
-            dataout(output_counter,1:11) = {trialcounter pos fix_reward stim_reward catchtrial target_reward trial_time audInfo.coh audInfo.dir incorrect_target_fixation trialInfo.modality};
-        elseif strcmp(trialInfo.modality, 'VIS')
-            dataout(output_counter,1:11) = {trialcounter pos fix_reward stim_reward catchtrial target_reward trial_time dotInfo.coh dotInfo.dir incorrect_target_fixation trialInfo.modality};
-        elseif strcmp(trialInfo.modality, 'AV')
-            dataout(output_counter,1:11) = {trialcounter pos fix_reward stim_reward catchtrial target_reward trial_time [AVInfo.coh_aud,AVInfo.coh_dot] AVInfo.dir incorrect_target_fixation trialInfo.modality};    
+        if strcmp(ExpInfo.modality, 'AUD')
+            dataout(output_counter,1:11) = {trialcounter pos fix_reward stim_reward catchtrial target_reward trial_time audInfo.coh audInfo.dir incorrect_target_fixation ExpInfo.modality};
+        elseif strcmp(ExpInfo.modality, 'VIS')
+            dataout(output_counter,1:11) = {trialcounter pos fix_reward stim_reward catchtrial target_reward trial_time dotInfo.coh dotInfo.dir incorrect_target_fixation ExpInfo.modality};
+        elseif strcmp(ExpInfo.modality, 'AV')
+            dataout(output_counter,1:11) = {trialcounter pos fix_reward stim_reward catchtrial target_reward trial_time [AVInfo.coh_aud,AVInfo.coh_dot] AVInfo.dir incorrect_target_fixation ExpInfo.modality};    
         end
         
         trialcounter = trialcounter + 1;

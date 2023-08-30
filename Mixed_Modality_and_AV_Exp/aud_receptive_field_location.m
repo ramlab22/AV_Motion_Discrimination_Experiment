@@ -1,4 +1,5 @@
-function [CAM_1_Cut_Ramped, CAM_2_Cut_Ramped, window_duration, ramp_dur] = aud_receptive_field_location(CAM_1, CAM_2, t_start, t_end, velocity)
+
+function [CAM_1_Cut_Ramped, CAM_2_Cut_Ramped, window_duration] = aud_receptive_field_location(CAM_1, CAM_2, t_start, t_end, sampling_rate, ramp_dur)
 %AUD_PERECPTIVE_FIELD_LOCATION Summary of this function goes here
 
 %Clips the CAM signals so that they will be presented only at certain times
@@ -23,8 +24,8 @@ function [CAM_1_Cut_Ramped, CAM_2_Cut_Ramped, window_duration, ramp_dur] = aud_r
 %}
 window_duration = t_end - t_start; %In ms  
 %Convert to samples 
-samp_start = t_start * 48.828; %Sample rate of RZ processor is 48828 Hz but times are ms 
-samp_end = t_end * 48.828; 
+samp_start = t_start * (sampling_rate/1000); %Sample rate of RZ processor is 48828 Hz but times are ms 
+samp_end = t_end *  (sampling_rate/1000); 
 
 %Now cut signal at sample locations 
 if samp_start == 0 %Eliminates index error if you want to start from time = 0  
@@ -38,10 +39,10 @@ CAM_2_Cut = CAM_2(samp_start:samp_end, 1);
 
 %Set ramps on these so speaker doesn't click 
 CAM_Cut = [CAM_1_Cut CAM_2_Cut]; 
-[CAM_Cut_Ramped, ramp_dur] = makeramp((t_end - t_start)/1000,48828,CAM_Cut);
+stim_dur=(t_end - t_start)/1000;
+[CAM_Cut_Ramped] = makeramp(stim_dur,ramp_dur,sampling_rate,CAM_Cut);
 
 CAM_1_Cut_Ramped = CAM_Cut_Ramped(:,1);
 CAM_2_Cut_Ramped = CAM_Cut_Ramped(:,2);
 
 end
-
