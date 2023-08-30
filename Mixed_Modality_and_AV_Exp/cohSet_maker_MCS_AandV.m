@@ -2,11 +2,11 @@ function [cohSet_aud] = cohSet_maker_MCS_AandV(audInfo,dotInfo)
 %Makes as many coherence values needed for amount of regular trials
 cohSet_vis = cell2mat(arrayfun(@(x,y) repmat(y, 1, x), dotInfo.coh_Freq_Set, dotInfo.coherences, 'UniformOutput', false));
 cohSet_aud = cell2mat(arrayfun(@(x,y) repmat(y, 1, x), audInfo.coh_Freq_Set, audInfo.coherences, 'UniformOutput', false));
-
-%cohSet_aud = cell2mat(arrayfun(@(x,y) repmat(y, 1, x), audInfo.coh_Freq_Set, audInfo.coherences, 'UniformOutput', false));
-
-cohSet_aud = cohSet_aud(randperm(length(cohSet_aud))); %Randomly Scatter the coherence valuesfor regular trials
-cohSet_vis = cohSet_vis(randperm(length(cohSet_vis))); %Randomly Scatter the coherence valuesfor regular trials
+% Randomly rearrange the order of elements in both cohSet_vis and cohSet_aud
+% ensuring the same random order is applied to both arrays.
+randOrder = randperm(length(cohSet_vis));
+cohSet_vis = cohSet_vis(randOrder);
+cohSet_aud = cohSet_aud(randOrder);
 
 %Now we insert the catch trials to the cohSet_aud list so we have all the
 %trials in one array, both regular and catch 
@@ -20,7 +20,7 @@ for k = 1:length(audInfo.random_incorrect_opacity_list)% 0 = Catch Trial, Insert
    end
     
 end
-end
+
 %Now we insert the catch trials to the cohSet_vis list so we have all the
 %trials in one array, both regular and catch 
 for k = 1:length(dotInfo.random_incorrect_opacity_list)% 0 = Catch Trial, Insert a 1 coherence to cohSet_vis at that index
@@ -33,4 +33,5 @@ for k = 1:length(dotInfo.random_incorrect_opacity_list)% 0 = Catch Trial, Insert
    end
     
 end
+
 end

@@ -1,6 +1,6 @@
 function [dirSet] = dirBin(data)
 %DIRBIN Summary of this function goes here
-%   Detailed explanation goes here
+%  set variable that indicates how many directions the stim can move in
 dir_bin = data(30:33,1)'; %[LR DU UD RL] 1 - Include, 0 Exclude dir
     if dir_bin == [1 1 1 1]% For the GUI State buttons corresponding to direction of RDK Motion, 0 = Right
         dirSet = [1 0 1 0];
