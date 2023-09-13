@@ -1,7 +1,7 @@
 
-Path = '/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Ba/Ba_A+V+AV_staircase/' ;% wherever you want to search
+Path = '/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Ba/Ba_mixedmodality_mcs/' ;% wherever you want to search
 [dataout,column_titles,totalfiles_names] = combine_data_acrossblocks(Path);
-save_name='081823_Baron_1';
+save_name='Baron_MCS_UNequaltrialspercoh';
 
 %% End of Block
 [AUD_dataout, VIS_dataout, AV_dataout] = modality_splitter(dataout);

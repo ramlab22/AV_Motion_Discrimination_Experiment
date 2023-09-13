@@ -12,12 +12,12 @@
 % estimates of threshold, so that the variability of the threshold could be determined." -Dylla et al. 2013
 %folder_name=folder_name;
 %cd test_data
-%n_permutations=1;
-n_permutations=100;
+n_permutations=1;
+%n_permutations=100;
 %chosen_threshold=0.72;
 max_n_coherences=11;
 %Path = '/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/AUD_Only_Experiment/test_data/' ;% wherever you want to search
-Path = '/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Ba/Ba_all_staircase_10dBSNR/' ;% wherever you want to search
+Path = '/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Ba/Ba_mixedmodality_mcs/' ;% wherever you want to search
 combine_blocks=0;
 %condition: 1=visual, 2=auditory, 3=AV
 %in AV data files for coherence column (8), first value in double is aud,
@@ -121,7 +121,6 @@ for i_newfile=1:n_newfiles
             [n_per_coherence, coherences] = groupcounts(file_coherences);
             n_coherences=length(coherences);
             [permutation_slope_at_50_percent,file_slope_VIS,file_std_slope_VIS,file_mu_VIS,file_curve_xvals_VIS,file_curve_yvals_VIS,file_threshold_VIS,file_prob_VIS] = get_threshold_combinedblocks(newfile_dataout,coherences',totalfiles_names_separated_conditions(i_newfile),condition,0);
-           % [file_fit_mean_midpoint_VIS,file_slope_VIS,file_std_slope_VIS,file_curve_xvals_VIS,file_curve_yvals_VIS,~,file_threshold_VIS,file_prob_VIS] = get_threshold_combinedblocks(newfile_dataout,coherences',totalfiles_names_separated_conditions(i_newfile),condition,chosen_threshold,0);
             
         case 'AU'
             condition=2;

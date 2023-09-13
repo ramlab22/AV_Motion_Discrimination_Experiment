@@ -71,8 +71,8 @@ function [fig, BF_AUD_VIS, BF_AUD_AV, BF_VIS_AV, AUD_mu, VIS_mu, AV_mu, AUD_std_
     scatter(AUD_xData, AUD_yData, all_sizes_AUD, 'red','LineWidth',2);
     hold on
     scatter(VIS_xData, VIS_yData, all_sizes_VIS, 'blue', 'LineWidth',2);
-    scatter(AV_xData, AV_yData, all_sizes_AV, 'black', 'LineWidth',2);
-    plot(x, AUD_p, 'red', x, VIS_p, 'blue', x, AV_p, 'black','LineWidth',2.5);
+    scatter(AV_xData, AV_yData, all_sizes_AV, 'green', 'LineWidth',2);
+    plot(x, AUD_p, 'red', x, VIS_p, 'blue', x, AV_p, 'green','LineWidth',2.5);
 
     % Label axes
     title(sprintf('AUD,VIS,AV Psych. Func. L&R\n%s', save_name), 'Interpreter', 'none');
