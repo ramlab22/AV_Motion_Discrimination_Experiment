@@ -68,7 +68,7 @@ else
 end
 
 % Applies an onset and offset ramped "gate"
-CAM = makeramp(dur,Fs,CAM);
+CAM = makeramp(dur,0.004,Fs,CAM);
 % Scales the signal between -1 and 1
 CAM = normalize(CAM);
 CAM = cat(1, silent, CAM);

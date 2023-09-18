@@ -7,17 +7,22 @@ audInfo = struct;
 
 %dotInfo.cohSet = []; %Coh List to choose from
 %dotInfo.coh_Freq_Set = []; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
-dotInfo.cohSet = [100 70.7 50 35.4 25 17.7 12.5 8.9 6.3 4.5 3.2]./100; %Coh List to choose from
-dotInfo.coh_Freq_Set = [50 100 100 200 200 200 200 100 100 50 50]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
+%dotInfo.cohSet = [100 70.7 50 35.4 25 17.7 12.5 8.9 6.3 4.5 3.2]./100; %Coh List to choose from
+dotInfo.cohSet = [100 70.7 50 35.4 25 17.7 12.5 8.9]./100; %Coh List to choose from
+
+%dotInfo.coh_Freq_Set = [100 100 100 200 200 200 200 100]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
+dotInfo.coh_Freq_Set = [100 100 100 100 100 100 100 100]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 
 dotInfo.n_vis_trials=sum(dotInfo.coh_Freq_Set);
 
-audInfo.cohSet = [100 70.7 50 35.4 25 17.7 12.5 8.9 6.3 4.5 3.2]./100; %Coh List to choose from
+%audInfo.cohSet = [100 70.7 50 35.4 25 17.7 12.5 8.9 6.3 4.5 3.2]./100; %Coh List to choose from
+audInfo.cohSet = dotInfo.cohSet ; %Coh List to choose from
+
 audInfo.coh_Freq_Set = dotInfo.coh_Freq_Set; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 audInfo.n_aud_trials=sum(audInfo.coh_Freq_Set);
 
-%AVInfo.coh_Freq_Set = dotInfo.coh_Freq_Set; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
-AVInfo.coh_Freq_Set =[0 0 0 0 0 0 0 0 0 0 0]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
+AVInfo.coh_Freq_Set = dotInfo.coh_Freq_Set; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
+%%AVInfo.coh_Freq_Set =[0 0 0 0 0 0 0 0 0 0 0]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 AVInfo.n_AV_trials=sum(AVInfo.coh_Freq_Set);
 
 %% GUI Input Parameters 
@@ -113,11 +118,12 @@ audInfo.Incorrect_Opacity = 1;
 AVInfo.dir = NaN; %Initilize for main loop purposes 
 
 if AVInfo.n_AV_trials ~=0
+    AVInfo.cohSet_dot = dotInfo.cohSet;
+    AVInfo.cohSet_aud = audInfo.cohSet;
     AVInfo.coherences_dot = AVInfo.cohSet_dot;
     AVInfo.coherences_aud = AVInfo.cohSet_aud;
     AVInfo.dirSet = dirBin(data);
-    AVInfo.cohSet_dot = dotInfo.cohSet;
-    AVInfo.cohSet_aud = audInfo.cohSet;
+  
     [AVInfo.aud_random_coh_list,AVInfo.dot_random_coh_list] = cohSet_maker_MCS_AV(AVInfo); %Random list of coherence Values for total trials
     AVInfo.random_dir_list = dir_randomizer_MCS_AV(AVInfo); %Random directions, 50% R and L for each coherence
 
