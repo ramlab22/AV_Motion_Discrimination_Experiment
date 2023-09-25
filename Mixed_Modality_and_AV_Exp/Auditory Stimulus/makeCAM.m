@@ -21,7 +21,7 @@ samples = round(dur.*Fs);
 silent = zeros((silence.*Fs),2);
 %dB_noise_reduction=6;
 dB_noise_reduction=10;
-%dB_noise_reduction=15;
+%dB_noise_reduction=8;
 
 noise_reduction_scalar=10^(-(dB_noise_reduction)/20);
 

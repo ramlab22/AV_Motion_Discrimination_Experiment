@@ -36,7 +36,7 @@ function [cohFreq_dir] = cohFreq_finder(dataout, audInfo)
             end
         end
     else
-        cohFreq_dir=0;
+        cohFreq_dir = [audInfo.coherences; zeros(1,length(audInfo.coherences))];
     end
 end
   
