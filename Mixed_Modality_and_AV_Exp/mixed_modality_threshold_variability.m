@@ -30,6 +30,7 @@ if combine_blocks==1
 else
     [master_dataout,column_titles,totalfiles_names] = load_blockdata_separately(Path) ;
     n_files=size(master_dataout,2);
+    close all
 
 end
 %011323=A only, 012023=V only, 021023=A and V only, 021623=A,V,AV
@@ -243,7 +244,7 @@ xtickangle(ax, 45);
 %ylim([0.2 0.4]);
 
 % Set the title and axis labels
-title(ax, 'Mean Slopes Across 100 Permutations');
+title(ax, sprintf('Mean Slopes Across %d Permutations',n_permutations));
 xlabel(ax, 'Date');
 ylabel(ax, 'Mean Slope');
 
