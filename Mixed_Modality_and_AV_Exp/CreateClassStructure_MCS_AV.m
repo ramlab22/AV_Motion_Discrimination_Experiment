@@ -11,35 +11,44 @@ audInfo = struct;
 dotInfo.cohSet = [100 70.7 50 35.4 25 17.7 12.5 8.9]./100; %Coh List to choose from
 
 %dotInfo.coh_Freq_Set = [100 100 100 200 200 200 200 100]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
-dotInfo.coh_Freq_Set = [100 100 100 100 100 100 100 100]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
+dotInfo.coh_Freq_Set = [200 200 200 200 200 200 200 200]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
+%dotInfo.coh_Freq_Set = [10 10 10 10 10 10 10 10]; 
 
 dotInfo.n_vis_trials=sum(dotInfo.coh_Freq_Set);
 
 %audInfo.cohSet = [100 70.7 50 35.4 25 17.7 12.5 8.9 6.3 4.5 3.2]./100; %Coh List to choose from
 audInfo.cohSet = dotInfo.cohSet ; %Coh List to choose from
+audInfo.coh_Freq_Set = [200 200 200 200 200 200 200 200]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
+%audInfo.coh_Freq_Set = [400 400 400 400 400 400 400 400]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 
-audInfo.coh_Freq_Set = dotInfo.coh_Freq_Set; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 audInfo.n_aud_trials=sum(audInfo.coh_Freq_Set);
 
 AVInfo.coh_Freq_Set = dotInfo.coh_Freq_Set; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
-%%AVInfo.coh_Freq_Set =[0 0 0 0 0 0 0 0 0 0 0]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
+%AVInfo.coh_Freq_Set =[0 0 0 0 0 0 0 0 0 0 0]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
+%AVInfo.coh_Freq_Set =[0 0 0 0 0 0 0 0]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 AVInfo.n_AV_trials=sum(AVInfo.coh_Freq_Set);
 
 %% GUI Input Parameters 
 
 ExpInfo.t_angle = 0.4; % Fixation Dot and Target Dots Visual Angle in Degrees
-ExpInfo.rew_angle = 15;% Reward Window Visual Angle in Degrees
+%ExpInfo.rew_angle = 15;% Reward Window Visual Angle in Degrees
+ExpInfo.rew_angle = 14;% Reward Window Visual Angle in Degrees
+
 %num of total trials across all modalities for each block
 ExpInfo.num_trials = dotInfo.n_vis_trials+audInfo.n_aud_trials+AVInfo.n_AV_trials;
 ExpInfo.catch_trials = 0; %dont use catch trials for this because previously, they replaced reg trials with fixation only reward trials to make it easier during hard staircase, but dont really need that for MCS
 ExpInfo.random_incorrect_opacity_list = catch_trial_randomizer(ExpInfo);%Gives list of 1 = regular trial, 0 = catch trial, see function 
-ExpInfo.stim_time = 834; %Time of stimulus presentaiton (ms)
+%ExpInfo.stim_time = 834; %Time of stimulus presentaiton (ms)
+ExpInfo.stim_time = 500; %Time of stimulus presentaiton (ms)
+
 ExpInfo.iti = 1000;%Intertrial Interval (ms)
 ExpInfo.fixation_time = 200;% ms; Time to fixate on fixation point before RDK Starts presenting == time of presenting fixation point 
 ExpInfo.positions = [0;0;0;0;1;0;0;0;0]; % Binary List of ON(1)/OFF(0) for position 1-9
 ExpInfo.possible_pos = find(ExpInfo.positions == 1); %Corresponding Number Position available for use
 ExpInfo.fail_timeout = 4000; %Failure of trial timeout in (ms)
-ExpInfo.rdk_angle = 15; %RDK stimulus visual angle
+%ExpInfo.rdk_angle = 15; %RDK stimulus visual angle
+ExpInfo.rdk_angle = 17; %RDK stimulus visual angle
+
 ExpInfo.target_fixation_time = 150;% ms; Time to fixate inside the target point window in order to get Reward
 data(30:33,1) = [1 0 0 1]; %[LR DU UD RL] 1 - Include, 0 Exclude dir
 data(21:24,1)=[0 1 0 1]; % [90 180 270 0]
