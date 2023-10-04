@@ -23,9 +23,9 @@ audInfo.coh_Freq_Set = [200 200 200 200 200 200 200 200]; %This is the descendin
 
 audInfo.n_aud_trials=sum(audInfo.coh_Freq_Set);
 
-%AVInfo.coh_Freq_Set = dotInfo.coh_Freq_Set; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
+AVInfo.coh_Freq_Set = dotInfo.coh_Freq_Set; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 %AVInfo.coh_Freq_Set =[0 0 0 0 0 0 0 0 0 0 0]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
-AVInfo.coh_Freq_Set =[0 0 0 0 0 0 0 0]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
+%AVInfo.coh_Freq_Set =[0 0 0 0 0 0 0 0]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 AVInfo.n_AV_trials=sum(AVInfo.coh_Freq_Set);
 
 %% GUI Input Parameters 
