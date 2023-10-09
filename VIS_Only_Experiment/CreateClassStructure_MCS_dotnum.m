@@ -1,5 +1,6 @@
-function  [ExpInfo, dstruct, dotInfo]= CreateClassStructure_MCS(data, monWidth, viewDist, xCenter, yCenter) %Puts all data input into structure for neatness
-%% Jack Mayfield 4/22/22
+function  [ExpInfo, dstruct, dotInfo]= CreateClassStructure_MCS_dotnum(data, monWidth, viewDist, xCenter, yCenter) %Puts all data input into structure for neatness
+%% adriana schoenhaut 10/6/23
+%% parameter setting for method of constant stim version of vis experiment, but with a single constant coherence and instead varying dot number
 
 %% GUI Input Parameters 
 
@@ -47,20 +48,26 @@ dotInfo.catchtrials = 0; % # catch trials
 dotInfo.dirSet = dirBin(data); %See function dirBin.m
 dotInfo.random_incorrect_opacity_list = catch_trial_randomizer(ExpInfo,dotInfo);%Gives list of 1 = regular trial, 0 = catch trial, see function 
 dotInfo.rdk_size_pix = angle2pixels(ExpInfo.rdk_angle); %RDK window size in pixels
-dotInfo.coh_Freq_Set = (data(50:60,1))'; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
-dotInfo.cohSet = [100 70.7 50 35.4 25 17.7 12.5 8.9 6.3 4.5 3.2]./100; %Coh List to choose from
-dotInfo.coherences = dotInfo.cohSet; 
-dotInfo.random_coh_list = cohSet_maker_MCS(dotInfo); %Random list of coherence Values for total trials
-dotInfo.random_dir_list = dir_randomizer_MCS(ExpInfo, dotInfo); %Random directions, 50% R and L for each coherence
+%dotInfo.coh_Freq_Set = [200]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
+%dotInfo.cohSet = [17]./100; %Coh List to choose from
+dotInfo.coherences = 12.5; 
+%dotInfo.random_coh_list = cohSet_maker_MCS(dotInfo); %Random list of coherence Values for total trials
+%dotInfo.random_dir_list = dir_randomizer_MCS(ExpInfo, dotInfo); %Random directions, 50% R and L for each coherence
 %dotInfo.probs = data(43:46,1)'; %This is the input probablities for the staircase procedure protocol
 dotInfo.apXYD = [0 90 (ExpInfo.rdk_angle*10)]; % Location x,y pixels (0,0 is center of screen) and diameter of the aperature, currently in visual degrees - MULTPLIED by 10 because of Shadlen dots code, needed to be an integer
-dotInfo.speed = data(20,1); %Degrees per second?
+
+dotInfo.speed =400; %Degrees per second*10
 dotInfo.dotSize = 4; %RDK Field Dots
 dotInfo.numDotField = 1; %Do not change 
 dotInfo.dotColor = [255 255 255]; %Dot field Color
 dotInfo.maxDotTime = ExpInfo.stim_time/1000; %Puts this in seconds from ms 
 dotInfo.Incorrect_Opacity = 1; %OPacity for the incorrect target if there is only 1 direction of motion, this for training purposes - eventually will be the same opacity as correct 
-dotInfo.maxDotsPerFrame = 200; %Maximum number of dots per frame of the RDK aperture drawing, DO NOT CHANGE - Graphics Card Specific
+%dotInfo.maxDotsPerFrame = 200; %Maximum number of dots per frame of the RDK aperture drawing, DO NOT CHANGE - Graphics Card Specific
+dotInfo.dotnum_Freq_Set = [100 100 100 100 100 100 100 100 100]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
+dotInfo.dotnumSet = [400 350 300 250 200 150 100 50 30]./100; %dotnum List to choose from
+dotInfo.random_dotnum_list = dotnumSet_maker_MCS(dotInfo); %Random list of coherence Values for total trials
+dotInfo.random_dir_list = dir_randomizer_MCS_dotnum(ExpInfo, dotInfo); %Random directions, 50% R and L for each dotnum
+
 %dotInfo.maxDotsPerFrame = 400; %Maximum number of dots per frame of the RDK aperture drawing, DO NOT CHANGE - Graphics Card Specific
 
 

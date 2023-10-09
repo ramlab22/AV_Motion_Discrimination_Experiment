@@ -1,4 +1,34 @@
-function [prob] = directional_probability(directional_dataout, dotInfo) 
+function [prob] = directional_probability_visual(directional_dataout, dotInfo) 
+% DIRECTIONAL_PROBABILITY Compute the proportion of correct responses for each coherence level based on direction.
+%
+% Given a dataset containing trial information and related dot information,
+% this function computes the success rate (in percentage) of different coherence levels 
+% based on the direction (right or left) of the trials.
+%
+% Input:
+%   - directional_dataout: Cell array containing trial-specific data.
+%     * Column 5: 'Yes' if it's a catch trial, 'No' otherwise.
+%     * Column 6: Indicates reward status - 'Yes', 'No', or 'N/A'.
+%     * Column 8: Coherence level for the trial.
+%     * Column 9: Direction of the trial - 0 for Right, 180 for Left.
+%
+%   - dotInfo: Struct containing information about the dot stimuli.
+%     * dotInfo.coherences: Array of unique coherence levels.
+%     * dotInfo.cohFreq_right: Array containing right trial frequencies for each coherence level.
+%     * dotInfo.cohFreq_left: Array containing left trial frequencies for each coherence level.
+%
+% Output:
+%   - prob: Nx2 array where N is the number of unique coherence levels.
+%     * Column 1: Coherence levels.
+%     * Column 2: Success rate in percentage for each coherence level.
+%
+% Example usage:
+%   prob_data = directional_probability(dataout, dotInfoStruct);
+%
+% Note:
+%   This function assumes that the input directional_dataout is a cell array 
+%   with the specified columns and dotInfo is a struct with the mentioned fields.
+
 
 coherence_rew_numbers = [dotInfo.coherences;
         zeros(1,length(dotInfo.coherences));

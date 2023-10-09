@@ -29,8 +29,8 @@ ExpInfo.random_list = zeros(1,ExpInfo.num_trials);
 %% Display Settings 
 
 dstruct.res = [1280 1024];    % screen resolution x y
-dstruct.siz = [40 30];        % screen size in cm W,H 
-dstruct.dis = 55;             % viewing distance in cm
+dstruct.siz = [monWidth 30];        % screen size in cm W,H 
+dstruct.dis = viewDist;             % viewing distance in cm
 
 %% Other Parameters
 

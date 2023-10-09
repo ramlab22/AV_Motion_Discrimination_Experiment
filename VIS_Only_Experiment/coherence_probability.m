@@ -1,4 +1,40 @@
-function [prob] = coherence_probability(dataout, dotInfo) 
+function [probability_correct] = coherence_probability(dataout, dotInfo)
+%COHERENCE_PROBABILITY Compute the total response accuracy per coherence from given data.
+%
+% Syntax:
+%   prob = coherence_probability(dataout, dotInfo)
+%
+% Input Arguments:
+%   dataout - A cell array containing trial data.
+%       * Column 5: Indicates if the trial is a 'Catch Trial' ('Yes' or 'No').
+%       * Column 6: Indicates if a reward was given ('Yes', 'No', or 'N/A').
+%       * Column 8: Contains coherence values.
+%
+%   dotInfo - A structure containing information about the dot coherence.
+%       * dotInfo.coherences: 1D array containing unique coherence levels.
+%       * dotInfo.cohFreq: 2D array where the first row has coherence levels 
+%                         and the second row contains the frequency of each coherence.
+%
+% Output Arguments:
+%   prob - A 2D array where:
+%       * First column: Coherence levels.
+%       * Second column: Coherence success rate in percentage.
+%       * Third column: Frequency of each coherence.
+%
+% Description:
+%   The function first calculates the number of rewarded trials and the number of 
+%   N/A trials (no chance for reward) for each coherence level. Then, it computes 
+%   the success rate by dividing the number of rewarded trials by the total number 
+%   of trials minus the N/A trials. The result is returned as a percentage.
+%
+% Examples:
+%   prob = coherence_probability(dataout, dotInfo);
+%
+% Note:
+%   The function assumes that the input 'dataout' has a specific structure where 
+%   relevant information is stored in columns 5, 6, and 8.
+%
+
 
 coherence_rew_numbers = [dotInfo.coherences;
         zeros(1,length(dotInfo.coherences));
@@ -25,9 +61,9 @@ coherence_rew_numbers = [dotInfo.coherences;
     end
 
     % All of the Coherence Success Rates in Percentage, regular
-    prob = [dotInfo.coherences;
+    probability_correct = [dotInfo.coherences;
         coherence_success_rate(2,:)*100;
         dotInfo.cohFreq];
 
-    prob = prob';
+    probability_correct = probability_correct';
 end

@@ -77,19 +77,7 @@ end
 
 
 %% Psychtoolbox 
-PsychDefaultSetup(2);
-screenNumber = 2;
-white = WhiteIndex(screenNumber);
-black = BlackIndex(screenNumber);
-[screenXpixels, screenYpixels] = Screen('WindowSize', screenNumber);
-[xCenter, yCenter] = RectCenter([0 0 screenXpixels screenYpixels]);
-%Screen('Preference', 'SkipSyncTests', 0);
-[window, windowRect] = PsychImaging('OpenWindow',screenNumber,black);
-
-Screen('Flip', window);
-ifi = Screen('GetFlipInterval', window); 
-waitframes = 1;
-refresh_rate = 1/ifi;
+[window, ifi, screenXpixels, screenYpixels, xCenter, yCenter] = setupPsychtoolbox();
 
 %% Structure Initialization 
 
@@ -489,8 +477,8 @@ num_catch_trials = dotInfo.catchtrials;
     dotInfo.cohFreq_right = cohFreq_finder(Right_dataout, dotInfo);
     dotInfo.cohFreq_left = cohFreq_finder(Left_dataout, dotInfo);
     
-    prob_Right = directional_probability(Right_dataout, dotInfo); 
-    prob_Left = directional_probability(Left_dataout, dotInfo); 
+    prob_Right = directional_probability_visual(Right_dataout, dotInfo); 
+    prob_Left = directional_probability_visual(Left_dataout, dotInfo); 
     
     [x, y, fig_both, coeff_p_values,mu,std_gaussian] = psychometric_plotter(prob_Right,prob_Left, dotInfo,save_name);
     Eye_Tracker_Plotter(eye_data_matrix);
