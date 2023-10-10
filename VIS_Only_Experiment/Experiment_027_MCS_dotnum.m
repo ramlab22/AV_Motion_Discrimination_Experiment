@@ -79,8 +79,9 @@ end
 
 
 %% Psychtoolbox 
-[window, ifi, screenXpixels, screenYpixels, xCenter, yCenter] = setupPsychtoolbox();
-
+[window, ifi, screenXpixels, screenYpixels, xCenter, yCenter,white,black] = setupPsychtoolbox();
+waitframes = 1;
+refresh_rate = 1/ifi;
 %% Structure Initialization 
 
 % Outputs all data into new structures for ease of use in later code
@@ -91,7 +92,7 @@ viewDist = 55; %Viewing Distance from monitor in cm
 
 %%%%%%%%%%%%%%%%%%%%%%% Main Structures for variable names %%%%%%%%%%%%%%
  
-[ExpInfo, vstruct, dotInfo] = CreateClassStructure_MCS(data, monWidth, viewDist, xCenter, yCenter);
+[ExpInfo, vstruct, dotInfo] = CreateClassStructure_MCS_dotnum(data, monWidth, viewDist, xCenter, yCenter);
     disp(ExpInfo)
     
      
@@ -154,7 +155,7 @@ rng('default');
 pause(2);
 dotInfo.coh=dotInfo.coherences;
 
-while (BreakState ~= 1) 
+while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     trialcounter = 1;
     coh_counter = 1;
     disp(['Trial #: ',num2str(trialcounter),'/',num2str(total_trials)])
@@ -484,13 +485,15 @@ num_catch_trials = dotInfo.catchtrials;
     probcorrect_Lefttrials = directional_probability_visual_dotnum(Left_dataout, dotInfo); 
     
     Eye_Tracker_Plotter(eye_data_matrix);
-     
+     [fig_dotnum] = create_dotnum_fig(dotInfo,prob_correct,save_name);
     %Save all figures to Figure Directory - NS = Non Staircase
-    saveas(fig_both, [figure_file_directory save_name '_VIS_MCS_dotnum.png'])
+    
+    saveas(fig_dotnum, [figure_file_directory save_name '_VIS_MCS_dotnum.png'])
     
     times = cell2mat(dataout(2:end,7)); %Extract the trial times 
     Total_Block_Time = sum(times);
     
+    block_counter = block_counter + 1;
     
 end
 %%

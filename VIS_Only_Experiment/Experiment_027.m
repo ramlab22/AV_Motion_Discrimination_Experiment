@@ -74,8 +74,9 @@ end
 
 
 %% Psychtoolbox 
-[window, ifi, screenXpixels, screenYpixels, xCenter, yCenter] = setupPsychtoolbox();
-
+[window, ifi, screenXpixels, screenYpixels, xCenter, yCenter,white,black] = setupPsychtoolbox();
+waitframes = 1;
+refresh_rate = 1/ifi;
 %% Structure Initialization 
 
 % Outputs all data into new structures for ease of use in later code

@@ -1,20 +1,24 @@
 function  [ExpInfo, dstruct, dotInfo]= CreateClassStructure_MCS_dotnum(data, monWidth, viewDist, xCenter, yCenter) %Puts all data input into structure for neatness
 %% adriana schoenhaut 10/6/23
 %% parameter setting for method of constant stim version of vis experiment, but with a single constant coherence and instead varying dot number
+dotInfo = struct;
+
+dotInfo.dotnum_Freq_Set = [130 130 130 130 130 130 130 130 130]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
+dotInfo.dotnumSet = [400 350 300 250 200 150 100 50 40]; %dotnum List to choose from
+ExpInfo.num_trials = sum(dotInfo.dotnum_Freq_Set); % Number of Trials for 1 block
 
 %% GUI Input Parameters 
 
-ExpInfo.t_angle = data(1,1); % Fixation Dot and Target Dots Visual Angle in Degrees
-ExpInfo.rew_angle = data(2,1);% Reward Window Visual Angle in Degrees
-ExpInfo.num_trials = data(3,1); % Number of Trials for 1 block
-ExpInfo.stim_time = data(4,1); %Time of stimulus(RDK) presentaiton (ms)
-ExpInfo.iti = data(5,1);%Intertrial Interval (ms)
-ExpInfo.fixation_time = data(6,1);% Time to fixate on fixation point before RDK Starts presenting == time of presenting fixation point 
-ExpInfo.positions = data(7:15,:); % Binary List of ON(1)/OFF(0) for position 1-9
+ExpInfo.t_angle = 0.4; % Fixation Dot and Target Dots Visual Angle in Degrees
+ExpInfo.rew_angle = 14.5;% Reward Window Visual Angle in Degrees
+ExpInfo.stim_time = 500; %Time of stimulus(RDK) presentaiton (ms)
+ExpInfo.iti = 1000;%Intertrial Interval (ms)
+ExpInfo.fixation_time = 200;% Time to fixate on fixation point before RDK Starts presenting == time of presenting fixation point 
+ExpInfo.positions =[0;0;0;0;1;0;0;0;0]; % Binary List of ON(1)/OFF(0) for position 1-9
 ExpInfo.possible_pos = find(ExpInfo.positions == 1); %Corresponding Number Position available for use
-ExpInfo.fail_timeout = data(16,1); %Failure of trial timeout in (ms)
-ExpInfo.rdk_angle = data(17,1); %RDK stimulus visual angle
-ExpInfo.target_fixation_time = data(18,1);% Time to fixate inside the target point window in order to get Reward
+ExpInfo.fail_timeout = 4000; %Failure of trial timeout in (ms)
+ExpInfo.rdk_angle = 17; %RDK stimulus visual angle
+ExpInfo.target_fixation_time = 150;% Time to fixate inside the target point window in order to get Reward
 
 %% This is the random position number generator
 
@@ -43,14 +47,14 @@ ExpInfo.ppd = 30;%pi * xCenter / atan(monWidth/viewDist/2) / 360;
 
 %% RDK Parameters
 
-dotInfo = struct;
 dotInfo.catchtrials = 0; % # catch trials
+data(21:24,1) = [0 1 0 1]; % [90 180 270 0]
 dotInfo.dirSet = dirBin(data); %See function dirBin.m
 dotInfo.random_incorrect_opacity_list = catch_trial_randomizer(ExpInfo,dotInfo);%Gives list of 1 = regular trial, 0 = catch trial, see function 
 dotInfo.rdk_size_pix = angle2pixels(ExpInfo.rdk_angle); %RDK window size in pixels
 %dotInfo.coh_Freq_Set = [200]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 %dotInfo.cohSet = [17]./100; %Coh List to choose from
-dotInfo.coherences = 12.5; 
+dotInfo.coherences = 12.5/100; 
 %dotInfo.random_coh_list = cohSet_maker_MCS(dotInfo); %Random list of coherence Values for total trials
 %dotInfo.random_dir_list = dir_randomizer_MCS(ExpInfo, dotInfo); %Random directions, 50% R and L for each coherence
 %dotInfo.probs = data(43:46,1)'; %This is the input probablities for the staircase procedure protocol
@@ -63,8 +67,6 @@ dotInfo.dotColor = [255 255 255]; %Dot field Color
 dotInfo.maxDotTime = ExpInfo.stim_time/1000; %Puts this in seconds from ms 
 dotInfo.Incorrect_Opacity = 1; %OPacity for the incorrect target if there is only 1 direction of motion, this for training purposes - eventually will be the same opacity as correct 
 %dotInfo.maxDotsPerFrame = 200; %Maximum number of dots per frame of the RDK aperture drawing, DO NOT CHANGE - Graphics Card Specific
-dotInfo.dotnum_Freq_Set = [100 100 100 100 100 100 100 100 100]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
-dotInfo.dotnumSet = [400 350 300 250 200 150 100 50 30]./100; %dotnum List to choose from
 dotInfo.random_dotnum_list = dotnumSet_maker_MCS(dotInfo); %Random list of coherence Values for total trials
 dotInfo.random_dir_list = dir_randomizer_MCS_dotnum(ExpInfo, dotInfo); %Random directions, 50% R and L for each dotnum
 
