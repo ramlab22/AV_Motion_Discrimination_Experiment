@@ -1,4 +1,4 @@
-function [rdk_timeout, eye_data_matrix] = RDK_Draw(ExpInfo, dotInfo, curWindow, xCenter, yCenter, h_voltage, k_voltage, TDT, start_block_time, eye_data_matrix, trial, fix_point_color)
+function [rdk_timeout, eye_data_matrix] = RDK_Draw(ExpInfo, dotInfo, curWindow, xCenter, yCenter, h_voltage, k_voltage, TDT, start_block_time, eye_data_matrix, trial, fix_point_color,k_pix)
 % dotInfo will be a struct with all of the information concerning the RDK stimulus
 %look at CreateClassStructure.m function 
 
@@ -93,8 +93,7 @@ r = round(ExpInfo.fixpoint_size_pix/2);
 % AJT: Now, this code does not do the above operation- instead ALL dots are
 % plotted every frame
   %Turn on fixation point Initially
-        Screen('FillOval',curWindow,fix_point_color,[(xCenter-r) (yCenter-r) (xCenter+r) (yCenter+r)]);
-
+        Screen('FillOval',curWindow,fix_point_color,[(xCenter-r) (k_pix-r) (xCenter+r) (k_pix+r)]);
         Screen('DrawingFinished',curWindow,dontclear);
 
 while continue_show
@@ -202,7 +201,7 @@ while continue_show
         Screen('DrawDots',curWindow,dots2Display,dotSize,dotInfo.dotColor,center(df,1:2));
     end
     
-        Screen('FillOval',curWindow,fix_point_color,[(xCenter-r) (yCenter-r) (xCenter+r) (yCenter+r)]);
+        Screen('FillOval',curWindow,fix_point_color,[(xCenter-r) (k_pix-r) (xCenter+r) (k_pix+r)]);
         Screen('DrawingFinished',curWindow,dontclear);
  
 

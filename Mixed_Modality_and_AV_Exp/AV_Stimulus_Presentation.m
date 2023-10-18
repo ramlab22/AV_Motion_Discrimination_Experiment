@@ -1,4 +1,4 @@
-function [av_timeout] = AV_Stimulus_Presentation(ExpInfo, dotInfo, AVInfo, curWindow, xCenter, yCenter, h_voltage, k_voltage, TDT)
+function [av_timeout] = AV_Stimulus_Presentation(ExpInfo, dotInfo, AVInfo, curWindow, xCenter, yCenter, h_voltage, k_voltage, TDT,k_pix)
 % dotInfo will be a struct with all of the information concerning the RDK stimulus
 %look at CreateClassStructure.m function 
 
@@ -23,8 +23,7 @@ refresh_rate = 1/ifi;
     apD = dotInfo.apXYD(:,3); % diameter of aperture
     center = repmat([xCenter yCenter],size(dotInfo.apXYD(:,1)));
 
-    center = [center(:,1) + dotInfo.apXYD(:,1)/10*(ExpInfo.ppd) center(:,2) - ...
-    dotInfo.apXYD(:,2)/10*ExpInfo.ppd]; % where you want the center of the aperture
+    center = [center(:,1) + dotInfo.apXYD(:,1)/10*(ExpInfo.ppd) center(:,2) -dotInfo.apXYD(:,2)/10*ExpInfo.ppd]; % where you want the center of the aperture
 
     center(:,3) = dotInfo.apXYD(:,3)/2/10*ExpInfo.ppd; % add diameter
     d_ppd = floor(apD/10 * ExpInfo.ppd);	% size of aperture in pixels
@@ -95,7 +94,7 @@ r = round(ExpInfo.fixpoint_size_pix/2);
 % are replotted according to the speed/direction and coherence. Similarly, the 
 % same is done for the 2nd group, etc.
   %Turn on fixation point Initially
-        Screen('FillOval',curWindow,dotInfo.dotColor,[(xCenter-r) (yCenter-r) (xCenter+r) (yCenter+r)]);
+        Screen('FillOval',curWindow,dotInfo.dotColor,[(xCenter-r) (k_pix-r) (xCenter+r) (k_pix+r)]);
 
         Screen('DrawingFinished',curWindow,dontclear);
         
@@ -206,7 +205,7 @@ while continue_show
         Screen('DrawDots',curWindow,dots2Display,dotSize,dotInfo.dotColor,center(df,1:2));
     end
     
-        Screen('FillOval',curWindow,dotInfo.dotColor,[(xCenter-r) (yCenter-r) (xCenter+r) (yCenter+r)]);
+        Screen('FillOval',curWindow,dotInfo.dotColor,[(xCenter-r) (k_pix-r) (xCenter+r) (k_pix+r)]);
         Screen('DrawingFinished',curWindow,dontclear);
  
 

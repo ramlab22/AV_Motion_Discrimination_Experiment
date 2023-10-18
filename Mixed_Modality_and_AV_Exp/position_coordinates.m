@@ -18,7 +18,9 @@ function [dot_coord] = position_coordinates(screenXpixels, screenYpixels, xCente
         dot_coord.Ypos_4 = screenYpixels./2;
         %Middle Dot 
         dot_coord.Xpos_5 = xCenter;
-        dot_coord.Ypos_5 = yCenter;
+      %  dot_coord.Ypos_5 = yCenter;
+        dot_coord.Ypos_5 = yCenter+200;
+
         %Middle Right
         dot_coord.Xpos_6 = screenXpixels-300;
         dot_coord.Ypos_6 = screenYpixels./2;

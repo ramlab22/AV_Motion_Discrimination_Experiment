@@ -18,14 +18,16 @@ dotInfo.n_vis_trials=sum(dotInfo.coh_Freq_Set);
 
 %audInfo.cohSet = [100 70.7 50 35.4 25 17.7 12.5 8.9 6.3 4.5 3.2]./100; %Coh List to choose from
 audInfo.cohSet = dotInfo.cohSet ; %Coh List to choose from
-audInfo.coh_Freq_Set = [200 200 200 200 200 200 200 200]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
+%audInfo.coh_Freq_Set = [200 200 200 200 200 200 200 200]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
+audInfo.coh_Freq_Set = [2 2 2 2 2 2 2 2]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
+
 %audInfo.coh_Freq_Set = [400 400 400 400 400 400 400 400]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 
 audInfo.n_aud_trials=sum(audInfo.coh_Freq_Set);
 
-AVInfo.coh_Freq_Set = dotInfo.coh_Freq_Set; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
+%AVInfo.coh_Freq_Set = dotInfo.coh_Freq_Set; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 %AVInfo.coh_Freq_Set =[0 0 0 0 0 0 0 0 0 0 0]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
-%AVInfo.coh_Freq_Set =[0 0 0 0 0 0 0 0]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
+AVInfo.coh_Freq_Set =[0 0 0 0 0 0 0 0]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 AVInfo.n_AV_trials=sum(AVInfo.coh_Freq_Set);
 
 %% GUI Input Parameters 
@@ -39,7 +41,8 @@ ExpInfo.num_trials = dotInfo.n_vis_trials+audInfo.n_aud_trials+AVInfo.n_AV_trial
 ExpInfo.catch_trials = 0; %dont use catch trials for this because previously, they replaced reg trials with fixation only reward trials to make it easier during hard staircase, but dont really need that for MCS
 ExpInfo.random_incorrect_opacity_list = catch_trial_randomizer(ExpInfo);%Gives list of 1 = regular trial, 0 = catch trial, see function 
 %ExpInfo.stim_time = 834; %Time of stimulus presentaiton (ms)
-ExpInfo.stim_time = 500; %Time of stimulus presentaiton (ms)
+%ExpInfo.stim_time = 500; %Time of stimulus presentaiton (ms)
+ExpInfo.stim_time = 550; %Time of stimulus presentaiton (ms)
 
 ExpInfo.iti = 1000;%Intertrial Interval (ms)
 ExpInfo.fixation_time = 200;% ms; Time to fixate on fixation point before RDK Starts presenting == time of presenting fixation point 
@@ -47,7 +50,8 @@ ExpInfo.positions = [0;0;0;0;1;0;0;0;0]; % Binary List of ON(1)/OFF(0) for posit
 ExpInfo.possible_pos = find(ExpInfo.positions == 1); %Corresponding Number Position available for use
 ExpInfo.fail_timeout = 4000; %Failure of trial timeout in (ms)
 %ExpInfo.rdk_angle = 15; %RDK stimulus visual angle
-ExpInfo.rdk_angle = 17; %RDK stimulus visual angle
+%ExpInfo.rdk_angle = 17; %RDK stimulus visual angle
+ExpInfo.rdk_angle = 22; %RDK stimulus visual angle
 
 ExpInfo.target_fixation_time = 150;% ms; Time to fixate inside the target point window in order to get Reward
 data(30:33,1) = [1 0 0 1]; %[LR DU UD RL] 1 - Include, 0 Exclude dir
@@ -89,7 +93,9 @@ dotInfo.rdk_size_pix = angle2pixels(ExpInfo.rdk_angle); %RDK window size in pixe
 dotInfo.coherences = dotInfo.cohSet; 
 dotInfo.random_coh_list = cohSet_maker_MCS(dotInfo); %Random list of coherence Values for total trials
 dotInfo.random_dir_list = dir_randomizer_MCS_unisensory(dotInfo); %Random directions, 50% R and L for each coherence
-dotInfo.apXYD = [0 90 (ExpInfo.rdk_angle*10)]; % Location x,y pixels (0,0 is center of screen) and diameter of the aperature, currently in visual degrees - MULTPLIED by 10 because of Shadlen dots code, needed to be an integer
+%dotInfo.apXYD = [0 90 (ExpInfo.rdk_angle*10)]; % Location x,y pixels (0,0 is center of screen) and diameter of the aperature, currently in visual degrees - MULTPLIED by 10 because of Shadlen dots code, needed to be an integer
+dotInfo.apXYD = [0 55 (ExpInfo.rdk_angle*10)]; % Location x,y pixels (0,0 is center of screen) and diameter of the aperature, currently in visual degrees - MULTPLIED by 10 because of Shadlen dots code, needed to be an integer
+
 dotInfo.speed = 400; %Degrees per second * 10
 dotInfo.dotSize = 4; %RDK Field Dots
 %dotInfo.dotSize = 3; %RDK Field Dots

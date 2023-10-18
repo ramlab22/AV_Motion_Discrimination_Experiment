@@ -126,15 +126,22 @@ target_only_time_frames = round((ExpInfo.target_fixation_time/1000)/ ifi);
 %% Target  structure initialization
 
 %target_distance_from_fixpoint_pix=200; %+- x distance between fixation point location and target location in pixels
-%target_distance_from_fixpoint_pix=350; %+- x distance between fixation point location and target location in pixels
+target_distance_from_fixpoint_pix=350; %+- x distance between fixation point location and target location in pixels
 %target_distance_from_fixpoint_pix=300; %+- x distance between fixation point location and target location in pixels
-target_distance_from_fixpoint_pix=270; %+- x distance between fixation point location and target location in pixels
-target_y_coord_pix = targ_adjust_y(90); %Pixel Y coordinate adjustment for the targets with relation to the RDK aperature
+%target_distance_from_fixpoint_pix=270; %+- x distance between fixation point location and target location in pixels
+%target_y_coord_pix = targ_adjust_y(90); %Pixel Y coordinate adjustment for the targets with relation to the RDK aperature
+target_y_coord_pix = 205; %Pixel Y coordinate adjustment for the targets with relation to the RDK aperature--hardcoded 101823 AMS
+
 %target_y_coord_pix = targ_adjust_y(dotInfo.apXYD(:,2)); %Pixel Y coordinate adjustment for the targets with relation to the RDK aperature
-target_y_coord_volts = pixels2volts_Y(target_y_coord_pix);%yCenter+target_y_coord_pix); %Added to yCenter to account for shadlen dots functions using a 0,0 center coordinate
+%target_y_coord_volts = pixels2volts_Y(target_y_coord_pix);%yCenter+target_y_coord_pix); %Added to yCenter to account for shadlen dots functions using a 0,0 center coordinate
+target_y_coord_volts = 2.9982;%--hardcoded 101823 AMS yCenter+target_y_coord_pix); %Added to yCenter to account for shadlen dots functions using a 0,0 center coordinate
 
 volts_per_pixel=0.0078125; %10 volts/1280 pixels= X volts/1 pixel , This is for the X direction ONLY
-target_distance_from_fixpoint_volts=target_distance_from_fixpoint_pix*volts_per_pixel;
+%target_distance_from_fixpoint_volts=target_distance_from_fixpoint_pix*volts_per_pixel;
+target_distance_from_fixpoint_volts=2.7344;%--hardcoded 101823 AMS
+
+center_x_coord_pix = 640 ; %h variable val (fixation point) in code where fixation point is center
+
 
 %% Initialize eye display figure
 % [Figdata, hFig, hAxes, hLine] = InitEyeDisplay;
@@ -277,13 +284,13 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         
         
         pos = ExpInfo.random_list(trialcounter);  %Gets random pos # from the list evaluated at specific trial #
-        [h,i_trial] = xypos(pos,dot_coord);%Outputs fixation center (h,k) in pixels for Psychtoolbox to draw dot
+        [h_pix,k_pix] = xypos(pos,dot_coord);%Outputs fixation center (h,k) in pixels for Psychtoolbox to draw dot
         [h_voltage, k_voltage] = pos_voltage(pos,dot_coord); %Outputs Fixation center in Volts for comparison to eyetracker values
         %         [adjust_right, adjust_left] = targ_adjust(pos);%Outputs the adjustments in pixels for dR and dL equations later on
         
         %Turn on fixation point Initially
         Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
-        Screen('DrawDots', window,[h i_trial], ExpInfo.fixpoint_size_pix, fix_point_color, [], 2);
+        Screen('DrawDots', window,[h_pix k_pix], ExpInfo.fixpoint_size_pix, fix_point_color, [], 2);
         vbl = Screen('Flip',window);
         
         %% Now we present the fix interval with fixation point minus one frame
@@ -299,7 +306,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
             
             d = sqrt(((x-h_voltage).^2)+((y-k_voltage).^2));
             if frame < time_wait_frames(1)
-                Screen('DrawDots', window,[h i_trial], ExpInfo.fixpoint_size_pix, fix_point_color, [], 2);
+                Screen('DrawDots', window,[h_pix k_pix], ExpInfo.fixpoint_size_pix, fix_point_color, [], 2);
                 %Flip to the screen
                 vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
                 
@@ -324,7 +331,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                 end %if fixate for necessary amoutn of time during waiting period
             end %if frame < fixation waiting period
             if frame > time_wait_frames(1)
-                Screen('DrawDots', window,[h i_trial], ExpInfo.fixpoint_size_pix, fix_point_color, [], 2);
+                Screen('DrawDots', window,[h_pix k_pix], ExpInfo.fixpoint_size_pix, fix_point_color, [], 2);
                 vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
                 if correct_counter > fix_only_time_frames %break out of loop if already fixated for required amount of time
                     break %added 10/31/22-AMS
@@ -368,7 +375,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
             
             if fix_timeout ~= 1
                 % Draw the RDK
-                [rdk_timeout, eye_data_matrix] = RDK_Draw(ExpInfo, dotInfo, window, xCenter, yCenter, h_voltage, k_voltage, TDT, start_block_time, eye_data_matrix, trialcounter, fix_point_color);
+                [rdk_timeout, eye_data_matrix] = RDK_Draw(ExpInfo, dotInfo, window, xCenter, yCenter, h_voltage, k_voltage, TDT, start_block_time, eye_data_matrix, trialcounter, fix_point_color,k_pix);
                 if rdk_timeout ~= 1
                     rdk_reward = 'Yes';
                     if baron_fixation_training==1 || strcmp(catchtrial, 'Yes')
@@ -406,7 +413,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                     
                     d = sqrt(((x-h_voltage).^2)+((y-k_voltage).^2));
 
-                    Screen('DrawDots', window,[h i_trial], ExpInfo.fixpoint_size_pix, fix_point_color, [], 2);
+                    Screen('DrawDots', window,[h_pix k_pix], ExpInfo.fixpoint_size_pix, fix_point_color, [], 2);
                     %Flip to the screen
                     vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
                     
@@ -459,7 +466,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
 
             if fix_timeout ~= 1
                 %Play the AV Stim
-                [av_timeout] = AV_Stimulus_Presentation(ExpInfo, dotInfo, AVInfo, window, xCenter, yCenter, h_voltage, k_voltage, TDT);
+                [av_timeout] = AV_Stimulus_Presentation(ExpInfo, dotInfo, AVInfo, window, xCenter, yCenter, h_voltage, k_voltage, TDT,k_pix);
                 if av_timeout ~= 1
                     av_reward = 'Yes';
                     if baron_fixation_training==1 || strcmp(catchtrial, 'Yes')
@@ -502,20 +509,20 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                 % Draw the 2 target points, k-... because shadlendots
                 % function's coordinates are backwards from ours, super
                 % convienient and not at all confusing
-                Screen('DrawDots', window, [(h + target_distance_from_fixpoint_pix) (target_y_coord_pix)], ExpInfo.targpoint_size_pix, right_target_color, [], 2);%Right target
-                Screen('DrawDots', window, [(h - target_distance_from_fixpoint_pix) (target_y_coord_pix)], ExpInfo.targpoint_size_pix, left_target_color, [], 2);%Left Target
+                Screen('DrawDots', window, [(center_x_coord_pix + target_distance_from_fixpoint_pix) (target_y_coord_pix)], ExpInfo.targpoint_size_pix, right_target_color, [], 2);%Right target
+                Screen('DrawDots', window, [(center_x_coord_pix - target_distance_from_fixpoint_pix) (target_y_coord_pix)], ExpInfo.targpoint_size_pix, left_target_color, [], 2);%Left Target
                 % Flip to the screen
                 vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
                 
-                dR = sqrt(((x-(h_voltage + target_distance_from_fixpoint_volts)).^2)+((y-(k_voltage+target_y_coord_volts)).^2));%Right Target Distance
-                dL = sqrt(((x-(h_voltage - target_distance_from_fixpoint_volts)).^2)+((y-(k_voltage+target_y_coord_volts)).^2));%Left Target Distance
+                dR = sqrt(((x-(0 + target_distance_from_fixpoint_volts)).^2)+((y-(0+target_y_coord_volts)).^2));%Right Target Distance
+                dL = sqrt(((x-(0 - target_distance_from_fixpoint_volts)).^2)+((y-(0+target_y_coord_volts)).^2));%Left Target Distance
                 isRightTargetFixation = (dR <= ExpInfo.target_rew_radius_volts);
                 isLeftTargetFixation = (dL <= ExpInfo.target_rew_radius_volts);
                 isAnyTargetFixation = (isRightTargetFixation || isLeftTargetFixation);
                 
                 if frame < time_wait_frames(2)
-                    Screen('DrawDots', window, [(h + target_distance_from_fixpoint_pix) (target_y_coord_pix)], ExpInfo.targpoint_size_pix, right_target_color, [], 2);%Right target
-                    Screen('DrawDots', window, [(h - target_distance_from_fixpoint_pix) (target_y_coord_pix)], ExpInfo.targpoint_size_pix, left_target_color, [], 2);%Left Target
+                    Screen('DrawDots', window, [(center_x_coord_pix + target_distance_from_fixpoint_pix) (target_y_coord_pix)], ExpInfo.targpoint_size_pix, right_target_color, [], 2);%Right target
+                    Screen('DrawDots', window, [(center_x_coord_pix - target_distance_from_fixpoint_pix) (target_y_coord_pix)], ExpInfo.targpoint_size_pix, left_target_color, [], 2);%Left Target
                     vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
                     
                     if (isRightTargetFixation && strcmp('right',correct_target)) || (isLeftTargetFixation && strcmp('left',correct_target)) %If hes looking at the correct target, left or right
