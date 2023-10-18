@@ -1,4 +1,4 @@
-function  [fig] = create_dotnum_fig(dotInfo,prob_correct,save_name)
+function  [fig,xData,yData,all_sizes] = create_dotnum_fig(dotInfo,prob_correct,save_name)
 all_sizes = nonzeros(dotInfo.dotnumFreq(2,:));
 %all_sizes = vertcat(sizes_L, sizes_R);
 xData = dotInfo.dotnumSet ;

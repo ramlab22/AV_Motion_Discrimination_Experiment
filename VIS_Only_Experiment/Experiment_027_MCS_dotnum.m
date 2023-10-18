@@ -485,7 +485,7 @@ num_catch_trials = dotInfo.catchtrials;
     probcorrect_Lefttrials = directional_probability_visual_dotnum(Left_dataout, dotInfo); 
     
     Eye_Tracker_Plotter(eye_data_matrix);
-     [fig_dotnum] = create_dotnum_fig(dotInfo,prob_correct,save_name);
+     [fig_dotnum,xData,yData,all_sizes] = create_dotnum_fig(dotInfo,prob_correct,save_name);
     %Save all figures to Figure Directory - NS = Non Staircase
     
     saveas(fig_dotnum, [figure_file_directory save_name '_VIS_MCS_dotnum.png'])

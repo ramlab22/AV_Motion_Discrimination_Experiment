@@ -3,14 +3,14 @@ function  [ExpInfo, dstruct, dotInfo]= CreateClassStructure_MCS_dotnum(data, mon
 %% parameter setting for method of constant stim version of vis experiment, but with a single constant coherence and instead varying dot number
 dotInfo = struct;
 
-dotInfo.dotnum_Freq_Set = [130 130 130 130 130 130 130 130 130]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
-dotInfo.dotnumSet = [400 350 300 250 200 150 100 50 40]; %dotnum List to choose from
+dotInfo.dotnum_Freq_Set = [250 250 250 250 250 250 250 250 250]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
+dotInfo.dotnumSet = [400 350 300 250 200 150 100 50 30]; %dotnum List to choose from
 ExpInfo.num_trials = sum(dotInfo.dotnum_Freq_Set); % Number of Trials for 1 block
 
 %% GUI Input Parameters 
 
 ExpInfo.t_angle = 0.4; % Fixation Dot and Target Dots Visual Angle in Degrees
-ExpInfo.rew_angle = 14.5;% Reward Window Visual Angle in Degrees
+ExpInfo.rew_angle = 14;% Reward Window Visual Angle in Degrees
 ExpInfo.stim_time = 500; %Time of stimulus(RDK) presentaiton (ms)
 ExpInfo.iti = 1000;%Intertrial Interval (ms)
 ExpInfo.fixation_time = 200;% Time to fixate on fixation point before RDK Starts presenting == time of presenting fixation point 
@@ -54,7 +54,7 @@ dotInfo.random_incorrect_opacity_list = catch_trial_randomizer(ExpInfo,dotInfo);
 dotInfo.rdk_size_pix = angle2pixels(ExpInfo.rdk_angle); %RDK window size in pixels
 %dotInfo.coh_Freq_Set = [200]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 %dotInfo.cohSet = [17]./100; %Coh List to choose from
-dotInfo.coherences = 12.5/100; 
+dotInfo.coherences = 25/100; 
 %dotInfo.random_coh_list = cohSet_maker_MCS(dotInfo); %Random list of coherence Values for total trials
 %dotInfo.random_dir_list = dir_randomizer_MCS(ExpInfo, dotInfo); %Random directions, 50% R and L for each coherence
 %dotInfo.probs = data(43:46,1)'; %This is the input probablities for the staircase procedure protocol
