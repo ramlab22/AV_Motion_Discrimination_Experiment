@@ -13,7 +13,7 @@ figure_file_directory = 'C:\Jackson\Adriana Stuff\AV_Figures\';
 
 
 %when running baron on fixation training set to 1
-baron_fixation_training=0;
+baron_fixation_training=1;
 if baron_fixation_training==1
     target_reward='N/A';
 end

@@ -7,6 +7,8 @@ ExpInfo.t_angle = data(1,1); % Fixation Dot and Target Dots Visual Angle in Degr
 ExpInfo.rew_angle = data(2,1);% Reward Window Visual Angle in Degrees
 ExpInfo.num_trials = data(3,1); % Number of Trials for 1 block
 ExpInfo.stim_time = data(4,1); %Time of stimulus(RDK) presentaiton (ms)
+%ExpInfo.stim_time =450; %Time of stimulus(RDK) presentaiton (ms)
+
 ExpInfo.iti = data(5,1);%Intertrial Interval (ms)
 ExpInfo.fixation_time = data(6,1);% Time to fixate on fixation point before RDK Starts presenting == time of presenting fixation point 
 ExpInfo.positions = data(7:15,:); % Binary List of ON(1)/OFF(0) for position 1-9

@@ -368,7 +368,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
             
             if fix_timeout ~= 1
                 % Draw the RDK
-                [rdk_timeout, eye_data_matrix] = RDK_Draw(ExpInfo, dotInfo, window, xCenter, yCenter, h_voltage, k_voltage, TDT, start_block_time, eye_data_matrix, trialcounter, fix_point_color);
+                [rdk_timeout, eye_data_matrix] = RDK_Draw(ExpInfo, dotInfo, window, xCenter, yCenter, h_voltage, k_voltage, TDT, start_block_time, eye_data_matrix, trialcounter, fix_point_color,k_pix);
                 if rdk_timeout ~= 1
                     rdk_reward = 'Yes';
                     if baron_fixation_training==1 || strcmp(catchtrial, 'Yes')
@@ -459,7 +459,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
 
             if fix_timeout ~= 1
                 %Play the AV Stim
-                [av_timeout] = AV_Stimulus_Presentation(ExpInfo, dotInfo, AVInfo, window, xCenter, yCenter, h_voltage, k_voltage, TDT);
+                [av_timeout] = AV_Stimulus_Presentation(ExpInfo, dotInfo, AVInfo, window, xCenter, yCenter, h_voltage, k_voltage, TDT,k_pix);
                 if av_timeout ~= 1
                     av_reward = 'Yes';
                     if baron_fixation_training==1 || strcmp(catchtrial, 'Yes')
