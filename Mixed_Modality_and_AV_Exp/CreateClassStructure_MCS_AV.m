@@ -38,8 +38,8 @@ ExpInfo.rew_angle = 14;% Reward Window Visual Angle in Degrees
 ExpInfo.num_trials = dotInfo.n_vis_trials+audInfo.n_aud_trials+AVInfo.n_AV_trials;
 ExpInfo.catch_trials = 0; %dont use catch trials for this because previously, they replaced reg trials with fixation only reward trials to make it easier during hard staircase, but dont really need that for MCS
 ExpInfo.random_incorrect_opacity_list = catch_trial_randomizer(ExpInfo);%Gives list of 1 = regular trial, 0 = catch trial, see function 
-%ExpInfo.stim_time = 834; %Time of stimulus presentaiton (ms)
-ExpInfo.stim_time = 500; %Time of stimulus presentaiton (ms)
+ExpInfo.stim_time = 834; %Time of stimulus presentaiton (ms)
+%ExpInfo.stim_time = 500; %Time of stimulus presentaiton (ms)
 
 ExpInfo.iti = 1000;%Intertrial Interval (ms)
 ExpInfo.fixation_time = 200;% ms; Time to fixate on fixation point before RDK Starts presenting == time of presenting fixation point 
@@ -90,7 +90,9 @@ dotInfo.coherences = dotInfo.cohSet;
 dotInfo.random_coh_list = cohSet_maker_MCS(dotInfo); %Random list of coherence Values for total trials
 dotInfo.random_dir_list = dir_randomizer_MCS_unisensory(dotInfo); %Random directions, 50% R and L for each coherence
 dotInfo.apXYD = [0 90 (ExpInfo.rdk_angle*10)]; % Location x,y pixels (0,0 is center of screen) and diameter of the aperature, currently in visual degrees - MULTPLIED by 10 because of Shadlen dots code, needed to be an integer
-dotInfo.speed = 400; %Degrees per second * 10
+%dotInfo.speed = 400; %Degrees per second * 10
+dotInfo.speed = 200; %Degrees per second * 10
+
 dotInfo.dotSize = 4; %RDK Field Dots
 %dotInfo.dotSize = 3; %RDK Field Dots
 
@@ -110,7 +112,9 @@ audInfo.catchtrials = 0;
 audInfo.coherences = audInfo.cohSet; %This is for use in other functions for success calcs
 audInfo.random_coh_list = cohSet_maker_MCS(audInfo); %Random list of coherence Values for total trials
 audInfo.random_dir_list = dir_randomizer_MCS_unisensory(audInfo); %Random directions, 50% R and L for each coherence
-audInfo.velocity =40; %deg/sec
+%audInfo.velocity =40; %deg/sec
+audInfo.velocity =20; %deg/sec
+
 audInfo.set_dur = 78/(audInfo.velocity) ;%Seconds, This is going to be set as long as the speakers dont move, the actual duration of the stimulus will be set by the t_start and t_end variables
     stimtime_midpoint=(audInfo.set_dur*1000)/2;
     half_desired_duration=ExpInfo.stim_time/2;
