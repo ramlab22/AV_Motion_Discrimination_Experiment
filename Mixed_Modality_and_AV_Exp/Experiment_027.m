@@ -254,7 +254,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
             CAM_1=audInfo.CAM(:,1);
             CAM_2=audInfo.CAM(:,2);
             ramp_dur=0.004;
-            [CAM_1_Cut_Ramped, CAM_2_Cut_Ramped, audInfo.window_duration, audInfo.ramp_dur] = aud_receptive_field_location(CAM_1, CAM_2,audInfo.t_start,audInfo.t_end, sampling_rate, ramp_dur)
+            [CAM_1_Cut_Ramped, CAM_2_Cut_Ramped, audInfo.window_duration, audInfo.ramp_dur] = aud_receptive_field_location(CAM_1, CAM_2,audInfo.t_start,audInfo.t_end, sampling_rate, ramp_dur);
             TDT.write('mux_sel',audInfo.mux); %The multiplexer values for each trial, set to all zeros for now to include only LR and RL
             TDT.write('window',audInfo.window_duration); %duration of the stimulus in ms
             TDT.write('ramp_dur',audInfo.ramp_dur);
@@ -277,13 +277,13 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         end
 
         pos = ExpInfo.random_list(trialcounter);  %Gets random pos # from the list evaluated at specific trial #
-        [h,i_trial] = xypos(pos,dot_coord);%Outputs fixation center (h,k) in pixels for Psychtoolbox to draw dot
+        [h_pix,k_pix] = xypos(pos,dot_coord);%Outputs fixation center (h,k) in pixels for Psychtoolbox to draw dot
         [h_voltage, k_voltage] = pos_voltage(pos,dot_coord); %Outputs Fixation center in Volts for comparison to eyetracker values
         %         [adjust_right, adjust_left] = targ_adjust(pos);%Outputs the adjustments in pixels for dR and dL equations later on
         
         %Turn on fixation point Initially
         Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
-        Screen('DrawDots', window,[h i_trial], ExpInfo.fixpoint_size_pix, fix_point_color, [], 2);
+        Screen('DrawDots', window,[h_pix k_pix], ExpInfo.fixpoint_size_pix, fix_point_color, [], 2);
         vbl = Screen('Flip',window);
         
         %% Now we present the fix interval with fixation point minus one frame
@@ -299,7 +299,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
             
             d = sqrt(((x-h_voltage).^2)+((y-k_voltage).^2));
             if frame < time_wait_frames(1)
-                Screen('DrawDots', window,[h i_trial], ExpInfo.fixpoint_size_pix, fix_point_color, [], 2);
+                Screen('DrawDots', window,[h_pix k_pix], ExpInfo.fixpoint_size_pix, fix_point_color, [], 2);
                 %Flip to the screen
                 vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
                 
@@ -324,7 +324,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                 end %if fixate for necessary amoutn of time during waiting period
             end %if frame < fixation waiting period
             if frame > time_wait_frames(1)
-                Screen('DrawDots', window,[h i_trial], ExpInfo.fixpoint_size_pix, fix_point_color, [], 2);
+                Screen('DrawDots', window,[h_pix k_pix], ExpInfo.fixpoint_size_pix, fix_point_color, [], 2);
                 vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
                 if correct_counter > fix_only_time_frames %break out of loop if already fixated for required amount of time
                     break %added 10/31/22-AMS
@@ -406,7 +406,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                     
                     d = sqrt(((x-h_voltage).^2)+((y-k_voltage).^2));
 
-                    Screen('DrawDots', window,[h i_trial], ExpInfo.fixpoint_size_pix, fix_point_color, [], 2);
+                    Screen('DrawDots', window,[h_pix k_pix], ExpInfo.fixpoint_size_pix, fix_point_color, [], 2);
                     %Flip to the screen
                     vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
                     
@@ -502,8 +502,8 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                 % Draw the 2 target points, k-... because shadlendots
                 % function's coordinates are backwards from ours, super
                 % convienient and not at all confusing
-                Screen('DrawDots', window, [(h + target_distance_from_fixpoint_pix) (target_y_coord_pix)], ExpInfo.targpoint_size_pix, right_target_color, [], 2);%Right target
-                Screen('DrawDots', window, [(h - target_distance_from_fixpoint_pix) (target_y_coord_pix)], ExpInfo.targpoint_size_pix, left_target_color, [], 2);%Left Target
+                Screen('DrawDots', window, [(h_pix + target_distance_from_fixpoint_pix) (target_y_coord_pix)], ExpInfo.targpoint_size_pix, right_target_color, [], 2);%Right target
+                Screen('DrawDots', window, [(h_pix - target_distance_from_fixpoint_pix) (target_y_coord_pix)], ExpInfo.targpoint_size_pix, left_target_color, [], 2);%Left Target
                 % Flip to the screen
                 vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
                 
@@ -514,8 +514,8 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                 isAnyTargetFixation = (isRightTargetFixation || isLeftTargetFixation);
                 
                 if frame < time_wait_frames(2)
-                    Screen('DrawDots', window, [(h + target_distance_from_fixpoint_pix) (target_y_coord_pix)], ExpInfo.targpoint_size_pix, right_target_color, [], 2);%Right target
-                    Screen('DrawDots', window, [(h - target_distance_from_fixpoint_pix) (target_y_coord_pix)], ExpInfo.targpoint_size_pix, left_target_color, [], 2);%Left Target
+                    Screen('DrawDots', window, [(h_pix + target_distance_from_fixpoint_pix) (target_y_coord_pix)], ExpInfo.targpoint_size_pix, right_target_color, [], 2);%Right target
+                    Screen('DrawDots', window, [(h_pix - target_distance_from_fixpoint_pix) (target_y_coord_pix)], ExpInfo.targpoint_size_pix, left_target_color, [], 2);%Left Target
                     vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
                     
                     if (isRightTargetFixation && strcmp('right',correct_target)) || (isLeftTargetFixation && strcmp('left',correct_target)) %If hes looking at the correct target, left or right
