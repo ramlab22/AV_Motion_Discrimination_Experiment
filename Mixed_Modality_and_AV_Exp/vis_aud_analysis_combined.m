@@ -1,7 +1,7 @@
 
-Path = '/Users/adrianaschoenhaut/My Drive/Lab Notebook/Thesis (monkey)/figs/Baron_500ms/' ;% wherever you want to search
+Path = '/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Alv/Alv_0919_to_0921/' ;% wherever you want to search
 [dataout,column_titles,totalfiles_names] = combine_data_acrossblocks(Path);
-save_name='Baron MCS 500ms Duration';
+save_name='Alv MCS 834ms 091923 to 092123';
 
 %% End of Block
 [AUD_dataout, VIS_dataout, AV_dataout] = modality_splitter(dataout);

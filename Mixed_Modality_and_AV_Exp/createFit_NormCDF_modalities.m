@@ -88,9 +88,9 @@ function [fig, BF_AUD_VIS, BF_AUD_AV, BF_VIS_AV, AUD_mu, VIS_mu, AV_mu, AUD_std_
     ax = gca; 
     ax.FontSize = 16;
 
-    BF_AUD_VIS=0;
-    BF_AUD_AV=0;
-    BF_VIS_AV=0;
+    BF_AUD_VIS=AUD_p;
+    BF_AUD_AV=AV_p;
+    BF_VIS_AV=VIS_p;
 %    [BF_AUD_VIS, BF_AUD_AV, BF_VIS_AV] = comparePsychometricFunctions_A_V_AV(x,AUD_mdl, VIS_mdl, AV_mdl,AUD_fit_par,VIS_fit_par,AV_fit_par);
     [Results_MLE] = MLE_Calculations_A_V_AV(AUD_mdl, VIS_mdl, AV_mdl,AUD_yData,VIS_yData, AV_yData,AUD_xData,VIS_xData, AV_xData)
 end

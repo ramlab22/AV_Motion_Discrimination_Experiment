@@ -36,7 +36,9 @@ coherence_rew_numbers = [AVInfo.coherences_aud;
    
     for c = 1:length(AVInfo.coherences_aud)
         coherence_success_rate(3,c) = ...
-            coherence_rew_numbers(3,c)/((AVInfo.cohFreq_aud(2,c)-coherence_rew_numbers(4,c)));  
+            coherence_rew_numbers(3,c)/(AVInfo.cohFreq_aud(2,c));  
+      %  coherence_success_rate(3,c) = ...
+      %      coherence_rew_numbers(3,c)/((AVInfo.cohFreq_aud(2,c)-coherence_rew_numbers(4,c)));  
         %Subtract the trials where there was no chance for reward(N/A Target Correct)
     end
 

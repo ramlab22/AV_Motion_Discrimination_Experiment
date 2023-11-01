@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="us-ascii" standalone="yes"?>
+<?fyp appVersion="5.0.2" schemaVersion="22"?>
+<figure strokeWidth="0.01in" strokeJoin="miter" loc="0.5in 0.5in" strokePat="solid" psFont="Helvetica" fontStyle="plain" title="Psychometric Function" fillColor="000000" altFont="serif" strokeCap="butt" width="6.5in" fontSize="12" strokeColor="000000" font="Arial" height="9in"
+     xmlns="http://www.keck.ucsf.edu/datanav/namespace/schema22">
+   <graph strokeWidth="0.5pt" loc="0.975in 1.35in" autorange="z" width="4.55in" fontSize="16" title="AUD,VIS,AV Psych. Func. L&amp;RBaron MCS 834ms Duration 8dB SNR" height="6.3in">
+      <axis lineHt="0.8" start="-1" spacer="0.1in" end="1" title="Coherence ((+)Rightward, (-)Leftward)">
+         <ticks intv="0.2" perLogIntv="1" start="-1" end="1" dir="in" fmt="f1"></ticks>
+      </axis>
+      <axis lineHt="0.8" start="0" spacer="0.1in" end="1" title="% Rightward Response">
+         <ticks intv="0.1" perLogIntv="1" start="0" end="1" dir="in" fmt="f2"></ticks>
+      </axis>
+      <zaxis cmapnan="ffffff" lineHt="0.8" gap="0.2in" cmap="tropic" start="0.6" spacer="0.1in" end="1" title="Z AXIS">
+         <ticks intv="0.1" perLogIntv="1" fmt="f3"></ticks>
+      </zaxis>
+      <gridline hide="false" strokeColor="262626" />
+      <gridline hide="false" strokeColor="262626" />
+      <legend loc="0in 0in" size="0.1in" mid="true" />
+      <scatter fillColor="none" strokeWidth="2pt" mode="sizeBubble" size="14.9pt" src="#src_AUD" strokeColor="ff0000" title="AUD" />
+      <scatter fillColor="none" strokeWidth="2pt" mode="sizeBubble" size="14.967pt" src="#src_VIS" strokeColor="0000ff" title="VIS" />
+      <scatter fillColor="none" strokeWidth="2pt" mode="sizeBubble" size="14.036pt" src="#src_AV" strokeColor="00ff00" title="AV" />
+      <trace strokeWidth="2.5pt" src="#src_57" strokeColor="ff0000" title="AUD - NormCDF">
+         <symbol fillColor="none" size="0pt" type="circle" />
+         <ebar hide="true" />
+      </trace>
+      <trace strokeWidth="2.5pt" src="#src_38" strokeColor="0000ff" title="VIS - NormCDF">
+         <symbol fillColor="none" size="0pt" type="circle" />
+         <ebar hide="true" />
+      </trace>
+      <trace strokeWidth="2.5pt" src="#src_25" strokeColor="00ff00" title="AV - NormCDF">
+         <symbol fillColor="none" size="0pt" type="circle" />
+         <ebar hide="true" />
+      </trace>
+      <label loc="50% 105%" fontSize="18" fontStyle="bold" align="center" title="AUD,VIS,AV Psych. Func. L&amp;RBaron MCS 834ms Duration 8dB SNR" font="Helvetica" />
+   </graph>
+   <ref>
+      <set id="src_25" fmt="ptset">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</set>
+      <set id="src_38" fmt="ptset">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</set>
+      <set id="src_57" fmt="ptset">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</set>
+      <set id="src_AV" fmt="xyzset">AAAABnNyY19BVgAAAAYAAAADAAAAFr+AAAA8a72zP1cJm780/fQ70g0hP2PO378AAAA8rzreP3lq
+/b61P309b6jaP3oVfL6AAAA+Hf0TP3FIVL41P30+aC+hP280mb4AAAA+xxxyP3S0hb22RaI+owoD
+P3QGQ72BBiU+0euFPzZkd704Uew/FAxWPyYq3b0DEm8/AvoMPykk0D0DEm8/ELIWPy7x1z04Uew/
+C1d+PyIdLD2BBiU/C2fsPzdNWT22RaI/IsZKP2/mWj4AAAA/J6JwP4AAAD41P30/LmrnP3YPlT6A
+AAA/TAUzP4AAAD61P30/ZOj5P3q/hz8AAAA/e82kP3a8Zj80/fQ/fksYP19iXD+AAAA/enmOP1cJ
+mw==</set>
+      <set id="src_VIS" fmt="xyzset">AAAAB3NyY19WSVMAAAAGAAAAAwAAABa/gAAAO8Q3MD9dCqy/NP30PC863j9p502/AAAAPVeUNj93
+R7K+tT99Phfimj93R7K+gAAAPnBTmD9vd1G+NT99Pqnbmj94dd2+AAAAPr1wpD9x5bO9tkWiPsrF
+tD9zGo+9gQYlPuAAAD81BPO9OFHsPwFgWD8k87K9AxJvPuI7iT8en2Y9AxJvPwkkkj8cxHE9OFHs
+Pw6Loz8gdN09gQYlPwYYYj8vRW89tkWiPwvBTj9vd1E+AAAAPwtttz+AAAA+NT99Px/YCj905v4+
+gAAAPzt5iT9wr0s+tT99P0qcED9p500/AAAAP18eiD98jFQ/NP30P3oUtz9g+js/gAAAP3uPij9g
++js=</set>
+      <set id="src_AUD" fmt="xyzset">AAAAB3NyY19BVUQAAAAGAAAAAwAAABa/gAAAPfRdFz9j8Iu/NP30PhQgND9YptS/AAAAPgHNhT96
+wdO+tT99PoLsIT9+Q6++gAAAPrA5Jz977oC+NT99PrTbET9zl1a+AAAAPsprKj977oC9tkWiPvgV
+HT9vT9q9gQYlPvsTsT8vN/W9OFHsPxofWT8qFtC9AxJvPwFK/T8q9Gg9AxJvPyLouj8q9Gg9OFHs
+PwFoFz8j5ug9gQYlPw445D8yjm49tkWiPx556D9sNTg+AAAAPzULiD+AAAA+NT99P09+pz9s1Po+
+gAAAP1YnYj93y+c+tT99P1zQrz95k7w/AAAAP2p3oD97WFY/NP30P3RdFz9VN84/gAAAP3hKBj9d
+Xo8=</set>
+   </ref>
+</figure>

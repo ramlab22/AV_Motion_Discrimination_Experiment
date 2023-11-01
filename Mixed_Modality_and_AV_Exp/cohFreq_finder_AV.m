@@ -1,5 +1,8 @@
 function [cohFreq_dir_aud, cohFreq_dir_vis] = cohFreq_finder_AV(AV_dataout, AVInfo)
     
+    AV_dataout(strcmp(AV_dataout(:,6),'N/A'),:)=[]; %delete rows where subject quit before target presented
+    AV_dataout(all(cellfun(@isempty, AV_dataout),2),:) = [];%delete empty rows from data cell
+
     columnIndex = 5; %Catch Trial Column
     filterCondition = @(x) strcmp(x, 'No'); %Filter to only regular Trials, ie Catch Trial = 'No' 
     filteredArray = {};
