@@ -1,4 +1,4 @@
-function [Results_MLE] = MLE_Calculations_A_V_AV(AUD_mdl, VIS_mdl, AV_mdl,AUD_yData,VIS_yData, AV_yData,AUD_xData,VIS_xData, AV_xData)
+function [Results_MLE] = MLE_Calculations_A_V_AV(AUD_mdl, VIS_mdl, AV_mdl,AUD_yData,VIS_yData, AV_yData,AUD_xData,VIS_xData, AV_xData,all_sizes_AUD,all_sizes_VIS,all_sizes_AV)
 
 % get residuals of all models
 AUD_fittedValues = feval(AUD_mdl, AUD_xData);
@@ -39,7 +39,12 @@ Results_MLE
 
 Results_MLE.AUD_xData=AUD_xData;
 Results_MLE.AUD_yData=AUD_yData;
+Results_MLE.AUD_sizes=all_sizes_AUD;
+
 Results_MLE.VIS_xData=VIS_xData;
 Results_MLE.VIS_yData=VIS_yData;
+Results_MLE.VIS_sizes=all_sizes_VIS;
+
 Results_MLE.AV_xData=AV_xData;
 Results_MLE.AV_yData=AV_yData;
+Results_MLE.AV_sizes=all_sizes_AV;

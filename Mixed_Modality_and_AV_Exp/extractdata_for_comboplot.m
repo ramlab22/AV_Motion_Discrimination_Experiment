@@ -30,6 +30,9 @@ switch modality
     case 'av'
         scatter_name='AV_vis';
         line_name='AV_vis - NormCDF';
+    case 'aud_only'
+        scatter_name='% Rightward Resp. vs. Coherence';
+        line_name='NormCDF';
 end
     files = dir(fullfile(folderPath, '*.fig'));
     fileNames = {files.name};
@@ -59,7 +62,7 @@ end
         end
         
         for j = 1:length(lines)
-            if strcmp(lines(j).DisplayName, line_name) % Identifying AUD line based on color
+            if strcmp(lines(j).DisplayName, line_name) % Identifying AUD line based on name
                 x_matrix(i, 1:length(lines(j).XData)) = lines(j).XData;
                 p_matrix(i, 1:length(lines(j).YData)) = lines(j).YData;
             end

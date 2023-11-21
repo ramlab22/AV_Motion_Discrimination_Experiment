@@ -68,10 +68,10 @@ function [fig, BF_AUD_VIS, BF_AUD_AV, BF_VIS_AV, AUD_mu, VIS_mu, AV_mu, AUD_std_
 
     % Plot fit with data.
     fig = figure('Name', 'Psychometric Function');
-    scatter(AUD_xData, AUD_yData, all_sizes_AUD, 'red','LineWidth',2);
+    scatter(AUD_xData, AUD_yData, all_sizes_AUD, 'red','LineWidth',2.2);
     hold on
-    scatter(VIS_xData, VIS_yData, all_sizes_VIS, 'blue', 'LineWidth',2);
-    scatter(AV_xData, AV_yData, all_sizes_AV, 'green', 'LineWidth',2);
+    scatter(VIS_xData, VIS_yData, all_sizes_VIS, 'blue', 'LineWidth',2.2);
+    scatter(AV_xData, AV_yData, all_sizes_AV, 'green', 'LineWidth',2.2);
     plot(x, AUD_p, 'red', x, VIS_p, 'blue', x, AV_p, 'green','LineWidth',2.5);
 
     % Label axes
@@ -92,7 +92,7 @@ function [fig, BF_AUD_VIS, BF_AUD_AV, BF_VIS_AV, AUD_mu, VIS_mu, AV_mu, AUD_std_
     BF_AUD_AV=AV_p;
     BF_VIS_AV=VIS_p;
 %    [BF_AUD_VIS, BF_AUD_AV, BF_VIS_AV] = comparePsychometricFunctions_A_V_AV(x,AUD_mdl, VIS_mdl, AV_mdl,AUD_fit_par,VIS_fit_par,AV_fit_par);
-    [Results_MLE] = MLE_Calculations_A_V_AV(AUD_mdl, VIS_mdl, AV_mdl,AUD_yData,VIS_yData, AV_yData,AUD_xData,VIS_xData, AV_xData)
+    [Results_MLE] = MLE_Calculations_A_V_AV(AUD_mdl, VIS_mdl, AV_mdl,AUD_yData,VIS_yData, AV_yData,AUD_xData,VIS_xData, AV_xData,all_sizes_AUD,all_sizes_VIS,all_sizes_AV)
 end
 
 % function [fig, AUD_p_values, VIS_p_values,...

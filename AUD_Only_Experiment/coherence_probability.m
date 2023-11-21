@@ -25,6 +25,7 @@ coherence_rew_numbers = [audInfo.coherences;
     coherence_success_rate = [audInfo.coherences;
         zeros(1,length(audInfo.coherences))]; %Initilize the top row, and percentages
     for c = 1:length(audInfo.coherences)
+        %Subtract the trials where there was no chance for reward(N/A Target Correct)
         coherence_success_rate(2,c) = coherence_rew_numbers(2,c)/(audInfo.cohFreq(2,c)-coherence_rew_numbers(3,c));  %Subtract the trials where there was no chance for reward(N/A Target Correct)
     end
 

@@ -15,7 +15,7 @@
 n_permutations=1;
 
 todays_date=datetime(datetime(),'Format','MMddyy');
-Path = '/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/AUD_Only_Experiment/test_data/' ;% wherever you want to search
+Path = '/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Alv/Alv_aud_dbSNR10_fixedspeakers/' ;% wherever you want to search
 condition=2; %1=visual, 2=auditory, 3=AV
 [master_dataout,column_titles,totalfiles_names] = combine_data_acrossblocks(Path);
 
@@ -24,7 +24,7 @@ master_dataout(strcmp(master_dataout(:,6),'N/A'),:)=[]; %delete rows where subje
 master_coherences=[master_dataout{2:end,8}]';
 [n_per_coherence, coherences] = groupcounts(master_coherences);
 n_coherences=length(coherences);
-[fit_mean_midpoint,fit_slope,slope_std,curve_xvals,curve_yvals,ci,master_threshold] = get_threshold_combinedblocks(master_dataout,coherences',totalfiles_names,condition,chosen_threshold,1);
+[fit_mean_midpoint,fit_slope,slope_std,curve_xvals,curve_yvals,ci,master_threshold] = get_threshold_combinedblocks(master_dataout,coherences',totalfiles_names,condition,1);
 
 %[n_trials_with_response,n_trials_with_reward,proportion_response_reversals_after_correct_response,proportion_response_reversals_after_incorrect_response] = response_reversal_proportions(master_dataout)    
 master_dataout=master_dataout(2:end,:);

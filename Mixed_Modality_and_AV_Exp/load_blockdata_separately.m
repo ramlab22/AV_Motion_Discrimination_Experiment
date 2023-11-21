@@ -26,8 +26,8 @@ master_dataout = cell(1, size(totalfiles_names, 2));
 for i_file = 1:length(totalfiles_names)
     
     % Load data from the current file
-    load(horzcat(Path, totalfiles_names{1, i_file}));
-    
+    %load(horzcat(Path, totalfiles_names{1, i_file}));
+    load(horzcat(Path,totalfiles_names{1,i_file}),"dataout");
     % Delete empty rows from the data cell array (dataout)
     dataout(all(cellfun(@isempty, dataout), 2), :) = [];
     
@@ -37,6 +37,6 @@ end % End of loop through each file
 
 % Extract column titles from the last processed data file
 column_titles = dataout(1, :);
-save_all_open_LRfuncs(Path,totalfiles_names) ;
+%save_all_open_LRfuncs(Path,totalfiles_names) ;
 end
 

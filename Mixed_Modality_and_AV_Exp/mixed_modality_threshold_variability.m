@@ -17,7 +17,7 @@ n_permutations=1;
 %chosen_threshold=0.72;
 max_n_coherences=11;
 %Path = '/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/AUD_Only_Experiment/test_data/' ;% wherever you want to search
-Path = '/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Ba/Ba_mixedmodality_mcs/' ;% wherever you want to search
+Path = '/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Alv/Alv_aud_dbSNR10_fixedspeakers/' ;% wherever you want to search
 combine_blocks=0;
 %condition: 1=visual, 2=auditory, 3=AV
 %in AV data files for coherence column (8), first value in double is aud,
