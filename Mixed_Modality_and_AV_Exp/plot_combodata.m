@@ -36,7 +36,7 @@ function plot_combodata(xData_matrix, yData_matrix, x_matrix, p_matrix, fileName
     % Add labels and legend
     xlabel('Coherence ((+)Rightward, (-)Leftward)');
     ylabel('% Rightward Response');
-    title('Alv AUD Combined Data Plot: unequal trials per coh');
+    title('Ba AUD: 26 degrees/s, 834ms');
     legend('Location', 'best');
     ax = gca; 
     ax.FontSize = 16;

@@ -75,5 +75,5 @@ function [fig, AUD_mu, VIS_mu, AUD_std_cumulative_gaussian, VIS_std_cumulative_g
     ax = gca; 
     ax.FontSize = 30;
 
-[Results_MLE] = MLE_Calculations_A_V(AUD_mdl, VIS_mdl,AUD_yData,VIS_yData, AUD_xData,VIS_xData)
+[Results_MLE] = MLE_Calculations_A_V(AUD_mdl, VIS_mdl,AUD_yData,VIS_yData, AUD_xData,VIS_xData,all_sizes_AUD,all_sizes_VIS)
 end
