@@ -4,7 +4,7 @@
 %standard deviation of the cumulative gaussian of the function (mu)
 Path = '/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Ba/Ba_audonly_26velocity/' ;% wherever you want to search
 [dataout,column_titles,totalfiles_names] = combine_data_acrossblocks(Path);
-save_name='Ba_audonly_26velocity';
+save_name='Ba_Aud_26velocity_22degrees_834ms_110823to112723';
 
 audInfo.coherences=unique(cell2mat(dataout(2:end,8)))';
 [audInfo.cohFreq] = cohFreq_finder(dataout, audInfo);
@@ -29,7 +29,7 @@ num_catch_trials =0; %set catch trials to 0 since the combine_data_acrossblocks 
     prob_Right = directional_probability(Right_dataout, audInfo); 
     prob_Left = directional_probability(Left_dataout, audInfo); 
     
-    [x, y, fig_both, coeff_p_values,CIs_of_LR_fit,mu,std_gaussian,LR_xdata,LR_ydata,LR_curve_xvals,LR_curve_yvals] = psychometric_plotter(prob_Right,prob_Left, audInfo,save_name);
+    [x, y, fig_both,mu,std_gaussian,LR_xdata,LR_ydata,LR_curve_xvals,LR_curve_yvals] = psychometric_plotter(prob_Right,prob_Left, audInfo,save_name,'red');
    % Eye_Tracker_Plotter(eye_data_matrix);
     
     %%Make Rightward only graph

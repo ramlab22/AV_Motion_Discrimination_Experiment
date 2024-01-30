@@ -54,9 +54,11 @@ mdl = fitnlm(xData, yData, normalcdf_fun, parms, 'Weights', all_sizes);
 curve_xvals = min(xData(:)):.01:max(xData(:));
 
 % Significance of fits 
-[p_values, bootstat,ci] = p_value_calc(yData, parms);
+%[p_values, bootstat,ci] = p_value_calc(yData, parms);
 
-
+p_values=0;
+ci=0;
+bootstat=0;
 curve_yvals = cdf('Normal', curve_xvals, mdl.Coefficients{1,1}, mdl.Coefficients{2,1});
 %get threshold
 mu= mdl.Coefficients{1,1};
