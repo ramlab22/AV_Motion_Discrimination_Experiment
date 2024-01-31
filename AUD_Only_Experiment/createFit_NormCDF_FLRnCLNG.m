@@ -8,10 +8,10 @@ function [fig, mu, std_gaussian, xData, yData, curve_xvals, curve_yvals] = creat
     %
     % Inputs:
     %   coh_list  - List of coherences.
-    %   pc        - Proportion correct.
+    %   probability_rightward_response - Proportion rightward responses for each coherence.
     %   audInfo   - Auditory information structure.
     %   save_name - Name of the file for saving the figure and data.
-    %   fig_color - Color of the figure ('blue' or 'red').
+    %   fig_color - Color of the figure ('blue' or 'red') red typically for auditory, blue typically for visual.
     %
     % Outputs:
     %   fig           - Handle to the created figure.

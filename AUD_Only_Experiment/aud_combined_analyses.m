@@ -2,9 +2,9 @@
 %to combine, plot, and analyze. this script goes into that folder, combines
 %those files, plots the psychometric function, and gives you mu and the
 %standard deviation of the cumulative gaussian of the function (mu)
-Path = '/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Ba/Ba_audonly_26velocity/' ;% wherever you want to search
+Path = '/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Alv/Alv_Jan_aud_26velocity/' ;% wherever you want to search
 [dataout,column_titles,totalfiles_names] = combine_data_acrossblocks(Path);
-save_name='Ba_Aud_26velocity_22degrees_834ms_110823to112723';
+save_name='Alvarez_AudOnly_January2024_26velocity_22degrees_824ms';
 
 audInfo.coherences=unique(cell2mat(dataout(2:end,8)))';
 [audInfo.cohFreq] = cohFreq_finder(dataout, audInfo);
