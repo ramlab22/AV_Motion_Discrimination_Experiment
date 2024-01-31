@@ -91,7 +91,7 @@ dotInfo.random_coh_list = cohSet_maker_MCS(dotInfo); %Random list of coherence V
 dotInfo.random_dir_list = dir_randomizer_MCS_unisensory(dotInfo); %Random directions, 50% R and L for each coherence
 dotInfo.apXYD = [0 90 (ExpInfo.rdk_angle*10)]; % Location x,y pixels (0,0 is center of screen) and diameter of the aperature, currently in visual degrees - MULTPLIED by 10 because of Shadlen dots code, needed to be an integer
 %dotInfo.speed = 400; %Degrees per second * 10
-dotInfo.speed = 200; %Degrees per second * 10
+dotInfo.speed = 260; %Degrees per second * 10
 
 dotInfo.dotSize = 4; %RDK Field Dots
 %dotInfo.dotSize = 3; %RDK Field Dots
@@ -113,7 +113,7 @@ audInfo.coherences = audInfo.cohSet; %This is for use in other functions for suc
 audInfo.random_coh_list = cohSet_maker_MCS(audInfo); %Random list of coherence Values for total trials
 audInfo.random_dir_list = dir_randomizer_MCS_unisensory(audInfo); %Random directions, 50% R and L for each coherence
 %audInfo.velocity =40; %deg/sec
-audInfo.velocity =20; %deg/sec
+audInfo.velocity =26; %deg/sec
 
 audInfo.set_dur = 78/(audInfo.velocity) ;%Seconds, This is going to be set as long as the speakers dont move, the actual duration of the stimulus will be set by the t_start and t_end variables
     stimtime_midpoint=(audInfo.set_dur*1000)/2;

@@ -26,24 +26,41 @@ end
 
 mu = mean(yData);
 sigma =std(yData);
-parms = [mu, sigma];
+%parms = [mu, sigma];
+% Adding floor and ceiling to "parms" - lol making me hungry
+floor_value = min(yData);
+ceiling_value = max(yData);
+parms = [mu, sigma, floor_value, ceiling_value];
 
-% Norm CDF Function Fitting
-fun_1 = @(b, x)cdf('Normal', x, b(1), b(2));
-fun = @(b)sum((fun_1(b,xData) - yData).^2); 
-opts = optimset('MaxFunEvals',50000, 'MaxIter',10000); 
-fit_par = fminsearch(fun, parms, opts);
 
-%New mdl to account for weights of PCs 
-normalcdf_fun = @(b, x) 0.5 * (1 + erf((x - b(1)) ./ (b(2) * sqrt(2))));
-mdl = fitnlm(xData, yData, normalcdf_fun, parms, 'Weights', all_sizes);
+% % Norm CDF Function Fitting
+% fun_1 = @(b, x)cdf('Normal', x, b(1), b(2));
+% fun = @(b)sum((fun_1(b,xData) - yData).^2); 
+% opts = optimset('MaxFunEvals',50000, 'MaxIter',10000); 
+% fit_par = fminsearch(fun, parms, opts);
+% 
+  % Custom response model function
+normalcdf_fun_mod = @(b, x) b(3) + (b(4) - b(3)) * (1 + erf((x - b(1)) ./ (b(2) * sqrt(2)))) / 2;
+   
+opts = optimset('MaxFunEvals', 50000, 'MaxIter', 10000);
+lb = [-Inf, -Inf, min(yData), -Inf];  % Lower bounds for parameters (floor is set to min(yData))
+ub = [Inf, Inf, max(yData), Inf];  % Upper bounds for parameters (ceiling is set to max(yData))
 
-x = -1:.01:1;
+% % Fit the model using all parameters
+% mdl = fitnlm(xData, yData, normalcdf_fun_mod, parms, 'Weights', all_sizes);
+% Fit the model using lsqcurvefit with bounds
+mdl = lsqcurvefit(@(b, x) normalcdf_fun_mod(b, x), parms, xData, yData, lb, ub, opts);
+
+
+%x = -1:.01:1;
+curve_xvals = min(xData(:)):.01:max(xData(:));
 
 % Significance of fits 
-[p_values, bootstat,ci] = p_value_calc(yData, parms);
+%[p_values, bootstat,ci] = p_value_calc(yData, parms);
 
-
+p_values=0;
+bootstat=0;
+ci=0;
 % plot(bootstat(:,1),bootstat(:,2),'o')
 % hold on 
 % plot(mu, sigma, "*")
@@ -55,30 +72,44 @@ x = -1:.01:1;
 % ylabel('Standard Deviation')
 % legend('Bootstrapped Coeff.', 'Chosen Coeff.')
 
-p = cdf('Normal', x, mdl.Coefficients{1,1}, mdl.Coefficients{2,1});
-%get threshold
-mu= mdl.Coefficients{1,1};
-%get std of cumulative gaussian (reflects the inherent variability of the psychophysical data)
-std_gaussian= mdl.Coefficients{2,1};
-slope_at_50_percent = 1 / (std_gaussian * sqrt(2 * pi));
+%p = cdf('Normal', x, mdl.Coefficients{1,1}, mdl.Coefficients{2,1});
+curve_yvals = normalcdf_fun_mod(mdl, curve_xvals);
 
+% get threshold
+% mu= mdl.Coefficients{1,1};
+% get std of cumulative gaussian (reflects the inherent variability of the psychophysical data)
+% std_gaussian= mdl.Coefficients{2,1};
+%get threshold
+%mu= mdl.Coefficients{2,1};
+%get std of cumulative gaussian (reflects the inherent variability of the psychophysical data)
+%std_gaussian= mdl.Coefficients{4,1};
+  % Extract mean and standard deviation from the coefficients
+ mu = mdl(1);  % Mean
+std_gaussian = mdl(2);  % Standard Deviation
+
+dy_dx = diff(curve_yvals) ./ diff(curve_xvals); % calculates the slope of the CDF curve by taking the difference between consecutive y-values and dividing by the difference between their corresponding x-values
+slope = mean(dy_dx);
+slope_at_50_percent = 1 / (std_gaussian * sqrt(2 * pi));
 
 % Plot fit with data.
 fig = figure( 'Name', 'Psychometric Function' );
-scatter(xData, yData, all_sizes)
+scatter(xData, yData, all_sizes,'LineWidth',2)
 hold on 
-plot(x, p);
+plot(curve_xvals, curve_yvals,'LineWidth',2.5);
 legend('% Rightward Resp. vs. Coherence', 'NormCDF', 'Location', 'NorthEast', 'Interpreter', 'none' );
 % Label axes
 title(sprintf('Auditory Psych. Func. L&R\n%s',save_name), 'Interpreter','none');
 xlabel( 'Coherence ((+)Rightward, (-)Leftward)', 'Interpreter', 'none' );
 ylabel( '% Rightward Response', 'Interpreter', 'none' );
-xlim([-1 1])
+xlim([-max(xData(:)), max(xData(:))])
 ylim([0 1])
 grid on
-text(0,.2,"mu: " + mu)
-text(0,.1, "std cum gaussian: " + std_gaussian)
-text(0,.3, "slope at 50 percent: " + slope_at_50_percent)
+
+text(0,.15,"mu: " + mu,'FontSize',14)
+text(0,.1, "std cummulative gaussian: " + std_gaussian,'FontSize',14)
+text(0,.2, "slope at 50 percent: " + slope_at_50_percent,'FontSize',14)
+text(0,.25, "overall slope: " + slope,'FontSize',14)
+text(0,.3, "n_trials: " + sum(all_sizes),'FontSize',14, 'Interpreter', 'none' )
 
 %text(0,.2,"std_cumulative_gaussian: " + std_gaussian)
 %text(0,.1, "mu: " + mu)
