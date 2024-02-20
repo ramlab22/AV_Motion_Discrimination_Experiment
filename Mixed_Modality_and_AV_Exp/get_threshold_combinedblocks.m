@@ -139,9 +139,7 @@ slope_at_50_percent = 1 / (std_gaussian * sqrt(2 * pi));
 dy_dx = diff(curve_yvals) ./ diff(curve_xvals); % calculates the slope of the CDF curve by taking the difference between consecutive y-values and dividing by the difference between their corresponding x-values
 slope = mean(dy_dx);
 slope_std = std(bootstat(:,2));
-% %get threshold
-% threshold_location=find(curve_yvals >= chosen_threshold, 1);
-% threshold=curve_xvals(1,threshold_location);
+
 
 %[x, y, fig_both] = psychometric_plotter(prob_Right,prob_Left, audInfo, save_name);
 if show_results_and_figs==1
