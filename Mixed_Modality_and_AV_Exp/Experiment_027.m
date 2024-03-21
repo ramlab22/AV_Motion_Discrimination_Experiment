@@ -1,4 +1,4 @@
-%% Experiment Script for 027 %%%%%%%%%%%%%%%%%%%%%%%%%%
+c%% Experiment Script for 027 %%%%%%%%%%%%%%%%%%%%%%%%%%
 % Psychtoolbox  Auditory Motion Stimulus presentation 
 % written 04/21/22 - Jackson Mayfield 
 clear;

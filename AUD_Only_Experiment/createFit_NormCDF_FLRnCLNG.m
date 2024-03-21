@@ -94,14 +94,14 @@ function [fig, mu, std_gaussian, xData, yData, curve_xvals, curve_yvals] = creat
 
     % Displaying additional information on the plot
     text(0, .15, "mu: " + mu, 'FontSize', 22);
-    text(0, .1, "std cummulative gaussian: " + std_gaussian, 'FontSize', 22);
-    text(0, .2, "slope at 50 percent: " + slope_at_50_percent, 'FontSize', 22);
-    text(0, .25, "overall slope: " + slope, 'FontSize', 22);
-    text(0, .3, "n_trials: " + sum(all_sizes), 'FontSize', 22, 'Interpreter', 'none');
+    text(0, .1, "std cummulative gaussian: " + sprintf('%.3f', std_gaussian), 'FontSize', 22);
+    text(0, .2, "slope at 50 percent: " + sprintf('%.3f', slope_at_50_percent), 'FontSize', 22);
+    text(0, .25, "overall slope: " + sprintf('%.3f', slope), 'FontSize', 22);
+    text(0, .05, "n_trials: " + sum(all_sizes), 'FontSize', 22, 'Interpreter', 'none');
 
     % Add legend to the plot
     legend('% Rightward Resp. vs. Coherence', 'NormCDF', 'Location', 'NorthWest', 'Interpreter', 'none');
 
     % Save figure and data
-    save(save_name, 'save_name', 'xData', 'yData', 'mdl');
+%    save(save_name, 'save_name', 'xData', 'yData', 'mdl');
 end

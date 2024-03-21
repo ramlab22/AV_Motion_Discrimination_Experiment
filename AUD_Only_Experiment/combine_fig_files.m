@@ -18,12 +18,12 @@
 % Author: adriana schoenhaut
 % Date: 8/20/23
 
-fig_title='Ba Aud (6 dB SNR) vs. Vis staircase';
-path1='/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Ba/Ba_aud_6dBSNR_staircase_combinedpsyLR.fig';
-path2='/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Ba/ba_vis_staircase_psyLR.fig';
+fig_title='Ba Aud 59.95 degree/s velocity 834ms';
+path1='/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Ba/Ba_aud_59.95velocity_834ms_catchtrials/Ba_audonly_feb2024_59.95velocity_834ms_catchtrialsincluded.fig';
+path2='/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Ba/Ba_aud_59.95velocity_834ms_nocatch/Ba_audonly_feb2024_59.95velocity_824ms_nocatchtrials.fig';
 
-fig1label='Aud (6 dB SNR)';
-fig2label='Vis';
+fig1label='With Catch Trials';
+fig2label='Without Catch Trials';
 
 fig1color='r';
 fig2color='b';

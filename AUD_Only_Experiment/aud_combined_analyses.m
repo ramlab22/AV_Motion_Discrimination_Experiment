@@ -2,9 +2,13 @@
 %to combine, plot, and analyze. this script goes into that folder, combines
 %those files, plots the psychometric function, and gives you mu and the
 %standard deviation of the cumulative gaussian of the function (mu)
-Path = '/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Ba/Ba_Jan_aud_43velocity/' ;% wherever you want to search
+Path = '/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Ba/Ba_aud_59.95velocity_834ms_catchtrials/' ;% wherever you want to search
+
+[x_scattervals, y_scattervals, x_curvevals, y_curvevals, mu_per_date, std_gaussian_per_date, slope_per_date, slope_at_50_percent_per_date, date_key] = get_unisensory_figdata_values(Path);
+[slope_variability, std_gaussian_variability, slope_at_50_percent_variability,slope_sd,std_gaussian_sd,slope_at_50_percent_sd] = jackknifeTaskPerformance(slope_per_date, std_gaussian_per_date, slope_at_50_percent_per_date);
+
 [dataout,column_titles,totalfiles_names] = combine_data_acrossblocks(Path);
-save_name='Baron_AudOnly_January2024_43velocity_36degrees_824ms';
+save_name='Baron_AudOnly_Feb2024_59.95velocity_824ms_catchtrials';
 close all
 
 audInfo.coherences=unique(cell2mat(dataout(2:end,8)))';
@@ -24,25 +28,37 @@ prob = coherence_probability(dataout,audInfo)
 audInfo.cohFreq_right = cohFreq_finder(Right_dataout, audInfo);
 audInfo.cohFreq_left = cohFreq_finder(Left_dataout, audInfo);
 
-
 prob_Right = directional_probability(Right_dataout, audInfo);
 prob_Left = directional_probability(Left_dataout, audInfo);
 
-[x, y, fig_both,mu,std_gaussian,LR_xdata,LR_ydata,LR_curve_xvals,LR_curve_yvals] = psychometric_plotter(prob_Right,prob_Left, audInfo,save_name,'red');
+[x_scatter, y_scatter, fig_both,mu,std_gaussian,LR_xdata,LR_ydata,LR_curve_xvals,LR_curve_yvals] = psychometric_plotter(prob_Right,prob_Left, audInfo,save_name,'red');
+ax = gca; 
+hold on
+text(-0.9, .7, "std cum.guas. SE: " + sprintf('%.3f', std_gaussian_variability), 'FontSize', 22);
+text(-0.9, .75, "slope at 50 percent SE: " + sprintf('%.3f', slope_at_50_percent_variability), 'FontSize', 22);
+text(-0.9, .8, "overall slope SE: " + sprintf('%.3f', slope_variability), 'FontSize', 22);
+text(-0.9, .85, "Across Sessions: " ,'FontSize', 22);
+if any(audInfo.coherences == 0)
+    [prop_Rresp_zerocoh] = propRresp_catchtrials(dataout, audInfo) ;
+    text(-0.9, .65, "catch trial prop. R resp: "+ sprintf('%.3f', prop_Rresp_zerocoh) ,'FontSize', 15);
 
-%%Make Rightward only graph
-prob_right_only = coherence_probability_1_direction(Right_dataout, audInfo);
-[R_coh, R_pc, R_fig] = psychometric_plotter_1_direction(prob_right_only, 'RIGHT ONLY', audInfo, save_name);
+end
+ % %Make Rightward only graph
+ % prob_right_only = coherence_probability_1_direction(Right_dataout, audInfo);
+ % [R_coh, R_pc, R_fig] = psychometric_plotter_1_direction(prob_right_only, 'RIGHT ONLY', audInfo, save_name);
 
-%%Make Leftward only graph
-prob_left_only = coherence_probability_1_direction(Left_dataout, audInfo);
-[L_coh, L_pc, L_fig] = psychometric_plotter_1_direction(prob_left_only, 'LEFT ONLY', audInfo, save_name);
+% %%Make Leftward only graph
+% prob_left_only = coherence_probability_1_direction(Left_dataout, audInfo);
+% [L_coh, L_pc, L_fig] = psychometric_plotter_1_direction(prob_left_only, 'LEFT ONLY', audInfo, save_name);
 
 mu
 std_gaussian
+std_gaussian_variability
 slope_at_50_percent = 1 / (std_gaussian * sqrt(2 * pi))
+slope_at_50_percent_variability
 dy_dx = diff(LR_curve_yvals) ./ diff(LR_curve_xvals); % calculates the slope of the CDF curve by taking the difference between consecutive y-values and dividing by the difference between their corresponding x-values
 slope = mean(dy_dx)
+slope_variability
 figure_file_directory=Path;
 %Save all figures to Figure Directory
 % saveas(fig_both, [figure_file_directory save_name '_AUD_Psyc_Func_LR.png'])

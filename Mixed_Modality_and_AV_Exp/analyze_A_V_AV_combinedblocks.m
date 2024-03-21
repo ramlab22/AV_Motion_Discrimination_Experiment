@@ -1,7 +1,7 @@
 
-Path = '/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Ba/Ba_083123/' ;% wherever you want to search
+Path = '/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Ba/Ba_834ms_22degrees_26velocity_10dBSNR_A+V+AV_brownbag/' ;% wherever you want to search
 [dataout,column_titles,totalfiles_names] = combine_data_acrossblocks(Path);
-save_name='Ba_083123';
+save_name='Ba_834ms_22degrees_26velocity_10dBSNR_A+V+AV';
 
 %% End of Block
 [AUD_dataout, VIS_dataout, AV_dataout] = modality_splitter(dataout);

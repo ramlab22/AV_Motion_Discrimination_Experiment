@@ -22,7 +22,7 @@ coherence_rew_numbers = [audInfo.coherences;
                     coherence_rew_numbers(3,i_coherence) = coherence_rew_numbers(3,i_coherence)+1;
                 end
             elseif directional_dataout{v,9} == 0 %Left Trial
-                if (strcmp(directional_dataout{v,6},'No')) && (directional_dataout{v,8} == coherences(i_coherence))  && (strcmp(directional_dataout{v,5},'No')) %Target Reward & Not a Catch Trial
+                if (strcmp(directional_dataout{v,6},'No')) && (directional_dataout{v,8} == coherences(i_coherence))  && (strcmp(directional_dataout{v,5},'No')) %no Target Reward & Not a Catch Trial
                     coherence_rew_numbers(2,i_coherence) = coherence_rew_numbers(2,i_coherence)+1;
                 end
                 if  (strcmp(directional_dataout{v,6},'N/A')) && (directional_dataout{v,8} == coherences(i_coherence)) && (strcmp(directional_dataout{v,5},'No')) %No chance for target reward & Not a catch trial

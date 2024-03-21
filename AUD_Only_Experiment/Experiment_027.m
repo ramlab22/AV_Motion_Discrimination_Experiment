@@ -578,7 +578,7 @@ num_catch_trials =n_catchtrials;
     prob_Right = directional_probability(Right_dataout, audInfo); 
     prob_Left = directional_probability(Left_dataout, audInfo); 
     
-    [x, y, fig_both,mu,std_gaussian,LR_xdata,LR_ydata,LR_curve_xvals,LR_curve_yvals] = psychometric_plotter(prob_Right,prob_Left, audInfo,save_name,'red');
+    [~, ~, fig_both,mu,std_gaussian,LR_xdata,LR_ydata,LR_curve_xvals,LR_curve_yvals] = psychometric_plotter(prob_Right,prob_Left, audInfo,save_name,'red');
    % Eye_Tracker_Plotter(eye_data_matrix);
     
     %%Make Rightward only graph
