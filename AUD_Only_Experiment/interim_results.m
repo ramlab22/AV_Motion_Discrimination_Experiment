@@ -21,7 +21,7 @@ audInfo.cohFreq_left = cohFreq_finder(Left_dataout, audInfo);
 prob_Right = directional_probability(Right_dataout, audInfo);
 prob_Left = directional_probability(Left_dataout, audInfo);
 
-[x, y, fig_both] = psychometric_plotter(prob_Right,prob_Left, audInfo, save_name);
+[x, y, fig_both] = psychometric_plotter(dataout,prob_Right,prob_Left, audInfo, save_name);
 Eye_Tracker_Plotter(eye_data_matrix);
 
 %%Make Rightward only graph

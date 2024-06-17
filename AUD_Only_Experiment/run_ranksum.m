@@ -1,0 +1,14 @@
+% Path_Ba='/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Ba/aud_only_velocity_vs_duration/constant_duration/ranksum/';
+% [slope_distributions_Ba,std_distributions_Ba,totalfiles_names_Ba] = load_data_for_ranksum(Path_Ba);
+% slope_significant_pairs_Ba = compareJackknifeDistributions(slope_distributions_Ba, totalfiles_names_Ba)
+% Path_Alv='/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Alv/aud_only_velocity_vs_duration/constant_duration/ranksum/';
+% [slope_distributions_Alv,std_distributions_Alv,totalfiles_names_Alv] = load_data_for_ranksum(Path_Alv);
+% slope_significant_pairs_Alv = compareJackknifeDistributions(slope_distributions_Alv, totalfiles_names_Alv)
+
+Path_Ba='/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Ba/aud_only_velocity_vs_duration/ranksum/'
+[slope_distributions_Ba,std_distributions_Ba,totalfiles_names_Ba] = load_data_for_ranksum(Path_Ba);
+std_significant_pairs_Ba = compareJackknifeDistributions(std_distributions_Ba, totalfiles_names_Ba)
+
+Path_Alv='/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Alv/aud_only_velocity_vs_duration/ranksum/'
+[slope_distributions_Alv,std_distributions_Alv,totalfiles_names_Alv] = load_data_for_ranksum(Path_Alv);
+std_significant_pairs_Alv = compareJackknifeDistributions(std_distributions_Alv, totalfiles_names_Alv)

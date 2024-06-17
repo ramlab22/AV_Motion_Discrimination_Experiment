@@ -62,7 +62,7 @@ end
     end
 
     function [mu, std_gaussian, slope, slope_at_50_percent, LR_xdata, LR_ydata, LR_curve_xvals, LR_curve_yvals] = plot_and_analyze_psychometric_curve(prob_Right, prob_Left, audInfo, save_name)
-        [~, ~, ~, mu, std_gaussian, LR_xdata, LR_ydata, LR_curve_xvals, LR_curve_yvals] = psychometric_plotter(prob_Right, prob_Left, audInfo, save_name, 'red');
+        [~, ~, ~, mu, std_gaussian, LR_xdata, LR_ydata, LR_curve_xvals, LR_curve_yvals] = psychometric_plotter(dataout,prob_Right, prob_Left, audInfo, save_name, 'red');
         slope_at_50_percent = 1 / (std_gaussian * sqrt(2 * pi));
         dy_dx = diff(LR_curve_yvals) ./ diff(LR_curve_xvals);
         slope = mean(dy_dx(~isnan(dy_dx))); % Exclude NaN values that may result from division by zero

@@ -21,7 +21,7 @@ audInfo.cohFreq_left = cohFreq_finder(LeftTrials_dataout, audInfo);
 probR_RightTrials = directional_probability(RightTrials_dataout, audInfo); 
 probR_LeftTrials = directional_probability(LeftTrials_dataout, audInfo); 
 
-%[x, y, fig_both] = psychometric_plotter(prob_Right,prob_Left, audInfo, save_name);
+%[x, y, fig_both] = psychometric_plotter(dataout,prob_Right,prob_Left, audInfo, save_name);
 
 xR = probR_RightTrials(:,1)'; 
 xL = flip(-1*(probR_LeftTrials(:,1)))'; %-1 to get on other side of x axis
@@ -58,7 +58,7 @@ sizes_L = flip(audInfo.cohFreq_left(2,:)');%Slpit to left and Right
 sizes_R = audInfo.cohFreq_right(2,:)';
 all_sizes = nonzeros(vertcat(sizes_L, sizes_R));
 
-%[x, y, fig_both] = psychometric_plotter(prob_Right,prob_Left, audInfo, save_name);
+%[x, y, fig_both] = psychometric_plotter(dataout,prob_Right,prob_Left, audInfo, save_name);
 
 % Plot fit with data.
 fig = figure( 'Name', 'Psychometric Function' );
