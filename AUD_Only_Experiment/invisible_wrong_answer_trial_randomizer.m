@@ -1,5 +1,5 @@
-function [random_incorrect_opacity_list] = catch_trial_randomizer(ExpInfo,audInfo)
-%CATCH_TRIAL_RANDOMIZER Summary of this function goes here
+function [random_incorrect_opacity_list] = invisible_wrong_answer_trial_randomizer(ExpInfo,audInfo)
+%invisible_wrong_answer_trial_randomizer Summary of this function goes here
 %   Given the number of trials, make a random list of catch trial "locations"
 %   within our total number of trials, Catch trial is where the incorrect opacity = 0
  

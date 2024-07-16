@@ -1,7 +1,7 @@
 function [random_dir_list] = dir_randomizer_MCS(ExpInfo,audInfo)
 %RANDOMIZER - Takes the Directions randomly
 %places them in different trial positions based on regular coherence
-%locations and catch trial(1 coherence) locations
+%locations 
 
     %Make a list of random directions with and equal amount of each
     %direction from dotInfo.dir_set, Currently only works for L and R

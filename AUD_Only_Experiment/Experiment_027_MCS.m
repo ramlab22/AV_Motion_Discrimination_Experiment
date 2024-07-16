@@ -12,9 +12,9 @@ file_directory='C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\AUD
 data_file_directory = 'C:\Jackson\Adriana Stuff\AV_Behavioral_Data\';
 figure_file_directory = 'C:\Jackson\Adriana Stuff\AV_Figures\'; 
 
-%when running baron on fixation training set to 1
-baron_fixation_training=0;
-if baron_fixation_training==1
+%when running  on fixation training set to 1
+fixation_training=0;
+if fixation_training==1
     target_reward='N/A';
 end
 
@@ -189,8 +189,12 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         audInfo.mux = 0; %Set to zero for now, we only need L and R trials 
         audInfo.coh = audInfo.random_coh_list(trialcounter);% Random Coherence for each trial
 
-        % No catch trials for now
-        catchtrial = 'No';
+%         if audInfo.coh==0
+%             catchtrial='Yes';
+%         else
+%             catchtrial = 'No';
+%         end
+ catchtrial = 'No';
         fix_point_color = white;
 
 
@@ -236,7 +240,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
 
         %This Includes the reward for fixating for required fixation time
         for frame = 1:fix_time_frames - waitframes
-            if baron_fixation_training==1 
+            if fixation_training==1 
                 if mod(frame,2) ~= 0
                     x = TDT.read('x');
                     y = TDT.read('y');
@@ -359,7 +363,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                 aud_timeout = 0;
                 aud_correct_counter = 0;
                 aud_reward = 'Yes';
-                if baron_fixation_training==1
+                if fixation_training==1
                     TDT.trg(1); %add in if fixation only
                     incorrect_target_fixation='N/A';
                     
@@ -374,7 +378,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         % This Includes a end trial reward for saccade and fixation towards either one of the target
         % points, IN PROGRESS
         targ_timeout = 0;
-        if fix_timeout ~= 1 && aud_timeout ~= 1 && baron_fixation_training ~= 1
+        if fix_timeout ~= 1 && aud_timeout ~= 1 && fixation_training ~= 1
             %This picks the luminace of the targets based on correct direction response, also outputs correct target string variable, eg 'right'
             [right_target_color,left_target_color,correct_target] = percentage_target_color_selection(audInfo,trialcounter);
             
@@ -513,19 +517,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
 
 
         %% End of trial Stuff , timing and output
-            %set trial status for staircase procedure to decide
-            %probabilities on subsequent trial
-        if strcmp(target_reward,'Yes')
-            trial_status = 'Correct';        
-        elseif strcmp(target_reward,'No') 
-            trial_status = 'Incorrect';
-        else %if subject abandons trial early
-            if trialcounter==1
-                trial_status='Incorrect';
-            else %use whatever the trial_status from the previous trial was to repeat those probabilities
-                trial_status = trial_status;
-            end
-        end
+  
   
         stim_modality = 'AUD';
         end_trial_time = hat;
@@ -538,7 +530,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
             disp(['Trial #: ',num2str(trialcounter),'/',num2str(total_trials)])
         end %if not on last trial
     end %while still going through all the trials
-%% End of Block 
+%% End of Block----START HERE TO SAVE 
 
 if trialcounter < ExpInfo.num_trials
     total_trials = trialcounter;
@@ -546,10 +538,10 @@ else
     total_trials = ExpInfo.num_trials;
 end
 
-num_regular_trials = total_trials - audInfo.catchtrials;  
-num_catch_trials = audInfo.catchtrials; 
-
-[Fixation_Success_Rate, AUD_Success_Rate, Target_Success_Rate_Regular, Target_Success_Rate_Catch] = SR_CALC(dataout,total_trials,num_regular_trials,num_catch_trials)
+%num_regular_trials = total_trials;  
+num_correct_target_option_only_trials = 0; 
+num_regular_trials = total_trials - num_correct_target_option_only_trials;  
+[Fixation_Success_Rate, AUD_Success_Rate, Target_Success_Rate_Regular, Target_Success_Rate_Catch] = SR_CALC(dataout,total_trials,num_regular_trials,num_correct_target_option_only_trials)
     
     %Break down of each success rate based on coherence level 
     %Count how many rew and N/A per coherence 
@@ -567,7 +559,14 @@ num_catch_trials = audInfo.catchtrials;
     prob_Right = directional_probability(Right_dataout, audInfo); 
     prob_Left = directional_probability(Left_dataout, audInfo); 
     
-    [x, y, fig_both, coeff_p_values,CIs_of_LR_fit,mu,std_gaussian] = psychometric_plotter(prob_Right,prob_Left, audInfo,save_name);
+    [x, y, fig_both, coeff_p_values,CIs_of_LR_fit,mu,std_gaussian] = psychometric_plotter(dataout,prob_Right,prob_Left, audInfo,save_name);
+     ax = gca;
+     hold on
+     text(-0.5, .85, "velocity (degrees/s): "+ audInfo.velocity ,'FontSize', 12);
+        text(-0.5, .9, "duration (ms): "+ sprintf('%.2f', audInfo.window_duration) ,'FontSize', 12);
+
+   
+    
     Eye_Tracker_Plotter(eye_data_matrix);
     
     %%Make Rightward only graph
@@ -578,7 +577,7 @@ num_catch_trials = audInfo.catchtrials;
     prob_left_only = coherence_probability_1_direction(Left_dataout, audInfo);
     [L_coh, L_pc, L_fig] = psychometric_plotter_1_direction(prob_left_only, 'LEFT ONLY', audInfo, save_name);
 
-
+    resizeFigures();
     %Save all figures to Figure Directory
     saveas(fig_both, [figure_file_directory save_name '_AUD_MCS_Psyc_Func_LR.png'])
     saveas(fig_both, [figure_file_directory save_name '_AUD_MCS_Psyc_Func_LR.fig'])
@@ -605,4 +604,7 @@ save([data_file_directory save_name]);
 disp('Experiment Data Exported to Behavioral Data Folder')
 sca; 
 
+
 TDT.halt(); 
+prob(:,4)
+prob(:,2)

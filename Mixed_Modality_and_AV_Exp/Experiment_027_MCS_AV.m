@@ -12,9 +12,10 @@ file_directory='C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\Mix
 data_file_directory = 'C:\Jackson\Adriana Stuff\AV_Behavioral_Data\';
 figure_file_directory = 'C:\Jackson\Adriana Stuff\AV_Figures\'; 
 
-%when running baron on fixation training set to 1
-baron_fixation_training=0;
-if baron_fixation_training==1
+%set to 1 if you want the monkey to be rewarded only for fixating, no
+%target selection
+reward_fixation_only=1;
+if reward_fixation_only==1
     target_reward='N/A';
 end
 
@@ -371,7 +372,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                 [rdk_timeout, eye_data_matrix] = RDK_Draw(ExpInfo, dotInfo, window, xCenter, yCenter, h_voltage, k_voltage, TDT, start_block_time, eye_data_matrix, trialcounter, fix_point_color);
                 if rdk_timeout ~= 1
                     rdk_reward = 'Yes';
-                    if baron_fixation_training==1 || strcmp(catchtrial, 'Yes')
+                    if reward_fixation_only==1 || strcmp(catchtrial, 'Yes')
                         TDT.trg(1); %add in if fixation only
                     end
                 else
@@ -437,7 +438,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                     aud_timeout = 0;
                     aud_correct_counter = 0;
                     aud_reward = 'Yes';
-                    if baron_fixation_training==1 || strcmp(catchtrial, 'Yes')
+                    if reward_fixation_only==1 || strcmp(catchtrial, 'Yes')
                         TDT.trg(1); %add in if fixation only
                         incorrect_target_fixation='N/A';
                     end
@@ -462,7 +463,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                 [av_timeout] = AV_Stimulus_Presentation(ExpInfo, dotInfo, AVInfo, window, xCenter, yCenter, h_voltage, k_voltage, TDT);
                 if av_timeout ~= 1
                     av_reward = 'Yes';
-                    if baron_fixation_training==1 || strcmp(catchtrial, 'Yes')
+                    if reward_fixation_only==1 || strcmp(catchtrial, 'Yes')
                         TDT.trg(1); %add in if fixation only
                     end
                 else
@@ -486,7 +487,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         % This Includes a end trial reward for saccade and fixation towards either one of the target
         % points, IN PROGRESS
         targ_timeout = 0;
-        if fix_timeout ~= 1 && (aud_timeout ~= 1 && rdk_timeout ~= 1 && av_timeout ~= 1) && baron_fixation_training ~= 1 && strcmp(catchtrial, 'No')
+        if fix_timeout ~= 1 && (aud_timeout ~= 1 && rdk_timeout ~= 1 && av_timeout ~= 1) && reward_fixation_only ~= 1 && strcmp(catchtrial, 'No')
             %This picks the luminace of the targets based on correct direction response, also outputs correct target string variable, eg 'right'
             [right_target_color,left_target_color,correct_target] = percentage_target_color_selection(dotInfo, audInfo, AVInfo,ExpInfo, trialcounter);
             
@@ -626,7 +627,9 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         
         end_trial_time = hat;
         trial_time = end_trial_time-start_trial_time;
-        
+        if reward_fixation_only==1
+            incorrect_target_fixation='N/A';
+        end
         if strcmp(ExpInfo.modality, 'AUD')
             dataout(output_counter,1:11) = {trialcounter pos fix_reward stim_reward catchtrial target_reward trial_time audInfo.coh audInfo.dir incorrect_target_fixation ExpInfo.modality};
         elseif strcmp(ExpInfo.modality, 'VIS')

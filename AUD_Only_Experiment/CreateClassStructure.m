@@ -50,7 +50,7 @@ ExpInfo.ppd = 30;%pi * xCenter / atan(monWidth/viewDist/2) / 360;
 
 audInfo.dirSet = dirBin(data); %[LR DU UD RL] 1 - Include, 0 - Exclude
 audInfo.catchtrials = ExpInfo.catch_trials;
-audInfo.random_incorrect_opacity_list = catch_trial_randomizer(ExpInfo,audInfo); 
+audInfo.random_incorrect_opacity_list = invisible_wrong_answer_trial_randomizer(ExpInfo,audInfo); 
 audInfo.cohSet = (nonzeros(data(50:60,1)))'./100; %This is the descending list of Coherences 
 audInfo.coherences = audInfo.cohSet; %This is for use in other functions for success calcs
 audInfo.probs = data(43:46,1)'; %This is the input probablities for the staircase procedure protocol
