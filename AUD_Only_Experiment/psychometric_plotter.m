@@ -1,4 +1,4 @@
-function [x_scatter, y_scatter, fig, mu, std_gaussian, xData, yData, curve_xvals, curve_yvals] = psychometric_plotter(prob_Right, prob_Left, audInfo, save_name, fig_color)
+function [x_scatter, y_scatter, fig, slope_dynamicrange, std_gaussian, xData, yData, curve_xvals, curve_yvals] = psychometric_plotter(dataout,prob_Right, prob_Left, audInfo, save_name, fig_color)
     % PSYCHOMETRIC_PLOTTER creates a psychometric plot based on probabilities of right and left choices.
     % This function processes the probabilities for rightward and leftward choices and uses them
     % to generate a psychometric plot. It adapts the probabilities to reflect the probability of a 
@@ -39,5 +39,5 @@ function [x_scatter, y_scatter, fig, mu, std_gaussian, xData, yData, curve_xvals
     scatter_plot_data = scatter_plot_data(~isnan(scatter_plot_data(:,2)),:); 
 
     % Call createFit_NormCDF_FLRnCLNG to fit a psychometric function
-    [fig, mu, std_gaussian, xData, yData, curve_xvals, curve_yvals] = createFit_NormCDF_FLRnCLNG(scatter_plot_data(:,1), scatter_plot_data(:,2)/100, audInfo, save_name, fig_color); 
+    [fig, slope_dynamicrange, std_gaussian, xData, yData, curve_xvals, curve_yvals] = createFit_NormCDF_FLRnCLNG_scalingfix(dataout,scatter_plot_data(:,1), scatter_plot_data(:,2)/100, audInfo, save_name, fig_color); 
 end

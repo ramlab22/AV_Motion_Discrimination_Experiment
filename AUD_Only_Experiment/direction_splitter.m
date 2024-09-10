@@ -10,15 +10,25 @@ dataout(all(cellfun(@isempty, dataout),2),:) = [];%delete empty rows from data c
 % dir_list = num2cell(dotInfo.random_dir_list);
 % dir_list = dir_list';
 % dataout(2:end,9) = dir_list;
+if  strcmp(dataout(1,1), 'Trial #')
 
-direction_list = dataout(2:end,9); 
+    direction_list = dataout(2:end,9); 
+else
+    direction_list = dataout(:,9); 
+end
 mat = cell2mat(direction_list); 
 R_test = (mat == 1) ;
 L_test = (mat == 0); 
 R_indeces = find(R_test == 1); 
 L_indeces = find(L_test == 1);
-Right_dataout = dataout(R_indeces+1,:); 
-Left_dataout = dataout(L_indeces+1,:); 
+if  strcmp(dataout(1,1), 'Trial #')
+
+    Right_dataout = dataout(R_indeces+1,:); 
+    Left_dataout = dataout(L_indeces+1,:); 
+else
+    Right_dataout = dataout(R_indeces,:); 
+    Left_dataout = dataout(L_indeces,:); 
+end
 
 end
 

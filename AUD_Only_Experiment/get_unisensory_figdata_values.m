@@ -1,4 +1,4 @@
-function [x_scattervals, y_scattervals, x_curvevals, y_curvevals, mu_per_date, std_gaussian_per_date, slope_per_date, slope_at_50_percent_per_date, date_key] = get_unisensory_figdata_values(Path)
+function [x_scattervals, y_scattervals, x_curvevals, y_curvevals, std_gaussian_per_date, slope_per_date, slope_at_50_percent_per_date, date_key,master_dataout] = get_unisensory_figdata_values(Path)
 %GET_UNISENSORY_FIGDATA_VALUES Extracts and processes unisensory figure data for visualization.
 %
 % This function processes data from a specified directory to produce values for
@@ -42,10 +42,11 @@ for i_date = 1:n_unique_dates
     [prob_Right, prob_Left, audInfo] = analyze_directional_data(dataout,audInfo);
     
     % Plot psychometric curves and extract statistical parameters
-    [mu, std_gaussian, slope, slope_at_50_percent, LR_xdata, LR_ydata, LR_curve_xvals, LR_curve_yvals] = plot_and_analyze_psychometric_curve(prob_Right, prob_Left, audInfo, save_name);
+    [~, ~, ~, slope, std_gaussian, LR_xdata, LR_ydata, LR_curve_xvals, LR_curve_yvals] = psychometric_plotter(dataout,prob_Right, prob_Left, audInfo, save_name, 'red');
+    slope_at_50_percent = 1 / (std_gaussian * sqrt(2 * pi));
 
     % Store results for the current date
-    store_plot_values(i_date, LR_xdata, LR_ydata, LR_curve_xvals, LR_curve_yvals, mu, std_gaussian, slope, slope_at_50_percent);
+    store_plot_values(i_date, LR_xdata, LR_ydata, LR_curve_xvals, LR_curve_yvals, std_gaussian, slope, slope_at_50_percent);
 end
 
     function audInfo = process_trial_information(dataout)
@@ -61,19 +62,12 @@ end
         prob_Left = directional_probability(Left_dataout, audInfo);
     end
 
-    function [mu, std_gaussian, slope, slope_at_50_percent, LR_xdata, LR_ydata, LR_curve_xvals, LR_curve_yvals] = plot_and_analyze_psychometric_curve(prob_Right, prob_Left, audInfo, save_name)
-        [~, ~, ~, mu, std_gaussian, LR_xdata, LR_ydata, LR_curve_xvals, LR_curve_yvals] = psychometric_plotter(dataout,prob_Right, prob_Left, audInfo, save_name, 'red');
-        slope_at_50_percent = 1 / (std_gaussian * sqrt(2 * pi));
-        dy_dx = diff(LR_curve_yvals) ./ diff(LR_curve_xvals);
-        slope = mean(dy_dx(~isnan(dy_dx))); % Exclude NaN values that may result from division by zero
-    end
 
-    function store_plot_values(i_date, LR_xdata, LR_ydata, LR_curve_xvals, LR_curve_yvals, mu, std_gaussian, slope, slope_at_50_percent)
+    function store_plot_values(i_date, LR_xdata, LR_ydata, LR_curve_xvals, LR_curve_yvals, std_gaussian, slope, slope_at_50_percent)
         x_scattervals{i_date} = LR_xdata;
         y_scattervals{i_date} = LR_ydata;
         x_curvevals{i_date} = LR_curve_xvals';
         y_curvevals{i_date} = LR_curve_yvals';
-        mu_per_date(i_date) = mu;
         std_gaussian_per_date(i_date) = std_gaussian;
         slope_per_date(i_date) = slope;
         slope_at_50_percent_per_date(i_date) = slope_at_50_percent;

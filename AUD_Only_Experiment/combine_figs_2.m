@@ -18,20 +18,28 @@
 % Author: adriana schoenhaut
 % Date: 8/20/23
 
-fig_title='Alv Aud Only velocity 59.95 duration 834ms vs 1100ms';
+fig_title='Alv Aud Only 367ms duration low vs high velocity';
 %path1='/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Ba/aud_only_velocity_vs_duration/constant_duration/dur834ms_vel9.59_dis8/Baron_audonly_9.59velocity_834ms_8degrees.fig';
 %path2='/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Ba/aud_only_velocity_vs_duration/constant_duration/dur834ms_vel26.38_dis22/Baron_AudOnly_dur834ms_vel26.38_22degrees.fig';
 
 % path3='/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Ba/aud_only_velocity_vs_duration/constant_velocity/dur1300ms_vel59.95_dis78/Ba_AudOnly_dur1300ms_vel59.95_dis78.fig';
 % path2='/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Ba/aud_only_velocity_vs_duration/constant_velocity/dur1100ms_vel59.95_dis66/Ba_AudOnly_dur1100ms_vel59.95_dis66.fig';
 % path1='/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Ba/aud_only_velocity_vs_duration/constant_duration/dur834ms_vel59.95_dis50/Ba_AudOnly_dur834ms_vel59.95_dis50.fig';
-path3='/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Alv/aud_only_velocity_vs_duration/constant_velocity/dur1300ms_vel59.95_dis78/Alv_AudOnly_dur1300ms_vel59.95_dis78.fig';
-path2='/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Alv/aud_only_velocity_vs_duration/constant_velocity/dur1100ms_vel59.95_dis66/Alv_AudOnly_dur1100ms_vel59.95_dis66.fig';
-path1='/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Alv/aud_only_velocity_vs_duration/constant_duration/dur834ms_vel59.95_dis50/Alv_AudOnly_dur834ms_vel59.95_dis50.fig';
+%path3='/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Alv/aud_only_velocity_vs_duration/constant_velocity/dur1300ms_vel59.95_dis78/Alv_AudOnly_dur1300ms_vel59.95_dis78.fig';
+%path2='/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Alv/aud_only_velocity_vs_duration/constant_velocity/dur1100ms_vel59.95_dis66/Alv_AudOnly_dur1100ms_vel59.95_dis66.fig';
+%path1='/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Alv/aud_only_velocity_vs_duration/constant_duration/dur834ms_vel59.95_dis50/Alv_AudOnly_dur834ms_vel59.95_dis50.fig';
 
-fig2label='dur1100ms_dis66';
-fig1label='dur834ms_dis50';
-fig3label='dur1300ms_dis78';
+path3='/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Alv/aud_only_velocity_vs_duration/dur312ms_vel250_dis78/Alv_AudOnly_dur312ms_vel250_dis78.fig';
+path2='/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Alv/aud_only_velocity_vs_duration/dur367ms_vel212_dis77.8/Alv_AudOnly_dur367ms_vel212_dis77.8.fig';
+path1='/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Alv/aud_only_velocity_vs_duration/constant_displacement/dur367ms_vel59.95_dis22/Alv_AudOnly_dur367ms_vel59.95_dis22.fig';
+
+fig1label='vel59.95_dis22';
+fig2label='vel212_dis77.8';
+fig3label='dur312ms_vel250_dis78';
+
+% fig2label='dur1100ms_dis66';
+% fig1label='dur834ms_dis50';
+% fig3label='dur1300ms_dis78';
 
 % fig1label='vel9.59_dis8';
 % fig2label='vel26.38_dis22';

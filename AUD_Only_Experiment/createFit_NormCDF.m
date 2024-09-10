@@ -60,10 +60,10 @@ p_values=0;
 ci=0;
 bootstat=0;
 curve_yvals = cdf('Normal', curve_xvals, mdl.Coefficients{1,1}, mdl.Coefficients{2,1});
-%get threshold
-mu= mdl.Coefficients{1,1};
+%get mu
+mu= mdl.Coefficients{1,1}; %point of subjective equality
 %get std of cumulative gaussian (reflects the inherent variability of the psychophysical data)
-std_gaussian= mdl.Coefficients{2,1};
+std_gaussian= mdl.Coefficients{2,1}; %sensitivity
 dy_dx = diff(curve_yvals) ./ diff(curve_xvals); % calculates the slope of the CDF curve by taking the difference between consecutive y-values and dividing by the difference between their corresponding x-values
 slope = mean(dy_dx);
 

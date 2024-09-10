@@ -1,4 +1,4 @@
-%function [master_dataout] = threshold_slope_variability(folder_name)
+function [thresholds_per_permutation] = threshold_slope_variability(Path,n_permutations,condition)
 % "the data were resampled using random draws with replacement, while taking care to 
 % maintain the substructure of the data. 
 
@@ -12,19 +12,21 @@
 % estimates of threshold, so that the variability of the threshold could be determined." -Dylla et al. 2013
 %folder_name=folder_name;
 %cd test_data
-n_permutations=1;
+%n_permutations=1;
+%n_permutations=100;
 
 todays_date=datetime(datetime(),'Format','MMddyy');
-Path = '/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Alv/Alv_aud_dbSNR10_fixedspeakers/' ;% wherever you want to search
-condition=2; %1=visual, 2=auditory, 3=AV
+%Path = '/Users/adrianaschoenhaut/Documents/AV_Motion_Discrimination_Experiment/Mixed_Modality_and_AV_Exp/test_data/Ba/aud_only_velocity_vs_duration/constant_duration/dur834ms_vel93.5_dis78/' ;% wherever you want to search
+%condition=2; %1=visual, 2=auditory, 3=AV
 [master_dataout,column_titles,totalfiles_names] = combine_data_acrossblocks(Path);
 
-
+close all;
 master_dataout(strcmp(master_dataout(:,6),'N/A'),:)=[]; %delete rows where subject quit before target presented
 master_coherences=[master_dataout{2:end,8}]';
 [n_per_coherence, coherences] = groupcounts(master_coherences);
+%n_per_coherence=400;
 n_coherences=length(coherences);
-[fit_mean_midpoint,fit_slope,slope_std,curve_xvals,curve_yvals,ci,master_threshold] = get_threshold_combinedblocks(master_dataout,coherences',totalfiles_names,condition,1);
+%[fit_mean_midpoint,fit_slope,slope_std,curve_xvals,curve_yvals,ci,master_threshold] = get_threshold_combinedblocks(master_dataout,coherences',totalfiles_names,condition,1);
 
 %[n_trials_with_response,n_trials_with_reward,proportion_response_reversals_after_correct_response,proportion_response_reversals_after_incorrect_response] = response_reversal_proportions(master_dataout)    
 master_dataout=master_dataout(2:end,:);
@@ -36,6 +38,7 @@ for i_permutation=1:n_permutations %how many times you want to get a threshold f
     permutation_dataout=column_titles;
     for i_coherence=1:n_coherences %for each coherence in data
         n_trials_in_icoherence=n_per_coherence(i_coherence,1);
+       % n_trials_in_icoherence=n_per_coherence;
         icoherence_dataout=master_dataout(cell2mat(master_dataout(:,8))==coherences(i_coherence),:);
         rand_index = randsample(1:n_trials_in_icoherence, n_trials_in_icoherence, true); %get index of randomly sampled trials with replacement
         permutation_dataout=vertcat(permutation_dataout,icoherence_dataout(rand_index,:));             
@@ -55,7 +58,7 @@ for i_permutation=1:n_permutations %how many times you want to get a threshold f
     end
 end %for i_permutations
 mean_threshold=mean(thresholds_per_permutation(~isnan(thresholds_per_permutation)))
-mean_slope=mean(thresholds_per_permutation(~isnan(slopes_per_permutation)))
+mean_slope=mean(slopes_per_permutation(~isnan(slopes_per_permutation)))
 std_slope=mean(std_slopes_per_permutation(~isnan(std_slopes_per_permutation)))
 std_threshold=std(thresholds_per_permutation(~isnan(thresholds_per_permutation)))
 median_threshold=median(thresholds_per_permutation(~isnan(thresholds_per_permutation)))

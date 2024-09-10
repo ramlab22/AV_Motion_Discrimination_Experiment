@@ -56,7 +56,7 @@ end
 
 
 
-%[x, y, fig_both] = psychometric_plotter(prob_Right,prob_Left, audInfo, save_name);
+%[x, y, fig_both] = psychometric_plotter(dataout,prob_Right,prob_Left, audInfo, save_name);
 
 xR = probR_RightTrials(:,1)'; 
 xL = flip(-1*(probR_LeftTrials(:,1)))'; %-1 to get on other side of x axis
@@ -88,7 +88,9 @@ end
 
 mu = mean(yData);
 sigma =std(yData);
-parms=[mu, sigma]; %initial parameter estimates
+floor_value = min(yData);
+ceiling_value = max(yData);
+parms = [mu, sigma, floor_value, ceiling_value];
 
 % fun_1 = @(b, x)cdf('Normal', x, b(1), b(2)); %normal cumulative distribution function with mean b(1) and standard deviation b(2)
 % fun = @(b)sum((fun_1(b,xData) - yData).^2); %calculates the sum of squared residuals between the observed data yData and the model prediction fun_1(b, xData).
@@ -104,21 +106,26 @@ parms=[mu, sigma]; %initial parameter estimates
 % opts = optimset('MaxFunEvals',50000, 'MaxIter',10000); 
 % fit_par = fminsearch(fun, parms, opts);
 
-%non-linear model to add weights to function fit based on # of trials per data point  
-normalcdf_fun = @(b, x) 0.5 * (1 + erf((x - b(1)) ./ (b(2) * sqrt(2))));
-mdl = fitnlm(xData, yData, normalcdf_fun, parms, 'Weights', all_sizes);
+% %non-linear model to add weights to function fit based on # of trials per data point  
+% normalcdf_fun = @(b, x) 0.5 * (1 + erf((x - b(1)) ./ (b(2) * sqrt(2))));
+% mdl = fitnlm(xData, yData, normalcdf_fun, parms, 'Weights', all_sizes);
+ % Define modified normal CDF function with floor and ceiling
+    normalcdf_fun = @(b, x) b(3) + (b(4) - b(3)) * (1 + erf((x - b(1)) ./ (b(2) * sqrt(2)))) / 2;
 
-curve_xvals = min(xData(:)):.01:max(xData(:));
+    % Optimization settings
+    opts = optimset('MaxFunEvals', 50000, 'MaxIter', 10000);
+    lb = [-Inf, -Inf, min(yData), -Inf];  % Lower bounds for parameters
+    ub = [Inf, Inf, max(yData), Inf];     % Upper bounds for parameters
 
-% Significance of fits 
-[p_values, bootstat,ci] = p_value_calc(yData, parms);
+    % Fit the model with bounds
+    mdl = lsqcurvefit(@(b, x) normalcdf_fun(b, x), parms, xData, yData, lb, ub, opts);
 
-
-curve_yvals = cdf('Normal', curve_xvals, mdl.Coefficients{1,1}, mdl.Coefficients{2,1});
-%get threshold
-mu= mdl.Coefficients{1,1};
-%get std of cumulative gaussian (reflects the inherent variability of the psychophysical data)
-std_gaussian= mdl.Coefficients{2,1};
+% Generate values for plotting the fitted curve
+    curve_xvals = min(xData(:)):.01:max(xData(:));
+    curve_yvals = normalcdf_fun(mdl, curve_xvals);
+% Extract and calculate relevant statistics
+    mu = mdl(1);  % Mean of the distribution
+    std_gaussian = mdl(2);  % Standard deviation of the Gaussian
 slope_at_50_percent = 1 / (std_gaussian * sqrt(2 * pi));
 
 %curve_xvals = -1:.01:1;
@@ -143,7 +150,7 @@ slope_std = std(bootstat(:,2));
 % threshold_location=find(curve_yvals >= chosen_threshold, 1);
 % threshold=curve_xvals(1,threshold_location);
 
-%[x, y, fig_both] = psychometric_plotter(prob_Right,prob_Left, audInfo, save_name);
+%[x, y, fig_both] = psychometric_plotter(dataout,prob_Right,prob_Left, audInfo, save_name);
 if show_results_and_figs==1
     % Plot fit with data.
     fig = figure( 'Name', 'Psychometric Function' );
@@ -151,9 +158,9 @@ if show_results_and_figs==1
     scatter(xData, yData, all_sizes,'filled','LineWidth',5,'MarkerEdgeColor','k','MarkerFaceColor','k');
     hold on
     plot(curve_xvals, curve_yvals,'LineWidth',5);
-    text(0,.2,"mu: " + mu);
-    text(0,.1, "std cummulative gaussian: " + std_gaussian);
-    text(0,.3, "slope at 50 percent: " + slope_at_50_percent);
+    % text(0,.2,"mu: " + mu);
+    % text(0,.1, "std cummulative gaussian: " + std_gaussian);
+    % text(0,.3, "slope at 50 percent: " + slope_at_50_percent);
 
     legend('% Rightward Resp. vs. Coherence', 'NormCDF','Location', 'Best', 'Interpreter', 'none' );
 
@@ -176,7 +183,6 @@ end
     text(0,.15,"mu: " + mu);
     text(0,.1, "std cummulative gaussian: " + std_gaussian);
     text(0,.2, "slope at 50 percent: " + slope_at_50_percent);
-    text(0,.25, "overall slope: " + slope);
 
     grid on
 end %if generate_figure 

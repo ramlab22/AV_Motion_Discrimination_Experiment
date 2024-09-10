@@ -11,9 +11,15 @@ for i_file=1:length(totalfiles_names)
     dataout(all(cellfun(@isempty, dataout),2),:) = [];
     %delete catch trials from data cell
     dataout(strcmp(dataout(:,5),'Yes'),:)=[];
-    % if length(dataout)>500
-    %     dataout=dataout(1:501,:);
-    % end
+     if length(dataout)>400
+         dataout=dataout(1:401,:);
+        % n_half_trials=floor(length(dataout)/2);
+        % dataout=dataout(1:n_half_trials+1,:);
+
+     end
+   % n_half_trials=floor(length(dataout)/2);
+  %  dataout=dataout(1:n_half_trials+1,:);
+  
 
     %combine all data in folder into one master_dataout cell
     if i_file==1

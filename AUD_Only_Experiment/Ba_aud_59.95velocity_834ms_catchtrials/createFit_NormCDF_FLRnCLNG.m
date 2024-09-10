@@ -1,4 +1,4 @@
-function [fig, mu, std_gaussian, xData, yData, curve_xvals, curve_yvals] = createFit_NormCDF_FLRnCLNG(coh_list, probability_rightward_response, audInfo, save_name, fig_color)
+function [fig, mu, std_gaussian, xData, yData, curve_xvals, curve_yvals] = createFit_NormCDF_FLRnCLNG(dataout,coh_list, probability_rightward_response, audInfo, save_name, fig_color)
     % CREATEFIT_NORMCDF_FLRnCLNG creates a psychometric function fit for given data.
     % This function accounts for floor and ceiling effects in the data, which are not
     % typically considered in a standard Gaussian distribution. The model utilizes

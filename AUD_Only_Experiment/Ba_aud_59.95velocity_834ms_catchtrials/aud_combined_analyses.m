@@ -28,7 +28,7 @@ audInfo.cohFreq_left = cohFreq_finder(Left_dataout, audInfo);
 prob_Right = directional_probability(Right_dataout, audInfo);
 prob_Left = directional_probability(Left_dataout, audInfo);
 
-[x_scatter, y_scatter, fig_both,mu,std_gaussian,LR_xdata,LR_ydata,LR_curve_xvals,LR_curve_yvals] = psychometric_plotter(prob_Right,prob_Left, audInfo,save_name,'red');
+[x_scatter, y_scatter, fig_both,mu,std_gaussian,LR_xdata,LR_ydata,LR_curve_xvals,LR_curve_yvals] = psychometric_plotter(dataout,prob_Right,prob_Left, audInfo,save_name,'red');
 
 % %%Make Rightward only graph
 % prob_right_only = coherence_probability_1_direction(Right_dataout, audInfo);
