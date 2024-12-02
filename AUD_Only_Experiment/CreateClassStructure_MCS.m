@@ -9,8 +9,9 @@ ExpInfo.t_angle = 0.3; % Fixation Dot and Target Dots Visual Angle in Degrees
 %ExpInfo.rew_angle =9.5;% Reward Window Visual Angle in Degrees
 ExpInfo.rew_angle =10;% Reward Window Visual Angle in Degrees
 %audInfo.cohSet = [0 0 0 0 0 0 0 0 0 0 0 0]./100; %Coh List to choose from
-
 audInfo.cohSet = [100 70.7 50 35.4 25 17.7 12.5 8.9 6.3 4.5 3.2 0]./100; %Coh List to choose from
+%audInfo.cohSet = [100 100 100 100 100 100 100 100 100 100 100 100]./100; %Coh List to choose from
+
 %audInfo.coh_Freq_Set = [300 300 300 300 300 300 300 300 100 100 100 100]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 %audInfo.coh_Freq_Set = [0 0 300 300 300 300 300 300 300 300 300 300]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 %audInfo.coh_Freq_Set = [300 300 300 300 300 300 300 300 300 300 300 300]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
@@ -34,19 +35,21 @@ ExpInfo.num_trials = sum(audInfo.coh_Freq_Set); % Number of total Trials for 1 b
 %ExpInfo.stim_time = 1100; %Time of stim presentaiton (ms)
 %ExpInfo.stim_time = 1300; %Time of stim presentaiton (ms)
 
-%audInfo.velocity = 59.95; %deg/sec
+audInfo.velocity = 59.95; %deg/sec
 %audInfo.velocity = 36.61; %deg/sec
-audInfo.velocity = 165.4; %deg/sec
+%audInfo.velocity = 165.4; %deg/sec
 %audInfo.velocity = 212; %deg/sec
+%audInfo.velocity = 40; %deg/sec
 
 %ExpInfo.stim_time = 601; %Time of stim presentaiton (ms)
 ExpInfo.stim_time = 367; %Time of stim presentaiton (ms)
 %ExpInfo.stim_time = 133; %Time of stim presentaiton (ms)
+%ExpInfo.stim_time = 550; %Time of stim presentaiton (ms)
 
 % audInfo.velocity = 250; %deg/sec
 % ExpInfo.stim_time = 312; 
-ExpInfo.iti = 800;%Intertrial Interval (ms)
-%ExpInfo.iti = 1000;%Intertrial Interval (ms)
+%ExpInfo.iti = 800;%Intertrial Interval (ms)
+ExpInfo.iti = 1000;%Intertrial Interval (ms)
 
 ExpInfo.fixation_time = 200;% Time to fixate on fixation point before RDK Starts presenting == time of presenting fixation point 
 ExpInfo.positions = [0;0;0;0;1;0;0;0;0]; % Binary List of ON(1)/OFF(0) for position 1-9

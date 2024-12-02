@@ -45,13 +45,10 @@ function [slope,sigma_scaled,coherence_low,coherence_high] = calculate_slope_dyn
     % Scale the standard deviation (sigma) by the difference in lapse rates
     sigma_scaled = sigma * (lapse_ceiling - lapse_floor);
     
-    if lapse_ceiling-lapse_floor<0.4
-        low_saturation_val=0.0001;
-        high_saturation_val=0.999;
-    else
-        low_saturation_val=0.10;
-        high_saturation_val=0.90;
-    end
+    
+    low_saturation_val=0.10;
+    high_saturation_val=0.90;
+    
     
     % % Calculate the low and high saturation points
      cdf_low = lapse_floor + (lapse_ceiling - lapse_floor) * low_saturation_val;
@@ -59,8 +56,12 @@ function [slope,sigma_scaled,coherence_low,coherence_high] = calculate_slope_dyn
      
    
     % Inverse CDF to find the corresponding x values (10% and 90% for most functions)
-    coherence_low = mu + sigma_scaled * sqrt(2) * erfinv(2 * (cdf_low - lapse_floor) / (lapse_ceiling - lapse_floor) - 1);
-    coherence_high = mu + sigma_scaled * sqrt(2) * erfinv(2 * (cdf_high - lapse_floor) / (lapse_ceiling - lapse_floor) - 1);
+   % coherence_low = mu + sigma_scaled * sqrt(2) * erfinv(2 * (cdf_low - lapse_floor) / (lapse_ceiling - lapse_floor) - 1);
+   % coherence_high = mu + sigma_scaled * sqrt(2) * erfinv(2 * (cdf_high - lapse_floor) / (lapse_ceiling - lapse_floor) - 1);
+    %changed the sigma we use on 9.5.25 bc slopes we were getting were
+    %inaccurate
+   coherence_low = mu + sigma * sqrt(2) * erfinv(2 * (cdf_low - lapse_floor) / (lapse_ceiling - lapse_floor) - 1);
+    coherence_high = mu + sigma * sqrt(2) * erfinv(2 * (cdf_high - lapse_floor) / (lapse_ceiling - lapse_floor) - 1);
 
     % Calculate the slope
     slope = (cdf_high - cdf_low) / (coherence_high - coherence_low);

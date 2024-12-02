@@ -214,7 +214,11 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
        CAM_2=audInfo.CAM(:,2);
         ramp_dur=0.004;
        [CAM_1_Cut_Ramped, CAM_2_Cut_Ramped, audInfo.window_duration, audInfo.ramp_dur] = aud_receptive_field_location(CAM_1, CAM_2,audInfo.t_start,audInfo.t_end, sampling_rate, ramp_dur);
-         
+%           figure
+%           plot(1:length(CAM_1_Cut_Ramped),CAM_1_Cut_Ramped,'b')
+%           hold on
+%            plot(1:length(CAM_2_Cut_Ramped),CAM_2_Cut_Ramped,'r')
+% %         
         
         TDT.write('mux_sel',audInfo.mux); %The multiplexer values for each trial, set to all zeros for now to include only LR and RL
         TDT.write('window',audInfo.window_duration); %duration of the stimulus in ms
