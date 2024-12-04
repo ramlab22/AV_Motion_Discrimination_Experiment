@@ -11,7 +11,9 @@ audInfo = struct;
 dotInfo.cohSet = [100 70.7 50 35.4 25 17.7 12.5 8.9]./100; %Coh List to choose from
 
 %dotInfo.coh_Freq_Set = [120 120 120 120 120 120 120 120]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
-dotInfo.coh_Freq_Set = [200 200 200 200 200 200 200 200]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
+%dotInfo.coh_Freq_Set = [200 200 200 200 200 200 200 200]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
+dotInfo.coh_Freq_Set = [0 0 0 0 0 0 0 0]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
+
 %dotInfo.coh_Freq_Set = [10 10 10 10 10 10 10 10]; 
 
 dotInfo.n_vis_trials=sum(dotInfo.coh_Freq_Set);
@@ -19,8 +21,8 @@ dotInfo.n_vis_trials=sum(dotInfo.coh_Freq_Set);
 %audInfo.cohSet = [100 70.7 50 35.4 25 17.7 12.5 8.9 6.3 4.5 3.2]./100; %Coh List to choose from
 audInfo.cohSet = dotInfo.cohSet ; %Coh List to choose from
 %audInfo.coh_Freq_Set = [200 200 200 200 200 200 200 200]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
-%audInfo.coh_Freq_Set = [2 2 2 2 2 2 2 2]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
-audInfo.coh_Freq_Set =dotInfo.coh_Freq_Set ;
+audInfo.coh_Freq_Set = [2 0 2 0 0 2 0 2]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
+%audInfo.coh_Freq_Set =dotInfo.coh_Freq_Set ;
 %audInfo.coh_Freq_Set = [400 400 400 400 400 400 400 400]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 
 audInfo.n_aud_trials=sum(audInfo.coh_Freq_Set);
@@ -48,10 +50,13 @@ ExpInfo.iti = 1000;%Intertrial Interval (ms)
 ExpInfo.fixation_time = 200;% ms; Time to fixate on fixation point before RDK Starts presenting == time of presenting fixation point 
 ExpInfo.positions = [0;0;0;0;1;0;0;0;0]; % Binary List of ON(1)/OFF(0) for position 1-9
 ExpInfo.possible_pos = find(ExpInfo.positions == 1); %Corresponding Number Position available for use
-ExpInfo.fail_timeout = 4000; %Failure of trial timeout in (ms)
+ExpInfo.fail_timeout = 2500; %Failure of trial timeout in (ms)
 %ExpInfo.rdk_angle = 15; %RDK stimulus visual angle
 %ExpInfo.rdk_angle = 17; %RDK stimulus visual angle
-ExpInfo.rdk_angle = 22; %RDK stimulus visual angle
+%ExpInfo.rdk_angle = 22; %RDK stimulus visual angle
+ExpInfo.rdk_angle = 26; %RDK stimulus visual angle
+
+%ExpInfo.rdk_angle = 31; %RDK stimulus visual angle THIS IS THE MAX VIS DISPLACEMENT POSSIBLE
 
 ExpInfo.target_fixation_time = 150;% ms; Time to fixate inside the target point window in order to get Reward
 data(30:33,1) = [1 0 0 1]; %[LR DU UD RL] 1 - Include, 0 Exclude dir
@@ -77,8 +82,9 @@ dstruct.dis = viewDist;             % viewing distance in cm
 
 %% Other Parameters
 
-ExpInfo.time_wait = [1.2, 1.7]; % Default waiting times (seconds) for each frame [fixation, targets] 042522-AS: changed from 4 vals to 2 bc dont have cue and delay time
+%ExpInfo.time_wait = [1.2, 1.7]; % Default waiting times (seconds) for each frame [fixation, targets] 042522-AS: changed from 4 vals to 2 bc dont have cue and delay time
 %ExpInfo.time_wait = [1, 1.5]; % Default waiting times (seconds) for each frame [fixation, targets] 042522-AS: changed from 4 vals to 2 bc dont have cue and delay time
+ExpInfo.time_wait = [1, 1.7]; % Default waiting times (seconds) for each frame [fixation, targets] 042522-AS: changed from 4 vals to 2 bc dont have cue and delay time
 
 ExpInfo.fixpoint_size_pix = angle2pixels(ExpInfo.t_angle); %Fixation Dot Stimulus Size pixels 
 ExpInfo.targpoint_size_pix = ExpInfo.fixpoint_size_pix; %Target Dot Size, same as fixation point for now 
@@ -97,7 +103,7 @@ dotInfo.random_coh_list = cohSet_maker_MCS(dotInfo); %Random list of coherence V
 dotInfo.random_dir_list = dir_randomizer_MCS_unisensory(dotInfo); %Random directions, 50% R and L for each coherence
 %dotInfo.apXYD = [0 90 (ExpInfo.rdk_angle*10)]; % Location x,y pixels (0,0 is center of screen) and diameter of the aperature, currently in visual degrees - MULTPLIED by 10 because of Shadlen dots code, needed to be an integer
 dotInfo.apXYD = [0 55 (ExpInfo.rdk_angle*10)]; % Location x,y pixels (0,0 is center of screen) and diameter of the aperature, currently in visual degrees - MULTPLIED by 10 because of Shadlen dots code, needed to be an integer
-
+        %dotInfo.apXYD hardcoded in av stim presentation
 %dotInfo.speed = 400; %Degrees per second * 10
 dotInfo.speed = 260; %Degrees per second * 10
 

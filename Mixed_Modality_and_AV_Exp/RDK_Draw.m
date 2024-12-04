@@ -3,6 +3,7 @@ function [rdk_timeout, eye_data_matrix] = RDK_Draw(ExpInfo, dotInfo, curWindow, 
 %look at CreateClassStructure.m function 
 
 
+
 Screen('Flip', curWindow);
 ifi = Screen('GetFlipInterval', curWindow);
 refresh_rate = 1/ifi; 
@@ -17,14 +18,14 @@ refresh_rate = 1/ifi;
     apD = dotInfo.apXYD(:,3); % diameter of aperture
     center = repmat([xCenter yCenter],size(dotInfo.apXYD(:,1)));
 
-    center = [center(:,1) + dotInfo.apXYD(:,1)/10*(ExpInfo.ppd) center(:,2) - ...
-    dotInfo.apXYD(:,2)/10*ExpInfo.ppd]; % where you want the center of the aperture
+    %center = [center(:,1) + dotInfo.apXYD(:,1)/10*(ExpInfo.ppd) center(:,2) -dotInfo.apXYD(:,2)/10*ExpInfo.ppd]; % where you want the center of the aperture
+    center = [center(:,1) + dotInfo.apXYD(:,1)/10*(ExpInfo.ppd) center(:,2)]; % where you want the center of the aperture
 
     center(:,3) = dotInfo.apXYD(:,3)/2/10*ExpInfo.ppd; % add diameter
     d_ppd = floor(apD/10 * ExpInfo.ppd);	% size of aperture in pixels
     dotSize = dotInfo.dotSize; 
     
-    % AJT: Number of dots per video frame was 16.7, but since we are updating
+    % update: Number of dots per video frame was 16.7, but since we are updating
     % every frame instead of every 3 frames, we can multiply this number by
     % 3, giving us 50
     
@@ -38,7 +39,7 @@ for df = 1 : dotInfo.numDotField
     % dxdy is an N x 2 matrix that gives jumpsize in units on 0..1
     %   deg/sec * ap-unit/deg * sec/jump = ap-unit/jump
     
-    % AJT: dxdy gives us a unit amount for each jump for a given single dot (signal 
+    % update: dxdy gives us a unit amount for each jump for a given single dot (signal 
     % dots will all be the same jumpsize). We need to change 3/refresh_rate to
     % 1/refresh_rate to update dot positions every frame and maintain the same
     % speed. If this wasn't changed while we made the dots one group instead of 3,
@@ -55,7 +56,7 @@ for df = 1 : dotInfo.numDotField
 %     Ls{df} = cumsum(ones(ndots(df),3)) + repmat([0 ndots(df) ndots(df)*2], ... 
 %         ndots(df), 1);
 %     loopi(df) = 1; % loops through the three sets of dots
-% AJT: Divide dots into three sets before, now just make a column of all
+% update: Divide dots into three sets before, now just make a column of all
 % dots. Originally, the dots were divided into three groups in order to not
 % skip frames. Code was optimized for older machines that couldn't plot
 % dots fast enough. Now that dots are one group, there will be smoother
@@ -90,7 +91,7 @@ r = round(ExpInfo.fixpoint_size_pix/2);
 % Then in the next (4th) frame, some percentage of the dots from the 1st frame 
 % are replotted according to the speed/direction and coherence. Similarly, the 
 % same is done for the 2nd group, etc.
-% AJT: Now, this code does not do the above operation- instead ALL dots are
+% update: Now, this code does not do the above operation- instead ALL dots are
 % plotted every frame
   %Turn on fixation point Initially
         Screen('FillOval',curWindow,fix_point_color,[(xCenter-r) (k_pix-r) (xCenter+r) (k_pix+r)]);
@@ -123,7 +124,7 @@ while continue_show
         % Moved in the current loop. This is a matrix of random numbers - starting 
         % positions of dots not moving coherently.
         
-            % AJT: In previous version, loopi variable used to track which group of
+            % update: In previous version, loopi variable used to track which group of
     % dots out of the three were updated for a given frame. All code that
     % pertained to loopi was deleted in this version. Lthis variable was
     % also used to keep track of the specific dots in group 1, 2, or 3. All
@@ -214,7 +215,7 @@ while continue_show
        
     for df = 1 : dotInfo.numDotField
         % Update the dot position array for the next loop
-        % AJT: Updating ALL dot position array for the next frame, since they
+        % update: Updating ALL dot position array for the next frame, since they
         % are replotted every frame
         ss{df} = this_s{df};
     end

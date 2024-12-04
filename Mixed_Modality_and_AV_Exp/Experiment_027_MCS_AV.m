@@ -5,6 +5,7 @@ clear;
 close all; 
 sca;
 sampling_rate = 24414*2; %sampling rate of rx8 processor
+y_fix_point_distance_from_center=450;
 
 %  Version info
 Version = 'Experiment_027_v.3.0' ; % after code changes, change version
@@ -284,10 +285,13 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         
         
         pos = ExpInfo.random_list(trialcounter);  %Gets random pos # from the list evaluated at specific trial #
+        dot_coord.Ypos_5 = yCenter+y_fix_point_distance_from_center; %AMS 120424: added so you can move the fix point lower for lower diameters
+        
         [h_pix,k_pix] = xypos(pos,dot_coord);%Outputs fixation center (h,k) in pixels for Psychtoolbox to draw dot
         [h_voltage, k_voltage] = pos_voltage(pos,dot_coord); %Outputs Fixation center in Volts for comparison to eyetracker values
         %         [adjust_right, adjust_left] = targ_adjust(pos);%Outputs the adjustments in pixels for dR and dL equations later on
-        
+        visstim_center=dot_coord.Ypos_5-517; %get fixation point location to accomodate diameter (AMS 120424)
+
         %Turn on fixation point Initially
         Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
         Screen('DrawDots', window,[h_pix k_pix], ExpInfo.fixpoint_size_pix, fix_point_color, [], 2);
@@ -375,7 +379,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
             
             if fix_timeout ~= 1
                 % Draw the RDK
-                [rdk_timeout, eye_data_matrix] = RDK_Draw(ExpInfo, dotInfo, window, xCenter, yCenter, h_voltage, k_voltage, TDT, start_block_time, eye_data_matrix, trialcounter, fix_point_color,k_pix);
+                [rdk_timeout, eye_data_matrix] = RDK_Draw(ExpInfo, dotInfo, window, xCenter, visstim_center, h_voltage, k_voltage, TDT, start_block_time, eye_data_matrix, trialcounter, fix_point_color,k_pix);
                 if rdk_timeout ~= 1
                     rdk_reward = 'Yes';
                     if baron_fixation_training==1 || strcmp(catchtrial, 'Yes')
@@ -466,7 +470,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
 
             if fix_timeout ~= 1
                 %Play the AV Stim
-                [av_timeout] = AV_Stimulus_Presentation(ExpInfo, dotInfo, AVInfo, window, xCenter, yCenter, h_voltage, k_voltage, TDT,k_pix);
+                [av_timeout] = AV_Stimulus_Presentation(ExpInfo, dotInfo, AVInfo, window, xCenter, visstim_center, h_voltage, k_voltage, TDT,k_pix);
                 if av_timeout ~= 1
                     av_reward = 'Yes';
                     if baron_fixation_training==1 || strcmp(catchtrial, 'Yes')
@@ -480,6 +484,10 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                         vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
                     end
                 end
+            else
+                av_reward = 'N/A';
+                aud_reward = 'N/A';
+                rdk_reward = 'N/A';
             end
         end %if trial is visual 
         
