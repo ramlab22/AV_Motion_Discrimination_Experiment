@@ -8,25 +8,27 @@ function [fig, AUD_p_values, VIS_p_values, AUD_mu, VIS_mu, AV_mu, AUD_std, VIS_s
 %  Must take 1-prob_Left to get the probability of a rightward choice, the
 %  input probabilities are in regards to the corrrect choice(i.e. in that
 %  direction)
+if audInfo.n_aud_trials ~=0
 
-AUD.xR = AUD_prob_Right(:,1)'; 
-AUD.xL = flip(-1*(AUD_prob_Left(:,1)))'; %-1 to get on other side of x axis
-AUD.x = cat(2,AUD.xL,AUD.xR); 
-AUD.yL = flip(AUD_prob_Left(:,2))';
-AUD.yR = AUD_prob_Right(:,2)';
-AUD.y = cat(2,AUD.yL,AUD.yR);  
-AUD.plot_data = [AUD.x; AUD.y]'; 
-AUD.plot_data = AUD.plot_data(~isnan(AUD.plot_data(:,2)),:); 
-
-
-VIS.xR = VIS_prob_Right(:,1)'; 
-VIS.xL = flip(-1*(VIS_prob_Left(:,1)))'; %-1 to get on other side of x axis
-VIS.x = cat(2,VIS.xL,VIS.xR); 
-VIS.yL = flip(VIS_prob_Left(:,2))';
-VIS.yR = VIS_prob_Right(:,2)';
-VIS.y = cat(2,VIS.yL,VIS.yR);  
-VIS.plot_data = [VIS.x; VIS.y]'; 
-VIS.plot_data = VIS.plot_data(~isnan(VIS.plot_data(:,2)),:); 
+    AUD.xR = AUD_prob_Right(:,1)'; 
+    AUD.xL = flip(-1*(AUD_prob_Left(:,1)))'; %-1 to get on other side of x axis
+    AUD.x = cat(2,AUD.xL,AUD.xR); 
+    AUD.yL = flip(AUD_prob_Left(:,2))';
+    AUD.yR = AUD_prob_Right(:,2)';
+    AUD.y = cat(2,AUD.yL,AUD.yR);  
+    AUD.plot_data = [AUD.x; AUD.y]'; 
+    AUD.plot_data = AUD.plot_data(~isnan(AUD.plot_data(:,2)),:); 
+end
+if dotInfo.n_vis_trials ~=0
+    VIS.xR = VIS_prob_Right(:,1)'; 
+    VIS.xL = flip(-1*(VIS_prob_Left(:,1)))'; %-1 to get on other side of x axis
+    VIS.x = cat(2,VIS.xL,VIS.xR); 
+    VIS.yL = flip(VIS_prob_Left(:,2))';
+    VIS.yR = VIS_prob_Right(:,2)';
+    VIS.y = cat(2,VIS.yL,VIS.yR);  
+    VIS.plot_data = [VIS.x; VIS.y]'; 
+    VIS.plot_data = VIS.plot_data(~isnan(VIS.plot_data(:,2)),:); 
+end
 if AVInfo.n_AV_trials ~=0
     AV_aud.xR = AVInfo.coherences_aud; 
     AV_aud.xL = flip(-1*(AVInfo.coherences_aud)); %-1 to get on other side of x axis
@@ -45,6 +47,9 @@ if AVInfo.n_AV_trials ~=0
     AV_vis.y = cat(2,AV_vis.yL,AV_vis.yR);  
     AV_vis.plot_data = [AV_vis.x; AV_vis.y]'; 
     AV_vis.plot_data = AV_vis.plot_data(~isnan(AV_vis.plot_data(:,2)),:); 
+end
+%if aud, vis, and AV trials included
+if AVInfo.n_AV_trials ~= 0 & dotInfo.n_vis_trials ~=0 & audInfo.n_aud_trials ~=0
 
     [fig,  AUD_p_values, VIS_p_values,...
            AV_aud_p_values, AV_vis_p_values,...
@@ -54,7 +59,9 @@ if AVInfo.n_AV_trials ~=0
                                              AV_aud.plot_data(:,1), AV_aud.plot_data(:,2)/100,...
                                              AV_vis.plot_data(:,1), AV_vis.plot_data(:,2)/100,...
                                              audInfo, dotInfo, AVInfo,save_name); 
-else
+end
+%if only aud and vis trials
+if AVInfo.n_AV_trials == 0 & dotInfo.n_vis_trials ~=0 & audInfo.n_aud_trials ~=0
     [fig, AUD_p_values, VIS_p_values,...
     AUD_mu, VIS_mu, AUD_std, VIS_std] = createFit_NormCDF_AandVonly(AUD.plot_data(:,1), AUD.plot_data(:,2)/100,...
                                                                     VIS.plot_data(:,1),VIS.plot_data(:,2)/100,...
@@ -62,9 +69,14 @@ else
     AV_mu=NaN;
     AV_std=NaN;
 end
+%if only auditory trials
+if AVInfo.n_AV_trials == 0 & dotInfo.n_vis_trials ==0 & audInfo.n_aud_trials ~=0
 
+end
+%if only vis trials included
+if AVInfo.n_AV_trials == 0 & dotInfo.n_vis_trials ~=0 & audInfo.n_aud_trials ==0
 
-
+end
 
 end
 

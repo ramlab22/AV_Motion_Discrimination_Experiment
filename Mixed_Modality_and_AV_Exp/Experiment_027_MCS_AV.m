@@ -176,6 +176,9 @@ AVtrial_counter = 0;
 
 pause(2);
 catchtrial_counter=0;
+rdk_reward = '0';
+aud_reward = '0';
+av_reward = '0';
 while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     trialcounter = 1;
     coh_counter = 1;
@@ -437,6 +440,8 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                             vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
                             aud_timeout = 1;
                             TDT.write('aud_off',1); %Turn off Audio
+                            aud_reward='No';
+                           
                         end
                         break
                     end
@@ -454,7 +459,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                     end
                
                 else
-                    aud_reward = 'No';
+                    aud_reward = 'N/A';
                 end
                 
             end
