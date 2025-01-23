@@ -8,14 +8,16 @@ audInfo = struct;
 ExpInfo.t_angle = 0.3; % Fixation Dot and Target Dots Visual Angle in Degrees
 %ExpInfo.rew_angle =9.5;% Reward Window Visual Angle in Degrees
 ExpInfo.rew_angle =10;% Reward Window Visual Angle in Degrees
+%ExpInfo.rew_angle =11;% Reward Window Visual Angle in Degrees
+
 %audInfo.cohSet = [0 0 0 0 0 0 0 0 0 0 0 0]./100; %Coh List to choose from
 audInfo.cohSet = [100 70.7 50 35.4 25 17.7 12.5 8.9 6.3 4.5 3.2 0]./100; %Coh List to choose from
 %audInfo.cohSet = [100 100 100 100 100 100 100 100 100 100 100 100]./100; %Coh List to choose from
 
-%audInfo.coh_Freq_Set = [300 300 300 300 300 300 300 300 100 100 100 100]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
+%audInfo.coh_Freq_Set = [300 300 300 300 0 0 0 0 0 0 0 0]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 %audInfo.coh_Freq_Set = [0 0 300 300 300 300 300 300 300 300 300 300]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 %audInfo.coh_Freq_Set = [300 300 300 300 300 300 300 300 300 300 300 300]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
-audInfo.coh_Freq_Set = [200 300 300 300 300 300 300 300 300 300 150 150]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
+audInfo.coh_Freq_Set = [300 300 300 300 300 300 300 300 150 150 100 100]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 %audInfo.coh_Freq_Set = [100 100 300 300 300 300 300 300 300 300 300 200]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 %audInfo.coh_Freq_Set = [150 150 300 300 300 300 300 300 300 300 300 150]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 
@@ -31,7 +33,7 @@ ExpInfo.num_trials = sum(audInfo.coh_Freq_Set); % Number of total Trials for 1 b
 %audInfo.velocity = 59.95; %deg/sec
 %audInfo.velocity = 20; %deg/sec
 %audInfo.velocity = 16.9; %deg/sec
-%ExpInfo.stim_time = 834; %Time of stim presentaiton (ms)
+ExpInfo.stim_time = 834; %Time of stim presentaiton (ms)
 %ExpInfo.stim_time = 1100; %Time of stim presentaiton (ms)
 %ExpInfo.stim_time = 1300; %Time of stim presentaiton (ms)
 
@@ -42,7 +44,7 @@ audInfo.velocity = 59.95; %deg/sec
 %audInfo.velocity = 40; %deg/sec
 
 %ExpInfo.stim_time = 601; %Time of stim presentaiton (ms)
-ExpInfo.stim_time = 367; %Time of stim presentaiton (ms)
+%ExpInfo.stim_time = 367; %Time of stim presentaiton (ms)
 %ExpInfo.stim_time = 133; %Time of stim presentaiton (ms)
 %ExpInfo.stim_time = 550; %Time of stim presentaiton (ms)
 

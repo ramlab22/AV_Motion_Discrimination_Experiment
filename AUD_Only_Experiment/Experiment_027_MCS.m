@@ -107,7 +107,7 @@ refresh_rate = 1/ifi;
 % Outputs all data into new structures for ease of use in later code
 
 monWidth = 40; %Monitor Width in cm 
-viewDist = 53; %Viewing Distance from monitor in cm 
+viewDist = 55; %Viewing Distance from monitor in cm 
 
 %%%%%%%%%%%%%%%%%%%%%%% Main Structures for variable names %%%%%%%%%%%%%%
  
