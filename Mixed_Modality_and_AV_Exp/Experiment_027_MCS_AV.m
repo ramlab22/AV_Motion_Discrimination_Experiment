@@ -676,19 +676,22 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         n_catchtrials=catchtrial_counter;
     else
         total_trials = ExpInfo.num_trials;
-        n_catchtrials=audInfo.catchtrials;  
+        n_catchtrials=audInfo.catchtrials;
     end
-
-    num_regular_trials = total_trials - n_catchtrials;  
-    num_catch_trials =n_catchtrials; 
-
+    
+    num_regular_trials = total_trials - n_catchtrials;
+    num_catch_trials =n_catchtrials;
+    
     [Fixation_Success_Rate, Stim_Success_Rate, Target_Success_Rate_Regular, Target_Success_Rate_Catch] = SR_CALC(dataout,total_trials,num_regular_trials,num_catch_trials)
     
     %Break down of each success rate based on coherence level
     %Count how many rew and N/A per coherence
-    
-    prob_AUD = coherence_probability(AUD_dataout, audInfo)
-    prob_VIS = coherence_probability(VIS_dataout, dotInfo)
+    if audInfo.n_aud_trials ~= 0
+        prob_AUD = coherence_probability(AUD_dataout, audInfo)
+    end
+    if dotInfo.n_vis_trials ~= 0
+        prob_VIS = coherence_probability(VIS_dataout, dotInfo)
+    end
     if AVInfo.n_AV_trials ~= 0
         prob_AV = coherence_probability_AV(AV_dataout, AVInfo)
     end
@@ -701,15 +704,24 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     [dotInfo.cohFreq_right] = cohFreq_finder(VIS_Right_dataout, dotInfo);
     [audInfo.cohFreq_left] = cohFreq_finder(AUD_Left_dataout, audInfo);
     [dotInfo.cohFreq_left] = cohFreq_finder(VIS_Left_dataout, dotInfo);
-%Since its congruent AV, aud and vis should be same number of freq, just at
-%different coherences for A and V lists
-     [AVInfo.cohFreq_right_aud, AVInfo.cohFreq_right_vis] = cohFreq_finder_AV(AV_Right_dataout, AVInfo);
-     [AVInfo.cohFreq_left_aud, AVInfo.cohFreq_left_vis] = cohFreq_finder_AV(AV_Left_dataout, AVInfo);
-
-    AUD_prob_Right = directional_probability(AUD_Right_dataout, audInfo, 'Right', 'AUD');
-    AUD_prob_Left = directional_probability(AUD_Left_dataout, audInfo, 'Left','AUD');
-    VIS_prob_Right = directional_probability(VIS_Right_dataout, dotInfo, 'Right','VIS');
-    VIS_prob_Left = directional_probability(VIS_Left_dataout, dotInfo, 'Left', 'VIS');
+    %Since its congruent AV, aud and vis should be same number of freq, just at
+    %different coherences for A and V lists
+    [AVInfo.cohFreq_right_aud, AVInfo.cohFreq_right_vis] = cohFreq_finder_AV(AV_Right_dataout, AVInfo);
+    [AVInfo.cohFreq_left_aud, AVInfo.cohFreq_left_vis] = cohFreq_finder_AV(AV_Left_dataout, AVInfo);
+    if dotInfo.n_vis_trials ~= 0
+        VIS_prob_Right = directional_probability(VIS_Right_dataout, dotInfo, 'Right','VIS');
+        VIS_prob_Left = directional_probability(VIS_Left_dataout, dotInfo, 'Left', 'VIS');
+    else
+        VIS_prob_Right = [];
+        VIS_prob_Left = [];
+    end
+    if audInfo.n_aud_trials ~= 0
+        AUD_prob_Right = directional_probability(AUD_Right_dataout, audInfo, 'Right', 'AUD');
+        AUD_prob_Left = directional_probability(AUD_Left_dataout, audInfo, 'Left','AUD');
+    else
+        AUD_prob_Right = [];
+        AUD_prob_Left = [];
+    end
     %These have indeces instead of cohs, 1:11 with probabilities
     %corresponding to the A and V coh lists
     if AVInfo.n_AV_trials ~= 0
@@ -721,62 +733,75 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         AV_prob_Left = [];
     end
     
-
-    [fig_3_AUD_VIS_AV_MCS, AUD_p_values, VIS_p_values,AUD_mu,VIS_mu, AV_mu, AUD_std,VIS_std,AV_std] = ...
-        psychometric_plotter_modalities(AUD_prob_Right, AUD_prob_Left, ...
-                                        VIS_prob_Right, VIS_prob_Left,...
-                                        AV_prob_Right, AV_prob_Left,...
-                                        audInfo, dotInfo, AVInfo, save_name);
-    vis_slope_at_50_percent = 1 / (VIS_std * sqrt(2 * pi));
-    aud_slope_at_50_percent = 1 / (AUD_std * sqrt(2 * pi));
-    av_slope_at_50_percent = 1 / (AV_std * sqrt(2 * pi));
+    if AVInfo.n_AV_trials ~= 0 || audInfo.n_aud_trials ~= 0 & dotInfo.n_vis_trials ~= 0
+        [fig_3_AUD_VIS_AV_MCS, AUD_p_values, VIS_p_values,AUD_mu,VIS_mu, AV_mu, AUD_std,VIS_std,AV_std] = ...
+            psychometric_plotter_modalities(AUD_prob_Right, AUD_prob_Left, ...
+            VIS_prob_Right, VIS_prob_Left,...
+            AV_prob_Right, AV_prob_Left,...
+            audInfo, dotInfo, AVInfo, save_name);
+        vis_slope_at_50_percent = 1 / (VIS_std * sqrt(2 * pi));
+        aud_slope_at_50_percent = 1 / (AUD_std * sqrt(2 * pi));
+        av_slope_at_50_percent = 1 / (AV_std * sqrt(2 * pi));
+        
+        
+        
+        display_aud_mu = sprintf('AUD Mu:\n %.2f',AUD_mu);
+        disp(display_aud_mu)
+        display_aud_std = sprintf('AUD std of cumulative gaussian:\n %.2f',AUD_std);
+        disp(display_aud_std)
+        display_aud_slope_at_50_percent = sprintf('AUD slope at 50 percent:\n %.2f',aud_slope_at_50_percent);
+        disp(display_aud_slope_at_50_percent)
+        display_vis_mu = sprintf('VIS Mu:\n %.2f',VIS_mu);
+        disp(display_vis_mu)
+        display_vis_std = sprintf('VIS std of cumulative gaussian:\n %.2f',VIS_std);
+        disp(display_vis_std)
+        display_vis_slope_at_50_percent = sprintf('VIS slope at 50 percent:\n %.2f',vis_slope_at_50_percent);
+        disp(display_vis_slope_at_50_percent)
+        display_av_mu = sprintf('AV Mu:\n %.2f',AV_mu);
+        disp(display_av_mu)
+        display_av_std = sprintf('AV std of cumulative gaussian:\n %.2f',AV_std);
+        disp(display_av_std)
+        display_av_slope_at_50_percent = sprintf('AV slope at 50 percent:\n %.2f',av_slope_at_50_percent);
+        disp(display_av_slope_at_50_percent)
+        saveas(fig_3_AUD_VIS_AV_MCS, [figure_file_directory save_name '_Psyc_Func_LR_MMAV_MCS.png']);
+        
+    end
+    %if only vis trials
+    if AVInfo.n_AV_trials == 0 & audInfo.n_aud_trials == 0 & dotInfo.n_vis_trials ~= 0
+        [VIS_x, VIS_y, VIS_fig, ~,~,~,VIS_std_gaussian_scaled] = psychometric_plotter_unisensory(VIS_dataout,VIS_prob_Right, VIS_prob_Left,dotInfo,save_name)
+        saveas(VIS_fig, [figure_file_directory save_name '_Psyc_Func_LR_VIS_MCS.png']);
+        
+    end
+    %if only aud trials
+    if AVInfo.n_AV_trials == 0 & audInfo.n_aud_trials ~= 0 & dotInfo.n_vis_trials == 0
+        [AUD_x, AUD_y, AUD_fig, ~,~,~,AUD_std_gaussian_scaled] = psychometric_plotter_unisensory(AUD_dataout,AUD_prob_Right, AUD_prob_Left,audInfo,save_name)
+        saveas(AUD_fig, [figure_file_directory save_name '_Psyc_Func_LR_AUD_MCS.png']);
+        
+    end
     
-   
-
-    display_aud_mu = sprintf('AUD Mu:\n %.2f',AUD_mu);
-    disp(display_aud_mu)
-    display_aud_std = sprintf('AUD std of cumulative gaussian:\n %.2f',AUD_std);
-    disp(display_aud_std)
-    display_aud_slope_at_50_percent = sprintf('AUD slope at 50 percent:\n %.2f',aud_slope_at_50_percent);
-    disp(display_aud_slope_at_50_percent)
-    display_vis_mu = sprintf('VIS Mu:\n %.2f',VIS_mu);
-    disp(display_vis_mu)
-    display_vis_std = sprintf('VIS std of cumulative gaussian:\n %.2f',VIS_std);
-    disp(display_vis_std)
-    display_vis_slope_at_50_percent = sprintf('VIS slope at 50 percent:\n %.2f',vis_slope_at_50_percent);
-    disp(display_vis_slope_at_50_percent)
-    display_av_mu = sprintf('AV Mu:\n %.2f',AV_mu);
-    disp(display_av_mu)
-    display_av_std = sprintf('AV std of cumulative gaussian:\n %.2f',AV_std);
-    disp(display_av_std)
-    display_av_slope_at_50_percent = sprintf('AV slope at 50 percent:\n %.2f',av_slope_at_50_percent);
-    disp(display_av_slope_at_50_percent)
-   
-    Eye_Tracker_Plotter(eye_data_matrix);
-    
-    
-    AUD_prob_right_only = coherence_probability_1_direction(AUD_Right_dataout, audInfo,'Right','AUD');
-    AUD_prob_left_only = coherence_probability_1_direction(AUD_Left_dataout, audInfo,'Left','AUD');
-    
-    VIS_prob_right_only = coherence_probability_1_direction(VIS_Right_dataout, dotInfo,'Right','VIS');
-    VIS_prob_left_only = coherence_probability_1_direction(VIS_Left_dataout, dotInfo,'Left','VIS');
-
+    if audInfo.n_aud_trials ~= 0
+        AUD_prob_right_only = coherence_probability_1_direction(AUD_Right_dataout, audInfo,'Right','AUD');
+        AUD_prob_left_only = coherence_probability_1_direction(AUD_Left_dataout, audInfo,'Left','AUD');
+    end
+    if dotInfo.n_vis_trials ~= 0
+        VIS_prob_right_only = coherence_probability_1_direction(VIS_Right_dataout, dotInfo,'Right','VIS');
+        VIS_prob_left_only = coherence_probability_1_direction(VIS_Left_dataout, dotInfo,'Left','VIS');
+    end
     if AVInfo.n_AV_trials ~= 0
         %%Make Rightward only graph with AUD and VIS
         [R_fig_AV_MCS] = psychometric_plotter_1_direction_modalities(AUD_prob_right_only,...
-                                                                 VIS_prob_right_only,...
-                                                                 AV_prob_Right, ...
-                                                                 'RIGHT ONLY', audInfo, dotInfo, AVInfo, save_name);
+            VIS_prob_right_only,...
+            AV_prob_Right, ...
+            'RIGHT ONLY', audInfo, dotInfo, AVInfo, save_name);
         %%Make Leftward only graph with AUD and VIS
         [L_fig_AV_MCS] = psychometric_plotter_1_direction_modalities(AUD_prob_left_only,...
-                                                                 VIS_prob_left_only,...
-                                                                 AV_prob_Left, ...
-                                                                 'LEFT ONLY', audInfo, dotInfo, AVInfo, save_name);
-         saveas(R_fig_AV_MCS, [figure_file_directory save_name '_Psyc_Func_R_MMAV_MCS.png']);
-         saveas(L_fig_AV_MCS, [figure_file_directory save_name '_Psyc_Func_L_MMAV_MCS.png']);                                                            
+            VIS_prob_left_only,...
+            AV_prob_Left, ...
+            'LEFT ONLY', audInfo, dotInfo, AVInfo, save_name);
+        saveas(R_fig_AV_MCS, [figure_file_directory save_name '_Psyc_Func_R_MMAV_MCS.png']);
+        saveas(L_fig_AV_MCS, [figure_file_directory save_name '_Psyc_Func_L_MMAV_MCS.png']);
     end
-      %Save all figures to Figure Directory
-    saveas(fig_3_AUD_VIS_AV_MCS, [figure_file_directory save_name '_Psyc_Func_LR_MMAV_MCS.png']);
+    %Save all figures to Figure Directory
     times = cell2mat(dataout(2:end,7)); %Extract the trial times
     Total_Block_Time = sum(times);
     
@@ -786,7 +811,7 @@ end
 
 %%
 [n_trials_with_response,n_trials_with_reward,proportion_response_reversals_after_correct_response,proportion_response_reversals_after_incorrect_response] = response_reversal_proportions_mixedmodality(dataout)
-% Save all block info and add to a .mat file for later analysis  
+% Save all block info and add to a .mat file for later analysis
 % save([data_file_directory save_name],'dataout','Fixation_Success_Rate','Stim_Success_Rate',...
 %     'Target_Success_Rate_Regular','Target_Success_Rate_Catch','ExpInfo','audInfo','dotInfo',...
 %     'AVInfo','Total_Block_Time','eye_data_matrix', 'AUD_p_values', 'VIS_p_values',...
@@ -795,6 +820,6 @@ end
 
 save([data_file_directory save_name]);
 disp('Experiment Data Exported to Behavioral Data Folder')
-sca; 
+sca;
 
-TDT.halt(); 
+TDT.halt();

@@ -12,7 +12,7 @@ dotInfo.cohSet = [100 70.7 50 35.4 25 17.7 12.5 8.9]./100; %Coh List to choose f
 
 %dotInfo.coh_Freq_Set = [120 120 120 120 0 0 0 0]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 %dotInfo.coh_Freq_Set = [200 200 200 200 200 200 200 200]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
-dotInfo.coh_Freq_Set = [2 0 0 0 0 0 0 0]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
+dotInfo.coh_Freq_Set = [0 0 0 0 0 0 0 0]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 
 %dotInfo.coh_Freq_Set = [10 10 10 10 10 10 10 10]; 
 
