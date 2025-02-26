@@ -734,8 +734,11 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     end
     
     if AVInfo.n_AV_trials ~= 0 || audInfo.n_aud_trials ~= 0 & dotInfo.n_vis_trials ~= 0
-        [fig_3_AUD_VIS_AV_MCS, AUD_p_values, VIS_p_values,AUD_mu,VIS_mu, AV_mu, AUD_std,VIS_std,AV_std] = ...
-            psychometric_plotter_modalities(AUD_prob_Right, AUD_prob_Left, ...
+        [fig_3_AUD_VIS_AV_MCS,AUD_curve_xvals, VIS_curve_xvals,...
+               AV_curve_xvals, AUD_curve_yvals,VIS_curve_yvals,AV_curve_yvals,...
+               AUD_xData, AUD_yData,VIS_xData, VIS_yData,AV_xData, AV_yData,...
+               AUD_mu, VIS_mu, AV_mu, AUD_std_gaussian, VIS_std_gaussian, AV_std_gaussian,AUD_prop_Rresp_zerocoh,VIS_prop_Rresp_zerocoh,AV_prop_Rresp_zerocoh] = ...
+            psychometric_plotter_modalities(AUD_dataout,VIS_dataout,AV_dataout,AUD_prob_Right, AUD_prob_Left, ...
             VIS_prob_Right, VIS_prob_Left,...
             AV_prob_Right, AV_prob_Left,...
             audInfo, dotInfo, AVInfo, save_name);
@@ -744,25 +747,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         av_slope_at_50_percent = 1 / (AV_std * sqrt(2 * pi));
         
         
-        
-        display_aud_mu = sprintf('AUD Mu:\n %.2f',AUD_mu);
-        disp(display_aud_mu)
-        display_aud_std = sprintf('AUD std of cumulative gaussian:\n %.2f',AUD_std);
-        disp(display_aud_std)
-        display_aud_slope_at_50_percent = sprintf('AUD slope at 50 percent:\n %.2f',aud_slope_at_50_percent);
-        disp(display_aud_slope_at_50_percent)
-        display_vis_mu = sprintf('VIS Mu:\n %.2f',VIS_mu);
-        disp(display_vis_mu)
-        display_vis_std = sprintf('VIS std of cumulative gaussian:\n %.2f',VIS_std);
-        disp(display_vis_std)
-        display_vis_slope_at_50_percent = sprintf('VIS slope at 50 percent:\n %.2f',vis_slope_at_50_percent);
-        disp(display_vis_slope_at_50_percent)
-        display_av_mu = sprintf('AV Mu:\n %.2f',AV_mu);
-        disp(display_av_mu)
-        display_av_std = sprintf('AV std of cumulative gaussian:\n %.2f',AV_std);
-        disp(display_av_std)
-        display_av_slope_at_50_percent = sprintf('AV slope at 50 percent:\n %.2f',av_slope_at_50_percent);
-        disp(display_av_slope_at_50_percent)
+  
         saveas(fig_3_AUD_VIS_AV_MCS, [figure_file_directory save_name '_Psyc_Func_LR_MMAV_MCS.png']);
         saveas(fig_3_AUD_VIS_AV_MCS, [figure_file_directory save_name '_Psyc_Func_LR_MMAV_MCS.fig']);
 
