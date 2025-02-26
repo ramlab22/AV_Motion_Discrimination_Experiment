@@ -1,6 +1,6 @@
 %% Experiment Script for 027 %%%%%%%%%%%%%%%%%%%%%%%%%%
 % Psychtoolbox  Auditory Motion Stimulus presentation 
-% written 04/21/22 - Jackson Mayfield 
+% written 04/21/22 - Jackson Mayfield & Adriana Schoenhaut 
 clear;
 close all; 
 sca;
