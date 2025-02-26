@@ -176,9 +176,9 @@ AVtrial_counter = 0;
 
 pause(2);
 catchtrial_counter=0;
-rdk_reward = '0';
-aud_reward = '0';
-av_reward = '0';
+rdk_reward = 'NaN';
+aud_reward = 'NaN';
+av_reward = 'NaN';
 while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     trialcounter = 1;
     coh_counter = 1;
@@ -764,7 +764,8 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         display_av_slope_at_50_percent = sprintf('AV slope at 50 percent:\n %.2f',av_slope_at_50_percent);
         disp(display_av_slope_at_50_percent)
         saveas(fig_3_AUD_VIS_AV_MCS, [figure_file_directory save_name '_Psyc_Func_LR_MMAV_MCS.png']);
-        
+        saveas(fig_3_AUD_VIS_AV_MCS, [figure_file_directory save_name '_Psyc_Func_LR_MMAV_MCS.fig']);
+
     end
     %if only vis trials
     if AVInfo.n_AV_trials == 0 & audInfo.n_aud_trials == 0 & dotInfo.n_vis_trials ~= 0

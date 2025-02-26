@@ -43,13 +43,13 @@ function [fig, mu, std_gaussian_scaled, xData, yData, curve_xvals, curve_yvals] 
     % when this function is run on data combined across multiple days (therefore more than 250 trials 
     % per coherence) remove coherences and corresponding data with insufficient data quantity to be 
     % worth including
-   if any(all_sizes > 250)
-        sufficient_quantity_data_idx=find(all_sizes > 50);
-        all_sizes=all_sizes(sufficient_quantity_data_idx,1);
-        xData=xData(sufficient_quantity_data_idx,1);
-        yData=yData(sufficient_quantity_data_idx,1);
-        coh_list=coh_list(sufficient_quantity_data_idx,1);
-    end
+%    if any(all_sizes > 250)
+%         sufficient_quantity_data_idx=find(all_sizes > 50);
+%         all_sizes=all_sizes(sufficient_quantity_data_idx,1);
+%         xData=xData(sufficient_quantity_data_idx,1);
+%         yData=yData(sufficient_quantity_data_idx,1);
+%         coh_list=coh_list(sufficient_quantity_data_idx,1);
+%     end
     % get actual prob right resp for 0% coherence trials and replace with that value
     % for both "leftward" and "rightward" 0% coherence
     if any(coh_list == 0)
