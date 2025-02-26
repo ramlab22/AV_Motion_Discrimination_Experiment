@@ -747,7 +747,7 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         av_slope_at_50_percent = 1 / (AV_std * sqrt(2 * pi));
         
         
-  
+        resizeFigures();
         saveas(fig_3_AUD_VIS_AV_MCS, [figure_file_directory save_name '_Psyc_Func_LR_MMAV_MCS.png']);
         saveas(fig_3_AUD_VIS_AV_MCS, [figure_file_directory save_name '_Psyc_Func_LR_MMAV_MCS.fig']);
 
@@ -755,12 +755,14 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
     %if only vis trials
     if AVInfo.n_AV_trials == 0 & audInfo.n_aud_trials == 0 & dotInfo.n_vis_trials ~= 0
         [VIS_x, VIS_y, VIS_fig, ~,~,~,VIS_std_gaussian_scaled] = psychometric_plotter_unisensory(VIS_dataout,VIS_prob_Right, VIS_prob_Left,dotInfo,save_name)
+        resizeFigures();
         saveas(VIS_fig, [figure_file_directory save_name '_Psyc_Func_LR_VIS_MCS.png']);
         
     end
     %if only aud trials
     if AVInfo.n_AV_trials == 0 & audInfo.n_aud_trials ~= 0 & dotInfo.n_vis_trials == 0
         [AUD_x, AUD_y, AUD_fig, ~,~,~,AUD_std_gaussian_scaled] = psychometric_plotter_unisensory(AUD_dataout,AUD_prob_Right, AUD_prob_Left,audInfo,save_name)
+        resizeFigures();
         saveas(AUD_fig, [figure_file_directory save_name '_Psyc_Func_LR_AUD_MCS.png']);
         
     end

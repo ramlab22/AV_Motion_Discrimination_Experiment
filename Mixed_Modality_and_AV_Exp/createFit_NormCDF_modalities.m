@@ -168,8 +168,8 @@ plot(AUD_curve_xvals, AUD_curve_yvals, "red",...
 legend('AUD','VIS','AV', 'AUD - NormCDF', 'VIS - NormCDF', 'AV - NormCDF', 'Location', 'northwest', 'Interpreter', 'none' );
 % Label axes
 title(sprintf('AUD,VIS,AV Psych. Func. L&R\n%s', save_name), 'Interpreter', 'none');
-xlabel( 'Coherence ((+)Rightward, (-)Leftward)', 'Interpreter', 'none' );
-ylabel( '% Rightward Response', 'Interpreter', 'none' );
+xlabel( 'Coherence (Leftward(-),Rightward(+))', 'Interpreter', 'none' );
+ylabel( 'Proportion Rightward Response', 'Interpreter', 'none' );
 xlim([(-1*max_cohval) max_cohval])
 ylim([0 1.1])
 ax = gca; 
