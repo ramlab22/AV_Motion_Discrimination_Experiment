@@ -7,7 +7,9 @@ audInfo = struct;
 
 %dotInfo.cohSet = []; %Coh List to choose from
 %dotInfo.coh_Freq_Set = []; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
-dotInfo.cohSet = [100 70.7 50 35.4 25 17.7 12.5 8.9 6.3 4.5 3.2]./100; %Coh List to choose from
+%dotInfo.cohSet = [100 70.7 50 35.4 25 17.7 12.5 8.9 6.3 4.5 3.2]./100; %Coh List to choose from
+dotInfo.cohSet = [100 0]./100; %Coh List to choose from
+
 %dotInfo.cohSet = [100 70.7 50 35.4 25 17.7 12.5 8.9 6.3 4.5]./100; %Coh List to choose from
 %dotInfo.cohSet = [100 70.7 50 35.4 25 17.7 12.5 8.9]./100; %Coh List to choose from
 
@@ -16,8 +18,9 @@ dotInfo.cohSet = [100 70.7 50 35.4 25 17.7 12.5 8.9 6.3 4.5 3.2]./100; %Coh List
 %dotInfo.coh_Freq_Set = [0 0 0 0 0 0 0 0]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 %dotInfo.coh_Freq_Set = [300 300 300 300 300 300 300 300];
 %dotInfo.coh_Freq_Set = [300 300 300 300 300 300 300 300 300 300];
+dotInfo.coh_Freq_Set = [10 40];
 
-dotInfo.coh_Freq_Set = [300 300 300 300 300 300 300 300 300 300 300];
+%dotInfo.coh_Freq_Set = [300 300 300 300 300 300 300 300 300 300 300];
 
 %dotInfo.coh_Freq_Set = [10 10 10 10 10 10 10 10]; 
 
@@ -28,8 +31,8 @@ audInfo.cohSet = dotInfo.cohSet ; %Coh List to choose from
 %audInfo.coh_Freq_Set = [150 150 150 150 150 150 150 150]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 %audInfo.coh_Freq_Set = [300 300 300 300 300 300 300 300]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 %audInfo.coh_Freq_Set = [300 300 300 300 300 300 300 300 300 300]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
-
-audInfo.coh_Freq_Set = [300 300 300 300 300 300 300 300 300 300 300]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
+audInfo.coh_Freq_Set = [10 40];
+%audInfo.coh_Freq_Set = [300 300 300 300 300 300 300 300 300 300 300]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 %audInfo.coh_Freq_Set = [50 50 50 50 50 50 50 50]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 %audInfo.coh_Freq_Set =dotInfo.coh_Freq_Set ;
 %audInfo.coh_Freq_Set = [400 400 400 400 400 400 400 400]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
@@ -42,7 +45,8 @@ audInfo.n_aud_trials=sum(audInfo.coh_Freq_Set);
 %AVInfo.coh_Freq_Set = [300 300 300 300 300 300 300 300]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 %AVInfo.coh_Freq_Set = [300 300 300 300 300 300 300 300 300 300]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 
-AVInfo.coh_Freq_Set = [300 300 300 300 300 300 300 300 300 300 300]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
+%AVInfo.coh_Freq_Set = [300 300 300 300 300 300 300 300 300 300 300]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
+AVInfo.coh_Freq_Set = [10 40];
 
 %AVInfo.coh_Freq_Set =[0 0 0 0 0 0 0 0]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 AVInfo.n_AV_trials=sum(AVInfo.coh_Freq_Set);
