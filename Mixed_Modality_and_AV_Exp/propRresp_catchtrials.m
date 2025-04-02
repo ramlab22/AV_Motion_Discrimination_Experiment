@@ -41,14 +41,18 @@ function [prop_Rresp_zerocoh] = propRresp_catchtrials(dataout)
 
     % Loop through each trial in the dataout, starting from startIndex
     for v = startIndex:size(dataout,1)
-        if dataout{v,11} == 'AV'
-              % Extract coherence level directly as it is already a double
-            coherence = dataout{v,8}(1);
-        else
-            % Extract coherence level directly as it is already a double
-            coherence = dataout{v,8};
+        trial_modality=dataout{v,11};
+        switch trial_modality
+            case 'AV'
+                coherence = dataout{v,8}(1);
+            case 'AUD'
+                % Extract coherence level directly as it is already a double
+                coherence = dataout{v,8};
+            case 'VIS'
+                % Extract coherence level directly as it is already a double
+                coherence = dataout{v,8};
         end
-
+        
         % Check if the correct target was not the only option available
         correctTargetNotOnlyAvailable = strcmp(dataout{v,5},'No');
 

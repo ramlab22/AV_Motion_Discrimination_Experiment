@@ -742,11 +742,11 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
             VIS_prob_Right, VIS_prob_Left,...
             AV_prob_Right, AV_prob_Left,...
             audInfo, dotInfo, AVInfo, save_name);
-        vis_slope_at_50_percent = 1 / (VIS_std * sqrt(2 * pi));
-        aud_slope_at_50_percent = 1 / (AUD_std * sqrt(2 * pi));
-        av_slope_at_50_percent = 1 / (AV_std * sqrt(2 * pi));
-        
-        
+%         vis_slope_at_50_percent = 1 / (VIS_std * sqrt(2 * pi));
+%         aud_slope_at_50_percent = 1 / (AUD_std * sqrt(2 * pi));
+%         av_slope_at_50_percent = 1 / (AV_std * sqrt(2 * pi));
+%         
+%         
         resizeFigures();
         saveas(fig_3_AUD_VIS_AV_MCS, [figure_file_directory save_name '_Psyc_Func_LR_MMAV_MCS.png']);
         saveas(fig_3_AUD_VIS_AV_MCS, [figure_file_directory save_name '_Psyc_Func_LR_MMAV_MCS.fig']);

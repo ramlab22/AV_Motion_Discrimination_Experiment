@@ -8,7 +8,10 @@ audInfo = struct;
 %dotInfo.cohSet = []; %Coh List to choose from
 %dotInfo.coh_Freq_Set = []; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 %dotInfo.cohSet = [100 70.7 50 35.4 25 17.7 12.5 8.9 6.3 4.5 3.2]./100; %Coh List to choose from
-dotInfo.cohSet = [100 0]./100; %Coh List to choose from
+dotInfo.cohSet = [100 70.7 50 35.4 25 17.7 12.5 8.9 6.3 4.5 3.2 0]./100; %Coh List to choose from
+%dotInfo.cohSet = [100 70.7 50 35.4 25 17.7 12.5 8.9 6.3 4.5]./100; %Coh List to choose from
+
+%dotInfo.cohSet = [100 0]./100; %Coh List to choose from
 
 %dotInfo.cohSet = [100 70.7 50 35.4 25 17.7 12.5 8.9 6.3 4.5]./100; %Coh List to choose from
 %dotInfo.cohSet = [100 70.7 50 35.4 25 17.7 12.5 8.9]./100; %Coh List to choose from
@@ -16,11 +19,12 @@ dotInfo.cohSet = [100 0]./100; %Coh List to choose from
 %dotInfo.coh_Freq_Set = [120 120 120 120 120 120 50 50]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 %dotInfo.coh_Freq_Set = [250 250 250 250 200 200 200 200]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 %dotInfo.coh_Freq_Set = [0 0 0 0 0 0 0 0]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
-%dotInfo.coh_Freq_Set = [300 300 300 300 300 300 300 300];
+%dotInfo.coh_Freq_Set = [300 300 300 300 300 300 300 300 300 150];
 %dotInfo.coh_Freq_Set = [300 300 300 300 300 300 300 300 300 300];
-dotInfo.coh_Freq_Set = [10 40];
+%dotInfo.coh_Freq_Set = [20 40];
 
 %dotInfo.coh_Freq_Set = [300 300 300 300 300 300 300 300 300 300 300];
+dotInfo.coh_Freq_Set = [300 300 300 300 300 300 300 300 300 300 300 300];
 
 %dotInfo.coh_Freq_Set = [10 10 10 10 10 10 10 10]; 
 
@@ -28,11 +32,14 @@ dotInfo.n_vis_trials=sum(dotInfo.coh_Freq_Set);
 
 %audInfo.cohSet = [100 70.7 50 35.4 25 17.7 12.5 8.9 6.3 4.5 3.2]./100; %Coh List to choose from
 audInfo.cohSet = dotInfo.cohSet ; %Coh List to choose from
+
 %audInfo.coh_Freq_Set = [150 150 150 150 150 150 150 150]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
-%audInfo.coh_Freq_Set = [300 300 300 300 300 300 300 300]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
+%audInfo.coh_Freq_Set = [300 300 300 300 300 300 300 300 300 150]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 %audInfo.coh_Freq_Set = [300 300 300 300 300 300 300 300 300 300]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
-audInfo.coh_Freq_Set = [10 40];
+%audInfo.coh_Freq_Set = [10 40];
 %audInfo.coh_Freq_Set = [300 300 300 300 300 300 300 300 300 300 300]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
+audInfo.coh_Freq_Set = [300 300 300 300 300 300 300 300 300 300 300 300]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
+
 %audInfo.coh_Freq_Set = [50 50 50 50 50 50 50 50]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 %audInfo.coh_Freq_Set =dotInfo.coh_Freq_Set ;
 %audInfo.coh_Freq_Set = [400 400 400 400 400 400 400 400]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
@@ -42,26 +49,28 @@ audInfo.n_aud_trials=sum(audInfo.coh_Freq_Set);
 %AVInfo.coh_Freq_Set = dotInfo.coh_Freq_Set; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 %AVInfo.coh_Freq_Set =[0 0 0 0 0 0 0 0 0 0 0]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 %AVInfo.coh_Freq_Set = [150 150 150 150 150 150 150 150]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
-%AVInfo.coh_Freq_Set = [300 300 300 300 300 300 300 300]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
+%AVInfo.coh_Freq_Set = [300 300 300 300 300 300 300 300 300 150]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 %AVInfo.coh_Freq_Set = [300 300 300 300 300 300 300 300 300 300]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
-
-%AVInfo.coh_Freq_Set = [300 300 300 300 300 300 300 300 300 300 300]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
-AVInfo.coh_Freq_Set = [10 40];
+%.coh_Freq_Set = [300 300 300 300 300 300 300 300 300 300 300]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
+AVInfo.coh_Freq_Set = [300 300 300 300 300 300 300 300 300 300 300 300]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
+%AVInfo.coh_Freq_Set = [10 40];
 
 %AVInfo.coh_Freq_Set =[0 0 0 0 0 0 0 0]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 AVInfo.n_AV_trials=sum(AVInfo.coh_Freq_Set);
 
-%% GUI Input Parameters 
+%% Input Parameters 
 
 ExpInfo.t_angle = 0.4; % Fixation Dot and Target Dots Visual Angle in Degrees
-%ExpInfo.rew_angle = 10;% Reward Window Visual Angle in Degrees
-ExpInfo.rew_angle = 11;% Reward Window Visual Angle in Degrees
+ExpInfo.rew_angle = 10;% Reward Window Visual Angle in Degrees
+%ExpInfo.rew_angle = 11;% Reward Window Visual Angle in Degrees
 
 %num of total trials across all modalities for each block
 ExpInfo.num_trials = dotInfo.n_vis_trials+audInfo.n_aud_trials+AVInfo.n_AV_trials;
 ExpInfo.catch_trials = 0; %dont use catch trials for this because previously, they replaced reg trials with fixation only reward trials to make it easier during hard staircase, but dont really need that for MCS
 ExpInfo.random_incorrect_opacity_list = catch_trial_randomizer(ExpInfo);%Gives list of 1 = regular trial, 0 = catch trial, see function 
-ExpInfo.stim_time = 834; %Time of stimulus presentaiton (ms)
+ExpInfo.stim_time = 1220; %Time of stimulus presentaiton (ms)
+%ExpInfo.stim_time = 834; %Time of stimulus presentaiton (ms)
+
 %ExpInfo.stim_time = 500; %Time of stimulus presentaiton (ms)
 %ExpInfo.stim_time = 550; %Time of stimulus presentaiton (ms)
 %ExpInfo.iti = 1000;%Intertrial Interval (ms)
@@ -70,7 +79,9 @@ ExpInfo.fixation_time = 200;% ms; Time to fixate on fixation point before RDK St
 ExpInfo.positions = [0;0;0;0;1;0;0;0;0]; % Binary List of ON(1)/OFF(0) for position 1-9
 ExpInfo.possible_pos = find(ExpInfo.positions == 1); %Corresponding Number Position available for use
 ExpInfo.fail_timeout = 2500; %Failure of trial timeout in (ms)
+%ExpInfo.rdk_angle = 8; %RDK stimulus visual angle
 %ExpInfo.rdk_angle = 15; %RDK stimulus visual angle
+
 %ExpInfo.rdk_angle = 17; %RDK stimulus visual angle
 ExpInfo.rdk_angle = 22; %RDK stimulus visual angle
 %ExpInfo.rdk_angle = 26; %RDK stimulus visual angle
@@ -124,7 +135,9 @@ dotInfo.random_dir_list = dir_randomizer_MCS_unisensory(dotInfo); %Random direct
 dotInfo.apXYD = [0 55 (ExpInfo.rdk_angle*10)]; % Location x,y pixels (0,0 is center of screen) and diameter of the aperature, currently in visual degrees - MULTPLIED by 10 because of Shadlen dots code, needed to be an integer
         %dotInfo.apXYD hardcoded in av stim presentation
 %dotInfo.speed = 400; %Degrees per second * 10
-dotInfo.speed = 263.8; %Degrees per second * 10
+%dotInfo.speed = 263.8; %Degrees per second * 10
+%dotInfo.speed = 95.9; %Degrees per second * 10
+dotInfo.speed = 179.9; %Degrees per second * 10
 
 dotInfo.dotSize = 4; %RDK Field Dots
 %dotInfo.dotSize = 3; %RDK Field Dots
@@ -146,7 +159,9 @@ audInfo.coherences = audInfo.cohSet; %This is for use in other functions for suc
 audInfo.random_coh_list = cohSet_maker_MCS(audInfo); %Random list of coherence Values for total trials
 audInfo.random_dir_list = dir_randomizer_MCS_unisensory(audInfo); %Random directions, 50% R and L for each coherence
 %audInfo.velocity =40; %deg/sec
-audInfo.velocity =26.38; %deg/sec
+%audInfo.velocity =26.38; %deg/sec
+%audInfo.velocity =9.59; %deg/sec
+audInfo.velocity =17.99; %deg/sec
 
 audInfo.set_dur = 78/(audInfo.velocity) ;%Seconds, This is going to be set as long as the speakers dont move, the actual duration of the stimulus will be set by the t_start and t_end variables 78= atand((distance_btwn_speakers/2)/viewDist). distance_btwn_speakers=86.36cm
     stimtime_midpoint=(audInfo.set_dur*1000)/2;

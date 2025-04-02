@@ -3,7 +3,7 @@ function [cohFreq_dir_aud, cohFreq_dir_vis] = cohFreq_finder_AV(AV_dataout, AVIn
         columnIndex = 5; %Catch Trial Column
         filterCondition = @(x) strcmp(x, 'No'); %Filter to only regular Trials, ie Catch Trial = 'No' 
         filteredArray = {};
-        for i = 1:size(AV_dataout, 1)
+        for i = 2:size(AV_dataout, 1)
             if filterCondition(AV_dataout{i, columnIndex})
                 filteredArray = [filteredArray; AV_dataout(i,:)];
             end

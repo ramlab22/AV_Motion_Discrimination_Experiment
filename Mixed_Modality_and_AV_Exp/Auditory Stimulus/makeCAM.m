@@ -19,10 +19,10 @@ function [CAM] = makeCAM(cLvl, direction, dur, silence, Fs)
 % even duration (one that doesn't produce a decimal when multiplying by Fs)
 samples = round(dur.*Fs);
 silent = zeros((silence.*Fs),2);
-%dB_noise_reduction=6;
-dB_noise_reduction=10;
+%dB_noise_reduction=1;
+%dB_noise_reduction=10;
 %dB_noise_reduction=8;
-%dB_noise_reduction=9;
+dB_noise_reduction=9;
 
 noise_reduction_scalar=10^(-(dB_noise_reduction)/20);
 
