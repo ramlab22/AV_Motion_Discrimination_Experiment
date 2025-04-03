@@ -38,8 +38,18 @@ function [fig, mu, std_gaussian_scaled, xData, yData, curve_xvals, curve_yvals] 
     [xData, yData] = prepareCurveData(coh_list, probability_rightward_response);
     % Process trial frequencies for each coherence
     sizes_L = flip(audInfo.cohFreq_left(2,:)');  % Frequencies for left responses
+    cohs_L=flip(audInfo.cohFreq_left(1,:)');
+    cohs_L=cohs_L*-1;
     sizes_R = audInfo.cohFreq_right(2,:)';       % Frequencies for right responses
+    cohs_R = audInfo.cohFreq_right(1,:)'
     all_sizes = nonzeros(vertcat(sizes_L, sizes_R));
+    all_cohs = vertcat(cohs_L, cohs_R);
+
+    % Find the indices of zero values in all_sizes
+zero_indices = (vertcat(sizes_L, sizes_R) == 0);
+
+% Remove corresponding elements from all_cohs where the values in all_sizes are zero
+filtered_cohs = all_cohs(~zero_indices);
     % when this function is run on data combined across multiple days (therefore more than 250 trials 
     % per coherence) remove coherences and corresponding data with insufficient data quantity to be 
     % worth including
@@ -53,7 +63,7 @@ function [fig, mu, std_gaussian_scaled, xData, yData, curve_xvals, curve_yvals] 
     % get actual prob right resp for 0% coherence trials and replace with that value
     % for both "leftward" and "rightward" 0% coherence
     if any(coh_list == 0)
-        [prop_Rresp_zerocoh] = propRresp_catchtrials(dataout, audInfo) ;
+        [prop_Rresp_zerocoh] = propRresp_catchtrials(dataout) ;
         catch_idx=find(xData==0);
         
         prop_Rresp_zerocoh_array = prop_Rresp_zerocoh/100 * ones(size(catch_idx));
@@ -62,7 +72,16 @@ function [fig, mu, std_gaussian_scaled, xData, yData, curve_xvals, curve_yvals] 
         dotsize_zerocoh_array =  sum(all_sizes(catch_idx)) * ones(size(catch_idx));
         all_sizes(catch_idx,1)=dotsize_zerocoh_array;
     end
-  
+ difference = setdiff(filtered_cohs, xData);
+
+% Step 2: If difference is not empty, find the indices of the difference values in all_sizes
+if ~isempty(difference)
+    [~, indices_to_remove] = ismember(difference, filtered_cohs);
+    
+    % Step 3: Remove the values in all_sizes that correspond to difference values
+    all_sizes(indices_to_remove(indices_to_remove > 0)) = [];
+    filtered_cohs(indices_to_remove(indices_to_remove > 0)) = [];
+  end
 % Initialize parameters for fitting
 mu = mean(xData); % Use mean of xData for the initial guess of mu
 sigma = std(xData); % Use standard deviation of xData for initial guess of sigma
