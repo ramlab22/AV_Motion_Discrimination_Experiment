@@ -742,6 +742,13 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
             VIS_prob_Right, VIS_prob_Left,...
             AV_prob_Right, AV_prob_Left,...
             audInfo, dotInfo, AVInfo, save_name);
+         ax = gca;
+     hold on
+           text(-0.5, .9, "displacement (degrees): "+ sprintf('%.2f', ExpInfo.rdk_angle) ,'FontSize', 12);
+     text(-0.5, .85, "velocity (degrees/s): "+ audInfo.velocity ,'FontSize', 12);
+        text(-0.5, .8, "duration (s): "+ sprintf('%.3f',  ExpInfo.stim_time/1000) ,'FontSize', 12);
+
+   
 %         vis_slope_at_50_percent = 1 / (VIS_std * sqrt(2 * pi));
 %         aud_slope_at_50_percent = 1 / (AUD_std * sqrt(2 * pi));
 %         av_slope_at_50_percent = 1 / (AV_std * sqrt(2 * pi));
