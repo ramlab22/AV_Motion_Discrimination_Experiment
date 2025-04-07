@@ -1,5 +1,5 @@
 function  [ExpInfo, dstruct, dotInfo, audInfo, AVInfo]= CreateClassStructure_MCS_AV( monWidth, viewDist, xCenter, yCenter) %Puts all data input into structure for neatness
-%% Jack Mayfield 4/22/22
+%% Jack Mayfield 4/22/22 updated ams 4/4/25
 %set individual modality parameters to get accurate totals later
 dotInfo = struct;
 AVInfo = struct; 
@@ -39,8 +39,8 @@ audInfo.cohSet = dotInfo.cohSet ; %Coh List to choose from
 %audInfo.coh_Freq_Set = [300 300 300 300 300 300 300 300 300 300]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 %audInfo.coh_Freq_Set = [10 40];
 %audInfo.coh_Freq_Set = [300 300 300 300 300 300 300 300 300 300 300]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
-%audInfo.coh_Freq_Set = [300 300 300 300 300 300 300 300 300 300 300 300]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
-audInfo.coh_Freq_Set = [0 0 0 0 0 0 0 0 0 0 0 0]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
+audInfo.coh_Freq_Set = [300 300 300 300 300 300 300 300 300 300 300 300]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
+%audInfo.coh_Freq_Set = [0 0 0 0 0 0 0 0 0 0 0 0]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 
 %audInfo.coh_Freq_Set = [50 50 50 50 50 50 50 50]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 %audInfo.coh_Freq_Set =dotInfo.coh_Freq_Set ;
@@ -49,12 +49,12 @@ audInfo.coh_Freq_Set = [0 0 0 0 0 0 0 0 0 0 0 0]; %This is the descending list o
 audInfo.n_aud_trials=sum(audInfo.coh_Freq_Set);
 
 %AVInfo.coh_Freq_Set = dotInfo.coh_Freq_Set; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
-AVInfo.coh_Freq_Set =[0 0 0 0 0 0 0 0 0 0 0 0]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
+%AVInfo.coh_Freq_Set =[0 0 0 0 0 0 0 0 0 0 0 0]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 %AVInfo.coh_Freq_Set = [150 150 150 150 150 150 150 150]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 %AVInfo.coh_Freq_Set = [300 300 300 300 300 300 300 300 300 150]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 %AVInfo.coh_Freq_Set = [300 300 300 300 300 300 300 300 300 300]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 %.coh_Freq_Set = [300 300 300 300 300 300 300 300 300 300 300]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
-%AVInfo.coh_Freq_Set = [300 300 300 300 300 300 300 300 300 300 300 300]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
+AVInfo.coh_Freq_Set = [300 300 300 300 300 300 300 300 300 300 300 300]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
 %AVInfo.coh_Freq_Set = [10 40];
 
 %AVInfo.coh_Freq_Set =[0 0 0 0 0 0 0 0]; %This is the descending list of frequencies for each Coh (100 down to 3.2 %)
@@ -62,31 +62,57 @@ AVInfo.n_AV_trials=sum(AVInfo.coh_Freq_Set);
 
 %% Input Parameters 
 
-ExpInfo.t_angle = 0.4; % Fixation Dot and Target Dots Visual Angle in Degrees
-ExpInfo.rew_angle = 10;% Reward Window Visual Angle in Degrees
-%ExpInfo.rew_angle = 11;% Reward Window Visual Angle in Degrees
+%% set reward window size
+%ExpInfo.rew_angle = 10;% Reward Window Visual Angle in Degrees ALV
+ExpInfo.rew_angle = 11;% Reward Window Visual Angle in Degrees BA
+%% set inter-trial interval
+ExpInfo.iti = 800;%Intertrial Interval (ms)
+%% set time out time
+ExpInfo.fail_timeout = 2500; %Failure of trial timeout in (ms)
+
+%% set visual displacement
+%ExpInfo.rdk_angle = 17; %RDK stimulus visual angle
+ExpInfo.rdk_angle = 22; %RDK stimulus visual angle
+%ExpInfo.rdk_angle = 10; %RDK stimulus visual angle
+%ExpInfo.rdk_angle = 26; %RDK stimulus visual angle
+%ExpInfo.rdk_angle = 15; %RDK stimulus visual angle
+
+ %% set stimulus duration for both aud and/or vis and/or av
+%ExpInfo.stim_time = 1220; %Time of stimulus presentaiton (ms)
+ExpInfo.stim_time = 834; %Time of stimulus presentaiton (ms)
+%ExpInfo.stim_time = 367; %Time of stimulus presentaiton (ms)
+
+ %% set visual velocity
+%dotInfo.speed = 40; %Degrees per second 
+dotInfo.speed = 26.38; %Degrees per second
+%dotInfo.speed = 11.99; %Degrees per second
+%dotInfo.speed = 9.59; %Degrees per second 
+%dotInfo.speed = 17.99; %Degrees per second 
+%dotInfo.speed =40.87; %Degrees per second 
+
+ %% set auditory velocity
+%audInfo.velocity =40; %deg/sec
+audInfo.velocity =26.38; %deg/sec
+%audInfo.velocity =11.99; %deg/sec
+%audInfo.velocity =9.59; %deg/sec
+%audInfo.velocity =17.99; %deg/sec
+%audInfo.velocity =40.87; %deg/sec
 
 %num of total trials across all modalities for each block
 ExpInfo.num_trials = dotInfo.n_vis_trials+audInfo.n_aud_trials+AVInfo.n_AV_trials;
 ExpInfo.catch_trials = 0; %dont use catch trials for this because previously, they replaced reg trials with fixation only reward trials to make it easier during hard staircase, but dont really need that for MCS
 ExpInfo.random_incorrect_opacity_list = catch_trial_randomizer(ExpInfo);%Gives list of 1 = regular trial, 0 = catch trial, see function 
-ExpInfo.stim_time = 1220; %Time of stimulus presentaiton (ms)
-%ExpInfo.stim_time = 834; %Time of stimulus presentaiton (ms)
-
+ExpInfo.t_angle = 0.4; % Fixation Dot and Target Dots Visual Angle in Degrees
 %ExpInfo.stim_time = 500; %Time of stimulus presentaiton (ms)
 %ExpInfo.stim_time = 550; %Time of stimulus presentaiton (ms)
 %ExpInfo.iti = 1000;%Intertrial Interval (ms)
-ExpInfo.iti = 800;%Intertrial Interval (ms)
 ExpInfo.fixation_time = 200;% ms; Time to fixate on fixation point before RDK Starts presenting == time of presenting fixation point 
 ExpInfo.positions = [0;0;0;0;1;0;0;0;0]; % Binary List of ON(1)/OFF(0) for position 1-9
 ExpInfo.possible_pos = find(ExpInfo.positions == 1); %Corresponding Number Position available for use
-ExpInfo.fail_timeout = 2500; %Failure of trial timeout in (ms)
 %ExpInfo.rdk_angle = 8; %RDK stimulus visual angle
 %ExpInfo.rdk_angle = 15; %RDK stimulus visual angle
 
-%ExpInfo.rdk_angle = 17; %RDK stimulus visual angle
-ExpInfo.rdk_angle = 22; %RDK stimulus visual angle
-%ExpInfo.rdk_angle = 26; %RDK stimulus visual angle
+
 
 %ExpInfo.rdk_angle = 31; %RDK stimulus visual angle THIS IS THE MAX VIS DISPLACEMENT POSSIBLE
 
@@ -125,7 +151,7 @@ ExpInfo.target_rew_radius_volts = angle2volts(9);
 ExpInfo.ppd = 30;%pi * xCenter / atan(monWidth/viewDist/2) / 360;
 
 %% RDK Parameters
-
+dotInfo.speed = dotInfo.speed*10; %multiply vis velocity by 10 to fit RDK toolbox format. presented velocity is still the velocity entered. 
 dotInfo.dir = NaN; %Initilize for main loop purposes 
 dotInfo.catchtrials = 0; % # catch trials
 dotInfo.dirSet = dirBin_vis(data); %See function dirBin.m
@@ -136,10 +162,6 @@ dotInfo.random_dir_list = dir_randomizer_MCS_unisensory(dotInfo); %Random direct
 %dotInfo.apXYD = [0 90 (ExpInfo.rdk_angle*10)]; % Location x,y pixels (0,0 is center of screen) and diameter of the aperature, currently in visual degrees - MULTPLIED by 10 because of Shadlen dots code, needed to be an integer
 dotInfo.apXYD = [0 55 (ExpInfo.rdk_angle*10)]; % Location x,y pixels (0,0 is center of screen) and diameter of the aperature, currently in visual degrees - MULTPLIED by 10 because of Shadlen dots code, needed to be an integer
         %dotInfo.apXYD hardcoded in av stim presentation
-%dotInfo.speed = 400; %Degrees per second * 10
-%dotInfo.speed = 263.8; %Degrees per second * 10
-%dotInfo.speed = 95.9; %Degrees per second * 10
-dotInfo.speed = 179.9; %Degrees per second * 10
 
 dotInfo.dotSize = 4; %RDK Field Dots
 %dotInfo.dotSize = 3; %RDK Field Dots
@@ -160,10 +182,7 @@ audInfo.catchtrials = 0;
 audInfo.coherences = audInfo.cohSet; %This is for use in other functions for success calcs
 audInfo.random_coh_list = cohSet_maker_MCS(audInfo); %Random list of coherence Values for total trials
 audInfo.random_dir_list = dir_randomizer_MCS_unisensory(audInfo); %Random directions, 50% R and L for each coherence
-%audInfo.velocity =40; %deg/sec
-%audInfo.velocity =26.38; %deg/sec
-%audInfo.velocity =9.59; %deg/sec
-audInfo.velocity =17.99; %deg/sec
+
 
 audInfo.set_dur = 78/(audInfo.velocity) ;%Seconds, This is going to be set as long as the speakers dont move, the actual duration of the stimulus will be set by the t_start and t_end variables 78= atand((distance_btwn_speakers/2)/viewDist). distance_btwn_speakers=86.36cm
     stimtime_midpoint=(audInfo.set_dur*1000)/2;

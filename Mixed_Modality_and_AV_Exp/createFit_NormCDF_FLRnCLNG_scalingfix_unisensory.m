@@ -41,7 +41,7 @@ function [fig, mu, std_gaussian_scaled, xData, yData, curve_xvals, curve_yvals] 
     cohs_L=flip(audInfo.cohFreq_left(1,:)');
     cohs_L=cohs_L*-1;
     sizes_R = audInfo.cohFreq_right(2,:)';       % Frequencies for right responses
-    cohs_R = audInfo.cohFreq_right(1,:)'
+    cohs_R = audInfo.cohFreq_right(1,:)';
     all_sizes = nonzeros(vertcat(sizes_L, sizes_R));
     all_cohs = vertcat(cohs_L, cohs_R);
 
